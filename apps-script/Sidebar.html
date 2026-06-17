@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<style>
+  :root {
+    --wine: #9B0D24;
+    --wine-deep: #7A0A1C;
+    --accent: #A85A32;
+    --accent-pale: #EEDACA;
+    --cream: #FDFBF7;
+    --cream-warm: #F9F5ED;
+    --text-dark: #2E1318;
+    --text-body: #3A3330;
+    --text-muted: #857E78;
+    --border: rgba(155,13,36,0.18);
+    --border-light: rgba(155,13,36,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 14px;
+    font-family: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: var(--text-body);
+    background: var(--cream);
+    line-height: 1.5;
+  }
+  h1 {
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 18px;
+    color: var(--text-dark);
+    margin: 0 0 4px;
+  }
+  h1 em { color: var(--accent); font-weight: 400; }
+  .lede {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .picker {
+    background: var(--cream-warm);
+    border: 1px solid var(--border-light);
+    border-top: 3px solid var(--accent);
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+  .picker label { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+  .picker select { width: 100%; }
+  .picker .new-btn { margin-top: 8px; }
+
+  details {
+    background: white;
+    border: 1px solid var(--border-light);
+    margin-bottom: 8px;
+  }
+  details summary {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--wine-deep);
+    background: var(--cream-warm);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details summary::after {
+    content: "▾";
+    margin-left: auto;
+    color: var(--accent);
+    transition: transform 160ms ease;
+  }
+  details[open] summary::after { transform: rotate(180deg); }
+  details summary::-webkit-details-marker { display: none; }
+  .fields { padding: 12px; }
+
+  label.field {
+    display: block;
+    margin-bottom: 10px;
+  }
+  label.field > span.field-label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  label.field > span.hint {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    font-style: italic;
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 7px 9px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-body);
+    border-radius: 0;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-pale);
+  }
+  textarea { min-height: 60px; resize: vertical; font-family: inherit; }
+  textarea.tall { min-height: 100px; }
+
+  .checkboxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px 8px;
+  }
+  .checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .checkbox-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .checkbox-line input { width: auto; }
+
+  .actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--cream);
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border: 1px solid var(--wine);
+    background: var(--wine);
+    color: var(--cream);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 140ms ease;
+  }
+  button:hover { background: var(--wine-deep); border-color: var(--wine-deep); }
+  button.secondary {
+    background: transparent;
+    color: var(--wine);
+  }
+  button.secondary:hover { background: var(--accent-pale); color: var(--wine-deep); }
+  button.danger {
+    background: transparent;
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+  }
+  button.danger:hover { background: #B33C3C; border-color: #B33C3C; color: white; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .toast {
+    position: fixed;
+    bottom: 10px; left: 10px; right: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    background: var(--wine-deep);
+    color: white;
+    transform: translateY(80px);
+    transition: transform 240ms ease;
+    z-index: 10;
+  }
+  .toast.is-error { background: #B33C3C; }
+  .toast.is-visible { transform: translateY(0); }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .id-display {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border-light);
+    margin-bottom: 10px;
+  }
+  .id-display .label { font-family: inherit; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 6px; font-size: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Course <em>Editor</em></h1>
+<div class="lede">ICS Catalogue</div>
+
+<div class="picker">
+  <label for="picker-select">Edit Existing Course</label>
+  <select id="picker-select">
+    <option value="">— select a course to edit —</option>
+  </select>
+  <button class="secondary new-btn" type="button" id="new-btn" style="width:100%;">+ Add new course</button>
+</div>
+
+<form id="course-form" autocomplete="off">
+
+  <div class="id-display" id="id-display" style="display:none;">
+    <span class="label">ID</span><span id="id-value"></span>
+  </div>
+
+  <details open>
+    <summary>Identity & Publishing</summary>
+    <div class="fields">
+      <label class="checkbox-line">
+        <input type="checkbox" name="published" id="f-published" checked>
+        <strong>Published</strong> — visible on the public catalogue
+      </label>
+      <label class="field">
+        <span class="field-label">Category</span>
+        <select name="category" id="f-category" required>
+          <option value="">— choose category —</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Section Order</span>
+        <input type="number" name="sectionOrder" min="0" step="1">
+        <span class="hint">Sort order within the category section. Leave blank if unsure.</span>
+      </label>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Editorial Card</summary>
+    <div class="fields">
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input type="text" name="title" required>
+        <span class="hint">Course name. Use *asterisks* around italics, e.g. Augustine's *Confessions*.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Subtitle</span>
+        <input type="text" name="subtitle">
+        <span class="hint">Optional, e.g. "MA-EL Capstone" or "CILC Required".</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Short Description</span>
+        <textarea name="descriptionShort"></textarea>
+        <span class="hint">2–3 sentence editorial blurb — always visible on the card.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Extended Description</span>
+        <textarea name="descriptionMore" class="tall"></textarea>
+        <span class="hint">Shown inside "Course details". Separate paragraphs with a blank line.</span>
+      </label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Code, Term & Credits</summary>
+    <div class="fields">
+      <div class="row-2">
+        <label class="field">
+          <span class="field-label">Course Code</span>
+          <input type="text" name="code">
+        </label>
+        <label class="field">
+          <span class="field-label">Term Code</span>
+          <input type="text" name="termCode" placeholder="F26">
+        </label>
+      </div>
+      <div class="row-2">
+        <label class="field">
+          <span class="field-label">Term ID</span>
+          <input type="text" name="term" placeholder="fall26">
+          <span class="hint">Filter key.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Term Display Label</span>
+          <input type="text" name="termLabel" placeholder="Fall Term">
+        </label>
+      </div>
+      <label class="field">
+        <span class="field-label">Credits</span>
+        <input type="text" name="credits" placeholder="3 Credits">
+      </label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Programs & Certificate Tags</summary>
+    <div class="fields">
+      <label class="field">
+        <span class="field-label">Programs</span>
+        <div class="checkboxes" id="program-checkboxes"></div>
+        <span class="hint">Drives the program filter.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Program Display Labels</span>
+        <input type="text" name="programTagsDisplay" placeholder="MA, MWS, MA-EL">
+        <span class="hint">Comma-separated, exactly as shown on the card.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Certificate Tags</span>
+        <input type="text" name="certificateTags" placeholder="CSTC Area 3, CILC Required">
+      </label>
+      <label class="field">
+        <span class="field-label">CSTC Area</span>
+        <input type="text" name="cstcArea" placeholder="Area 3">
+      </label>
+      <label class="field">
+        <span class="field-label">Prerequisites</span>
+        <input type="text" name="prerequisites">
+      </label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Instructor</summary>
+    <div class="fields">
+      <label class="field">
+        <span class="field-label">Instructor Name</span>
+        <input type="text" name="instructorName">
+      </label>
+      <label class="field">
+        <span class="field-label">Instructor Bio URL</span>
+        <input type="url" name="instructorUrl">
+      </label>
+      <label class="field">
+        <span class="field-label">Color Key</span>
+        <select name="instructorSlug" id="f-instructor-slug">
+          <option value="">— default —</option>
+        </select>
+        <span class="hint">Pick 1–6. Each value maps to a distinct instructor link color on the card.</span>
+      </label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Schedule & Format</summary>
+    <div class="fields">
+      <label class="field">
+        <span class="field-label">Format</span>
+        <input type="text" name="format" placeholder="Online Synchronous">
+      </label>
+      <div class="row-2">
+        <label class="field">
+          <span class="field-label">Meeting Day</span>
+          <input type="text" name="meetingDay" placeholder="Thursdays">
+        </label>
+        <label class="field">
+          <span class="field-label">Meeting Time</span>
+          <input type="text" name="meetingTime" placeholder="6:00pm – 9:00pm ET">
+        </label>
+      </div>
+      <label class="field">
+        <span class="field-label">Syllabus URL</span>
+        <input type="url" name="syllabusUrl">
+      </label>
+      <label class="field">
+        <span class="field-label">TST Cross-list Code</span>
+        <input type="text" name="tstCode" placeholder="ICT3732HS L0101">
+      </label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Books & Enrolment</summary>
+    <div class="fields">
+      <label class="field">
+        <span class="field-label">Required Books</span>
+        <textarea name="requiredBooks" class="tall"></textarea>
+        <span class="hint">One citation per line. Use *asterisks* for italic titles.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">Enrolment Notes</span>
+        <textarea name="enrolmentNotes"></textarea>
+      </label>
+      <div class="row-2">
+        <label class="field">
+          <span class="field-label">Registration Email</span>
+          <input type="email" name="registrationEmail">
+        </label>
+        <label class="field">
+          <span class="field-label">Max Enrolment</span>
+          <input type="number" name="maxEnrolment" min="0">
+        </label>
+      </div>
+      <label class="field">
+        <span class="field-label">Last Date to Register</span>
+        <input type="date" name="lastDateToRegister">
+      </label>
+      <label class="field">
+        <span class="field-label">Partner Note</span>
+        <input type="text" name="partnerNote" placeholder="In Partnership with Calvin University">
+      </label>
+    </div>
+  </details>
+
+  <div class="actions">
+    <button type="submit" id="save-btn">Save</button>
+    <button type="button" class="secondary" id="reset-btn">Reset</button>
+    <button type="button" class="danger" id="delete-btn" style="display:none;margin-left:auto;">Delete</button>
+  </div>
+
+  <input type="hidden" name="id" id="f-id">
+</form>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+  const state = { editingId: null };
+
+  function toast(msg, isError) {
+    const t = $("#toast");
+    t.textContent = msg;
+    t.classList.toggle("is-error", !!isError);
+    t.classList.add("is-visible");
+    clearTimeout(toast._h);
+    toast._h = setTimeout(() => t.classList.remove("is-visible"), 3000);
+  }
+
+  function setBusy(busy) {
+    $$("button").forEach(b => b.disabled = busy);
+  }
+
+  // ----- Bootstrap options from server -----
+  function loadOptions() {
+    google.script.run
+      .withSuccessHandler(opts => {
+        const catSel = $("#f-category");
+        opts.categories.forEach(c => {
+          const o = document.createElement("option");
+          o.value = c; o.textContent = c;
+          catSel.appendChild(o);
+        });
+        const slugSel = $("#f-instructor-slug");
+        opts.instructorSlugs.forEach(s => {
+          const o = document.createElement("option");
+          o.value = s; o.textContent = "Color " + s;
+          slugSel.appendChild(o);
+        });
+        const progBox = $("#program-checkboxes");
+        opts.programs.forEach(p => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="checkbox" name="program" value="${p.id}"> ${p.label}`;
+          progBox.appendChild(label);
+        });
+      })
+      .withFailureHandler(err => toast("Could not load form options: " + err.message, true))
+      .getFormOptions();
+  }
+
+  function loadList() {
+    google.script.run
+      .withSuccessHandler(list => {
+        const sel = $("#picker-select");
+        // Reset
+        sel.innerHTML = '<option value="">— select a course to edit —</option>';
+        list.forEach(c => {
+          const o = document.createElement("option");
+          o.value = c.id;
+          o.textContent = `${c.title || "(untitled)"} ${c.termCode ? "· " + c.termCode : ""} ${c.published ? "" : "[draft]"}`;
+          sel.appendChild(o);
+        });
+      })
+      .listCourses();
+  }
+
+  function fillForm(course) {
+    const form = $("#course-form");
+    form.reset();
+    state.editingId = course ? course.id : null;
+    $("#f-id").value = course?.id || "";
+    if (course?.id) {
+      $("#id-display").style.display = "block";
+      $("#id-value").textContent = course.id;
+      $("#delete-btn").style.display = "inline-block";
+    } else {
+      $("#id-display").style.display = "none";
+      $("#delete-btn").style.display = "none";
+    }
+
+    if (!course) {
+      $("#f-published").checked = true;
+      // Uncheck all programs
+      $$('input[name="program"]').forEach(cb => cb.checked = false);
+      return;
+    }
+
+    // Standard fields
+    Object.entries(course).forEach(([k, v]) => {
+      const el = form.elements.namedItem(k);
+      if (!el || el.type === "checkbox" || k === "programs") return;
+      if (k === "lastDateToRegister" && v) {
+        const d = (typeof v === "string") ? v.slice(0, 10) : "";
+        el.value = d;
+        return;
+      }
+      el.value = v ?? "";
+    });
+
+    // Published checkbox
+    $("#f-published").checked = (course.published === true || /^(true|yes|1)$/i.test(String(course.published || "")));
+
+    // Programs
+    const progTokens = String(course.programs || "").split(/\s+/).filter(Boolean);
+    $$('input[name="program"]').forEach(cb => cb.checked = progTokens.includes(cb.value));
+  }
+
+  function readForm() {
+    const form = $("#course-form");
+    const data = {};
+    Array.from(form.elements).forEach(el => {
+      if (!el.name || el.name === "program") return;
+      if (el.type === "checkbox") {
+        data[el.name] = el.checked;
+      } else if (el.type === "number") {
+        data[el.name] = el.value === "" ? "" : Number(el.value);
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+    data.programs = $$('input[name="program"]:checked').map(cb => cb.value).join(" ");
+    return data;
+  }
+
+  // ----- Event wiring -----
+  $("#picker-select").addEventListener("change", e => {
+    const id = e.target.value;
+    if (!id) { fillForm(null); return; }
+    setBusy(true);
+    google.script.run
+      .withSuccessHandler(course => { fillForm(course); setBusy(false); })
+      .withFailureHandler(err => { toast("Load failed: " + err.message, true); setBusy(false); })
+      .getCourse(id);
+  });
+
+  $("#new-btn").addEventListener("click", () => {
+    $("#picker-select").value = "";
+    fillForm(null);
+    toast("New course — fill in the form and Save.");
+  });
+
+  $("#reset-btn").addEventListener("click", () => {
+    if (state.editingId) {
+      $("#picker-select").value = state.editingId;
+      $("#picker-select").dispatchEvent(new Event("change"));
+    } else {
+      fillForm(null);
+    }
+  });
+
+  $("#course-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const data = readForm();
+    if (!data.title) { toast("Title is required.", true); return; }
+    if (!data.category) { toast("Category is required.", true); return; }
+    setBusy(true);
+    google.script.run
+      .withSuccessHandler(res => {
+        toast(`Course ${res.action} — public page will refresh on next load.`);
+        setBusy(false);
+        loadList();
+        // Re-select to refresh form with normalized data
+        $("#picker-select").value = res.id;
+        $("#picker-select").dispatchEvent(new Event("change"));
+      })
+      .withFailureHandler(err => { toast("Save failed: " + err.message, true); setBusy(false); })
+      .saveCourse(data);
+  });
+
+  $("#delete-btn").addEventListener("click", () => {
+    if (!state.editingId) return;
+    if (!confirm("Delete this course? This cannot be undone.")) return;
+    setBusy(true);
+    google.script.run
+      .withSuccessHandler(() => {
+        toast("Deleted.");
+        setBusy(false);
+        fillForm(null);
+        loadList();
+      })
+      .withFailureHandler(err => { toast("Delete failed: " + err.message, true); setBusy(false); })
+      .deleteCourse(state.editingId);
+  });
+
+  // Boot
+  loadOptions();
+  loadList();
+</script>
+
+</body>
+</html>
