@@ -796,7 +796,7 @@ a:hover { color: var(--accent); }
  *  Paste the Apps Script web-app URL here once you've deployed the backend
  *  (see SETUP.md). Leave blank to render with bundled sample data.
  */
-const APPS_SCRIPT_URL = "";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzC-hmu2I2qSbcBlsfPOS9SfShCOv2HFx5jOIxFDyLQ3JElCOSh9oRZU57JyDYwr8/exec";
 
 /* ==========================================================================
  *  TAXONOMY
@@ -1013,6 +1013,12 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
+// Only allow http(s) and mailto links; anything else (e.g. javascript:) is dropped.
+function safeUrl(u) {
+  const s = String(u || "").trim();
+  return /^(https?:|mailto:)/i.test(s) ? s : "";
+}
+
 // Tiny markdown-ish: *italic* and **bold**, preserves line breaks as <br>.
 function richify(text) {
   if (!text) return "";
@@ -1116,11 +1122,12 @@ function renderFilters() {
 }
 
 function cardHtml(c) {
-  const catColor = `var(--cat-${c.category || "core"})`;
-  const instrColor = c.instructorSlug ? `var(--instr-${c.instructorSlug})` : `var(--wine)`;
+  const catColor = `var(--cat-${escapeHtml(c.category || "core")})`;
+  const instrColor = c.instructorSlug ? `var(--instr-${escapeHtml(c.instructorSlug)})` : `var(--wine)`;
   const isPartnership = c.category === "partnership";
-  const instructorMarkup = c.instructorUrl
-    ? `<a href="${escapeHtml(c.instructorUrl)}" target="_blank" rel="noopener">${escapeHtml(c.instructorName || "")}</a>`
+  const instructorHref = safeUrl(c.instructorUrl);
+  const instructorMarkup = instructorHref
+    ? `<a href="${escapeHtml(instructorHref)}" target="_blank" rel="noopener">${escapeHtml(c.instructorName || "")}</a>`
     : escapeHtml(c.instructorName || "");
 
   const tags = [];
@@ -1142,9 +1149,10 @@ function cardHtml(c) {
   if (c.tstCode)            detailRows.push(["TST Code", escapeHtml(c.tstCode)]);
   if (c.prerequisites)      detailRows.push(["Prerequisites", escapeHtml(c.prerequisites)]);
   if (c.cstcArea)           detailRows.push(["CSTC Area", escapeHtml(c.cstcArea)]);
-  if (c.syllabusUrl)        detailRows.push(["Syllabus", `<a href="${escapeHtml(c.syllabusUrl)}" target="_blank" rel="noopener">View syllabus →</a>`]);
+  const syllabusHref = safeUrl(c.syllabusUrl);
+  if (syllabusHref)         detailRows.push(["Syllabus", `<a href="${escapeHtml(syllabusHref)}" target="_blank" rel="noopener">View syllabus →</a>`]);
   if (c.enrolmentNotes)     detailRows.push(["Enrolment", escapeHtml(c.enrolmentNotes)]);
-  if (c.registrationEmail)  detailRows.push(["Register", `<a href="mailto:${escapeHtml(c.registrationEmail)}">${escapeHtml(c.registrationEmail)}</a>`]);
+  if (c.registrationEmail)  detailRows.push(["Register", `<a href="mailto:${encodeURIComponent(c.registrationEmail)}">${escapeHtml(c.registrationEmail)}</a>`]);
 
   const detailGridHtml = detailRows.length
     ? `<dl class="catl-detail-grid">${detailRows.map(([k, v]) =>
@@ -1208,7 +1216,7 @@ function renderSections() {
     section.dataset.category = cat.id;
     section.innerHTML = `
       <div class="catl-section__header">
-        ${cat.eyebrow ? `<div class="catl-section__eyebrow" style="color: var(--cat-${cat.id});">${escapeHtml(cat.eyebrow)}</div>` : ""}
+        ${cat.eyebrow ? `<div class="catl-section__eyebrow" style="color: var(--cat-${escapeHtml(cat.id)});">${escapeHtml(cat.eyebrow)}</div>` : ""}
         <h2 class="catl-section__title">${escapeHtml(cat.label)}</h2>
         ${cat.lede ? `<p class="catl-section__lede">${escapeHtml(cat.lede)}</p>` : ""}
       </div>

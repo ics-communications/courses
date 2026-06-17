@@ -53,6 +53,21 @@ const PROGRAM_OPTIONS = [
 
 const INSTRUCTOR_SLUG_OPTIONS = ["1", "2", "3", "4", "5", "6"];
 
+// Whitelist of fields exposed in the public JSON payload. Anything not listed
+// here (e.g. future internal-only columns) is never served to the public page.
+const PUBLIC_FIELDS = [
+  "id", "published", "category",
+  "title", "code", "termCode", "term", "termLabel",
+  "programs", "programTagsDisplay", "credits",
+  "instructorName", "instructorSlug", "instructorUrl",
+  "subtitle", "descriptionShort", "descriptionMore",
+  "tstCode", "format", "meetingDay", "meetingTime",
+  "syllabusUrl", "requiredBooks",
+  "prerequisites", "cstcArea", "certificateTags",
+  "enrolmentNotes", "registrationEmail",
+  "lastDateToRegister", "maxEnrolment", "partnerNote"
+];
+
 // ============================================================================
 //  PUBLIC WEB APP
 // ============================================================================
@@ -86,11 +101,15 @@ function buildPayload_() {
 }
 
 function normalizeCourseForPublic_(row) {
-  const out = Object.assign({}, row);
+  // Only copy whitelisted fields into the public payload — never leak
+  // internal-only columns (e.g. updatedAt or any future private fields).
+  const out = {};
+  PUBLIC_FIELDS.forEach(h => { if (row[h] !== undefined) out[h] = row[h]; });
   // coerce published into a boolean
   out.published = (row.published === true || /^(true|yes|1)$/i.test(String(row.published || "").trim()));
-  // strip the internal updatedAt timestamp from the public payload
-  delete out.updatedAt;
+  // drop categories that aren't in the known set, so the page never renders
+  // an unexpected category value (defense in depth alongside front-end escaping)
+  if (CATEGORY_OPTIONS.indexOf(out.category) === -1) out.category = "core";
   // serialize dates
   if (row.lastDateToRegister instanceof Date) {
     out.lastDateToRegister = Utilities.formatDate(row.lastDateToRegister, Session.getScriptTimeZone(), "yyyy-MM-dd");
