@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institute for Christian Studies | Where Faith Meets Rigorous Scholarship</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   RESET & VARIABLES
+   ================================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Crimson core — ICS brand red */
+  --wine:        #9B0D24;
+  --wine-deep:   #7A0A1C;
+  --wine-mid:    #BE0B28;
+  --wine-soft:   #D44B5E;
+
+  /* Burnt Copper accent */
+  --accent:       #A85A32;
+  --accent-light: #C87A52;
+  --accent-muted: #8E4A28;
+  --accent-pale:  #EEDACA;
+  --accent-deep:  #7A4020;
+
+  /* Warm Umber — tertiary */
+  --teal:         #7A5C3A;
+  --teal-light:   #A07A4E;
+  --teal-muted:   #6B4E30;
+  --teal-pale:    #E6D9C6;
+  --teal-deep:    #5A4228;
+
+  /* Neutrals */
+  --cream:       #FDFBF7;
+  --cream-warm:  #F9F5ED;
+  --parchment:   #F0E9DD;
+  --text-dark:   #2E1318;
+  --text-body:   #3A3330;
+  --text-muted:  #857E78;
+  --text-on-dark:#E8C2C2;
+  --border-light:rgba(155,13,36,0.08);
+
+  --serif: 'Libre Baskerville', Georgia, serif;
+  --sans:  'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ease:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 110%;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--text-body);
+  background: var(--cream);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ================================================================
+   SHARED ELEMENTS
+   ================================================================ */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-muted);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--wine);
+  line-height: 1.2;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.6rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.35s var(--ease);
+  /* Mobile: ensure minimum touch target */
+  min-height: 44px;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-accent:hover {
+  background: var(--accent-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(168,90,50,0.3);
+}
+
+.btn-outline-light {
+  background: transparent;
+  color: var(--cream);
+  border: 1.5px solid rgba(255,255,255,0.3);
+}
+.btn-outline-light:hover {
+  border-color: var(--accent-light);
+  color: var(--accent-light);
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: var(--wine);
+  border: 1.5px solid var(--wine);
+}
+.btn-outline-dark:hover {
+  background: var(--wine);
+  color: var(--cream);
+}
+
+.btn-arrow::after {
+  content: '→';
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.btn-arrow:hover::after { transform: translateX(3px); }
+
+/* ================================================================
+   HERO — Campaign-forward, ~60vh
+   ================================================================ */
+.hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  background: var(--wine-deep);
+  overflow: hidden;
+  padding: 5rem 0 4rem;
+}
+
+.hero__bg {
+  position: absolute; inset: 0;
+}
+.hero__bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  filter: saturate(0.25) brightness(0.7);
+}
+
+.hero__overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 90%, rgba(168,90,50,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 15%, rgba(168,90,50,0.05) 0%, transparent 45%),
+    linear-gradient(160deg, rgba(122,10,28,0.94) 0%, rgba(122,10,28,0.78) 100%);
+}
+
+.hero__accent-rule {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light) 40%, transparent 80%);
+  z-index: 10;
+}
+
+.hero__content {
+  position: relative; z-index: 5; width: 100%;
+}
+
+.hero__inner { max-width: 700px; }
+
+.hero__eyebrow {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+}
+
+.hero__title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.12;
+  margin-bottom: 1.1rem;
+}
+.hero__title em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+.hero__subtitle {
+  font-family: var(--sans);
+  font-size: 1.02rem;
+  font-weight: 300;
+  color: var(--text-on-dark);
+  line-height: 1.75;
+  max-width: 560px;
+  margin-bottom: 2rem;
+}
+
+.hero__ctas {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.btn-donate-hero {
+  background: transparent;
+  color: var(--cream);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  min-height: 44px;
+}
+.btn-donate-hero:hover {
+  border-color: var(--accent-light);
+  color: var(--accent-light);
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   ACCENT RULE
+   ================================================================ */
+.accent-rule {
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light) 50%, transparent);
+}
+
+/* ================================================================
+   ANNOUNCEMENT BANNER
+   ================================================================ */
+.announce {
+  position: relative;
+  overflow: hidden;
+  background: var(--cream-warm);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.announce::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 60%, rgba(168,90,50,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(168,90,50,0.05) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+
+.announce__accent-top {
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light) 40%, transparent 100%);
+}
+
+.announce__inner {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2rem 2rem 2.2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.announce__photo-col {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.75rem;
+  padding-top: 0.3rem;
+}
+
+.announce__photo {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-light);
+  object-fit: cover; display: block;
+  box-shadow: 0 4px 20px rgba(46,19,24,0.12);
+}
+
+.announce__photo-name {
+  font-family: var(--serif);
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--wine); text-align: center;
+  line-height: 1.3;
+}
+
+.announce__photo-title {
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  color: var(--accent-muted);
+  text-align: center;
+  letter-spacing: 0.02em;
+  margin-top: -0.2rem;
+}
+
+.announce__text-col {
+  display: flex; flex-direction: column; gap: 0.65rem;
+}
+
+.announce__date {
+  font-family: var(--sans);
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--accent-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.announce__heading {
+  font-family: var(--serif);
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--wine); line-height: 1.25;
+}
+
+.announce__body {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+.announce__quote {
+  border-left: 3px solid var(--accent);
+  background: rgba(168,90,50,0.06);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.4rem;
+  margin: 0.2rem 0;
+  max-width: 560px;
+}
+
+.announce__quote-text {
+  font-family: var(--serif);
+  font-size: 0.88rem; font-style: italic;
+  color: var(--text-dark); line-height: 1.65;
+}
+
+.announce__quote-attr {
+  font-family: var(--sans);
+  font-size: 0.68rem; font-weight: 700;
+  color: var(--wine);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.45rem;
+}
+
+.announce__cta {
+  display: inline-flex;
+  align-items: center; gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--accent);
+  border: none; border-radius: 0;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s var(--ease);
+  width: fit-content;
+  text-transform: uppercase;
+  min-height: 44px;
+}
+
+.announce__cta:hover {
+  background: var(--accent-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(168,90,50,0.3);
+}
+
+.announce__cta svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ================================================================
+   WHO WE ARE — mission strip
+   ================================================================ */
+.mission-strip {
+  background: var(--wine);
+  padding: 3.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-strip::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(168,90,50,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(168,90,50,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.mission-strip__content {
+  position: relative;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.mission-strip__eyebrow {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 1rem;
+}
+
+.mission-strip__title {
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.35;
+  margin-bottom: 1.2rem;
+}
+.mission-strip__title em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+.mission-strip__body {
+  font-size: 0.92rem;
+  color: var(--text-on-dark);
+  line-height: 1.75;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   DISTINCTIVES — 3-column feature grid
+   ================================================================ */
+.distinctives {
+  padding: 4.5rem 0 5rem;
+  background: var(--cream-warm);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.distinctives__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.distinctives__header .eyebrow { margin-bottom: 0.5rem; }
+
+.distinctives__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.distinctive {
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+.distinctive__icon {
+  width: 52px; height: 52px;
+  margin: 0 auto 1.2rem;
+  background: rgba(155,13,36,0.06);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  color: var(--wine);
+  border: 1px solid var(--border-light);
+}
+
+.distinctive__title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wine);
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+
+.distinctive__desc {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+/* ================================================================
+   TESTIMONIALS
+   ================================================================ */
+.testimonials {
+  padding: 4.5rem 0;
+  background: var(--cream);
+}
+
+.testimonials__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  text-align: center;
+}
+
+.testimonial-card__photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1.2rem;
+  display: block;
+  border: 3px solid var(--accent-pale);
+}
+
+.testimonial-card__mark {
+  font-family: var(--serif);
+  font-size: 2.4rem;
+  color: var(--accent-pale);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.testimonial-card__quote {
+  font-family: var(--serif);
+  font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+  font-style: italic;
+  color: var(--text-dark);
+  line-height: 1.7;
+  margin-bottom: 1.3rem;
+}
+
+.testimonial-card__name {
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--wine);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.testimonial-card__role {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   PROGRAMS — 3 groups
+   ================================================================ */
+.programs {
+  padding: 4.5rem 0 5rem;
+  background: var(--cream);
+}
+
+.programs__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.programs__header .eyebrow { margin-bottom: 0.5rem; }
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.program-group {
+  background: var(--cream-warm);
+  border: 1px solid var(--border-light);
+  border-top: 3px solid var(--accent);
+  padding: 2.2rem 1.8rem 1.8rem;
+  transition: all 0.4s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+.program-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(155,13,36,0.07);
+  border-top-color: var(--wine-soft);
+}
+
+.program-group__number {
+  font-family: var(--serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-muted);
+  margin-bottom: 0.75rem;
+}
+
+.program-group__title {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--wine);
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+
+.program-group__question {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--accent-deep);
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--accent-pale);
+}
+
+.program-group__desc {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.program-group__programs {
+  list-style: none;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  padding-top: 1rem;
+}
+
+.program-group__programs li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.program-group__programs li::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.4rem;
+}
+
+.program-group__degree {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--wine-mid);
+  background: rgba(155,13,36,0.06);
+  padding: 0.1rem 0.45rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.program-group__name {
+  font-size: 0.88rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.program-group__link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.3s ease, gap 0.3s ease;
+  margin-top: auto;
+  min-height: 44px;
+}
+.program-group__link:hover {
+  color: var(--wine);
+  gap: 0.55rem;
+}
+
+/* Teal variant for Group II */
+.program-group--teal { border-top-color: var(--teal); }
+.program-group--teal:hover { border-top-color: var(--teal-deep); }
+.program-group--teal .program-group__number { color: var(--teal-muted); }
+.program-group--teal .program-group__question { color: var(--teal-deep); border-left-color: var(--teal-pale); }
+.program-group--teal .program-group__programs li::before { background: var(--teal); }
+.program-group--teal .program-group__link { color: var(--teal-muted); }
+.program-group--teal .program-group__link:hover { color: var(--teal-deep); }
+
+/* ================================================================
+   MWS-E SPOTLIGHT — full-width feature
+   ================================================================ */
+.spotlight {
+  position: relative;
+  padding: 5rem 0;
+  background: var(--wine-deep);
+  overflow: hidden;
+}
+
+.spotlight::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(168,90,50,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 80%, rgba(168,90,50,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.spotlight__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.spotlight__text { z-index: 1; }
+
+.spotlight__badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wine-deep);
+  background: var(--accent-light);
+  padding: 0.25rem 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.spotlight__title {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+.spotlight__title em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+.spotlight__sub {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.2rem;
+}
+
+.spotlight__body {
+  font-size: 0.95rem;
+  color: var(--text-on-dark);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+  max-width: 480px;
+}
+
+.spotlight__features {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.spotlight__features li {
+  font-size: 0.82rem;
+  color: var(--text-on-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spotlight__features li::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.spotlight__ctas {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.spotlight__image {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlight__image-frame {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  border: 2px solid rgba(200,122,82,0.2);
+  position: relative;
+}
+
+.spotlight__image-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: saturate(0.85);
+}
+
+.spotlight__image-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.5rem 1.2rem 1rem;
+  background: linear-gradient(to top, rgba(122,10,28,0.9), transparent);
+}
+
+.spotlight__image-caption p {
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--cream);
+  opacity: 0.9;
+}
+
+/* ================================================================
+   TAKE A COURSE
+   ================================================================ */
+.courses {
+  padding: 4rem 0 4.5rem;
+  background: var(--cream);
+}
+
+.courses__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.courses__header {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.courses__header-desc {
+  max-width: 560px;
+  margin: 0.6rem auto 0;
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.course-card {
+  background: var(--cream-warm);
+  border: 1px solid var(--border-light);
+  border-top: 3px solid var(--teal);
+  padding: 2rem 1.8rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s var(--ease);
+}
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(155,13,36,0.07);
+  border-top-color: var(--teal-deep);
+}
+
+.course-card__eyebrow {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal-muted);
+  margin-bottom: 0.5rem;
+}
+
+.course-card__title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--wine);
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+}
+
+.course-card__desc {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+  flex-grow: 1;
+}
+
+.course-card__details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.course-card__tag {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--teal-deep);
+  background: var(--teal-pale);
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+}
+
+.course-card__link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.3s ease, gap 0.3s ease;
+  margin-top: auto;
+  min-height: 44px;
+}
+.course-card__link:hover {
+  color: var(--teal-deep);
+  gap: 0.55rem;
+}
+
+/* ================================================================
+   DONATE BANNER
+   ================================================================ */
+.donate-banner {
+  background: var(--cream-warm);
+  padding: 2.2rem 0;
+  position: relative;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.donate-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.donate-banner__icon {
+  width: 44px; height: 44px;
+  background: var(--teal-pale);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.donate-banner__text { flex-grow: 1; }
+
+.donate-banner__title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wine);
+  margin-bottom: 0.2rem;
+}
+
+.donate-banner__desc {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  max-width: 480px;
+  line-height: 1.55;
+}
+
+.btn-donate-banner {
+  background: var(--teal);
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  padding: 0.85rem 2rem;
+  min-height: 44px;
+}
+.btn-donate-banner:hover {
+  background: var(--teal-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(122,92,58,0.25);
+}
+
+/* ================================================================
+   FEEDS — Facebook + Events
+   ================================================================ */
+.feeds {
+  padding: 0 0 5rem;
+  background: var(--cream);
+}
+
+.feeds__grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Facebook widget */
+.fb-widget {
+  background: var(--cream-warm);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 700px;
+}
+
+.fb-widget__header {
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.fb-widget__logo {
+  width: 26px; height: 26px;
+  background: #1877F2;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fb-widget__logo svg { display: block; }
+
+.fb-widget__name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--wine);
+  flex-grow: 1;
+  line-height: 1.3;
+}
+
+.fb-widget__follow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  color: var(--accent-muted);
+  border: 1px solid var(--accent-muted);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.fb-widget__follow:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.fb-widget__embed {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background: #fff;
+}
+
+.fb-widget__embed iframe {
+  border: none;
+  width: 100%;
+  min-height: 600px;
+  margin-top: -70px;
+}
+
+.fb-widget__footer {
+  padding: 0.7rem 1.2rem;
+  text-align: center;
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+  background: var(--cream-warm);
+}
+
+.fb-widget__more {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wine-mid);
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 44px;
+}
+.fb-widget__more:hover { color: var(--accent-muted); }
+
+/* Events widget */
+.events-widget {
+  background: var(--cream-warm);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  max-height: 700px;
+  display: flex;
+  flex-direction: column;
+}
+
+.events-widget__header {
+  padding: 1.1rem 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.events-widget__header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.events-widget__icon {
+  width: 26px; height: 26px;
+  background: var(--wine);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.events-widget__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--wine);
+}
+
+.events-widget__cal-link {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-muted);
+  transition: color 0.3s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.events-widget__cal-link:hover { color: var(--wine); }
+
+.events-widget__scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.5rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155,13,36,0.12) transparent;
+  /* Smooth scroll on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+.events-widget__scroll::-webkit-scrollbar { width: 4px; }
+.events-widget__scroll::-webkit-scrollbar-track { background: transparent; }
+.events-widget__scroll::-webkit-scrollbar-thumb { background: rgba(155,13,36,0.12); border-radius: 4px; }
+
+.events-widget__loading,
+.events-widget__error,
+.events-widget__empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.events-widget__loading-spinner {
+  width: 26px; height: 26px;
+  border: 2.5px solid var(--border-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 0.8rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.event-card {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.9rem 1.6rem;
+  border-bottom: 1px solid rgba(155,13,36,0.04);
+  transition: background 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.event-card:last-child { border-bottom: none; }
+.event-card:hover { background: rgba(168,90,50,0.05); }
+
+.event-card__date-badge {
+  width: 52px; height: 52px;
+  background: var(--wine);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.event-card__date-badge::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+
+.event-card__month {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-top: 2px;
+}
+
+.event-card__day {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1;
+}
+
+.event-card__info { min-width: 0; }
+
+.event-card__title {
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--wine);
+  line-height: 1.3;
+  margin-bottom: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.event-card__time {
+  font-size: 0.72rem;
+  color: var(--accent-muted);
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+}
+
+.event-card__location {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-card__description {
+  font-size: 0.74rem;
+  color: var(--text-body);
+  line-height: 1.55;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  opacity: 0.82;
+}
+
+.events-month-divider {
+  padding: 0.5rem 1.6rem 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(168,90,50,0.04);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.event-card--today .event-card__date-badge { background: var(--teal); }
+.event-card--today .event-card__month { color: #fff; }
+.event-card--today .event-card__day { color: #fff; }
+
+/* ================================================================
+   COMMUNITY CTA
+   ================================================================ */
+.community-cta {
+  position: relative;
+  padding: 5rem 0;
+  background: var(--wine-deep);
+  overflow: hidden;
+}
+
+.community-cta__bg {
+  position: absolute; inset: 0;
+}
+.community-cta__bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  filter: saturate(0.3);
+}
+
+.community-cta__overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 80%, rgba(168,90,50,0.06) 0%, transparent 50%),
+    linear-gradient(160deg, rgba(122,10,28,0.93), rgba(155,13,36,0.9));
+}
+
+.community-cta__content {
+  position: relative; z-index: 2;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.community-cta__eyebrow {
+  margin-bottom: 0.5rem;
+  display: block;
+  color: var(--accent-light);
+}
+
+.community-cta__title {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.community-cta__title em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+.community-cta__text {
+  font-size: 0.95rem;
+  color: var(--text-on-dark);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.community-cta__buttons {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.site-footer {
+  background: var(--wine-deep);
+  padding: 3.5rem 0 2rem;
+  color: var(--text-on-dark);
+  border-top: 1px solid rgba(168,90,50,0.12);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.footer__brand {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+
+.footer__desc {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  max-width: 280px;
+}
+
+.footer__address {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  font-style: normal;
+}
+
+.footer__heading {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 1.2rem;
+}
+
+.footer__links { list-style: none; }
+.footer__links li { margin-bottom: 0.6rem; }
+.footer__links a {
+  font-size: 0.85rem;
+  color: var(--text-on-dark);
+  transition: color 0.2s ease;
+  /* Ensure touch-friendly link height */
+  display: inline-block;
+  padding: 0.15rem 0;
+}
+.footer__links a:hover { color: var(--accent-light); }
+
+.footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: rgba(212,172,172,0.5);
+}
+
+.footer__social {
+  display: flex; gap: 0.6rem;
+}
+.footer__social a {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+  color: var(--text-on-dark);
+  transition: all 0.2s ease;
+}
+.footer__social a:hover {
+  border-color: var(--accent-light);
+  color: var(--accent-light);
+}
+
+.footer__social .social-substack {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ================================================================
+   SCROLL ANIMATION
+   ================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================================
+   RESPONSIVE — TABLET (max-width: 1024px)
+   ================================================================ */
+@media (max-width: 1024px) {
+  .spotlight__grid { gap: 2.5rem; }
+  .feeds__grid { grid-template-columns: 1fr 1fr; }
+  .fb-widget, .events-widget { max-height: 580px; }
+  .fb-widget__embed iframe { min-height: 550px; }
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+
+/* ================================================================
+   RESPONSIVE — MOBILE (max-width: 768px)
+   ================================================================ */
+@media (max-width: 768px) {
+  /* Scale down base font for mobile */
+  html { font-size: 100%; }
+
+  /* Tighten container padding */
+  .container { padding: 0 1.25rem; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: auto;
+    padding: 2.5rem 0 2rem;
+  }
+  .hero__title {
+    font-size: clamp(1.7rem, 7vw, 2.4rem);
+  }
+  .hero__subtitle {
+    font-size: 0.92rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero__ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero__ctas .btn {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* ── ANNOUNCEMENT BANNER ── */
+  .announce__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.8rem 1.25rem 2rem;
+    gap: 1.2rem;
+  }
+  .announce__photo-col {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+  }
+  .announce__photo { width: 72px; height: 72px; border-width: 2px; }
+  .announce__photo-info { text-align: left; }
+  .announce__photo-name { text-align: left; font-size: 0.95rem; }
+  .announce__photo-title { text-align: left; font-size: 0.78rem; }
+  .announce__heading { font-size: 1.2rem; }
+  .announce__body { font-size: 0.86rem; max-width: 100%; }
+  .announce__quote {
+    max-width: 100%;
+    text-align: left;
+    padding: 0.8rem 1rem;
+  }
+  .announce__quote-text { font-size: 0.82rem; }
+  .announce__cta {
+    margin: 0.5rem auto 1.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── MISSION STRIP ── */
+  .mission-strip { padding: 2.5rem 0; }
+  .mission-strip__title { font-size: clamp(1.15rem, 4.5vw, 1.5rem); }
+  .mission-strip__body { font-size: 0.86rem; }
+
+  /* ── DISTINCTIVES ── */
+  .distinctives { padding: 3rem 0 3.5rem; }
+  .distinctives__header { margin-bottom: 2rem; }
+  .distinctives__grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .distinctive { padding: 1.5rem 1rem; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 3rem 0; }
+  .testimonials__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .testimonial-card__photo { width: 80px; height: 80px; margin-bottom: 1rem; }
+  .testimonial-card__quote { font-size: 0.9rem; }
+
+  /* ── PROGRAMS ── */
+  .programs { padding: 3rem 0 3.5rem; }
+  .programs__header { margin-bottom: 2rem; }
+  .programs-grid { grid-template-columns: 1fr; }
+  .program-group { padding: 1.8rem 1.4rem 1.4rem; }
+  .program-group__title { font-size: 1.15rem; }
+
+  /* ── SPOTLIGHT / MWS-E ── */
+  .spotlight { padding: 3rem 0; }
+  .spotlight__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .spotlight__image { order: -1; }
+  .spotlight__image-frame { aspect-ratio: 16/9; }
+  .spotlight__body { max-width: 100%; font-size: 0.9rem; }
+  .spotlight__features {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+  }
+  .spotlight__ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .spotlight__ctas .btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* ── COURSES ── */
+  .courses { padding: 3rem 0 3.5rem; }
+  .courses__inner { grid-template-columns: 1fr; }
+  .course-card { padding: 1.6rem 1.4rem 1.4rem; }
+
+  /* ── DONATE BANNER ── */
+  .donate-banner { padding: 2rem 0; }
+  .donate-banner__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .donate-banner__icon { margin: 0 auto; }
+  .donate-banner__desc { max-width: 100%; }
+  .btn-donate-banner { width: 100%; justify-content: center; }
+
+  /* ── FEEDS ── */
+  .feeds__grid { grid-template-columns: 1fr; }
+  .fb-widget { max-height: 620px; }
+  .fb-widget__embed iframe { min-height: 590px; }
+  .events-widget { max-height: 620px; }
+  .event-card { padding: 0.9rem 1.2rem; }
+  .events-month-divider { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .events-widget__header { padding: 1rem 1.2rem; }
+
+  /* ── COMMUNITY CTA ── */
+  .community-cta { padding: 3rem 0; }
+  .community-cta__text { font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .community-cta__buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .community-cta__buttons .btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer { padding: 2.5rem 0 1.5rem; }
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .footer__desc { max-width: 100%; }
+  .footer__bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  .footer__social { justify-content: center; }
+  .footer__social a { width: 40px; height: 40px; }
+}
+
+/* ================================================================
+   RESPONSIVE — SMALL MOBILE (max-width: 480px)
+   ================================================================ */
+@media (max-width: 480px) {
+  html { font-size: 95%; }
+  .container { padding: 0 1rem; }
+
+  .hero { padding: 2rem 0 1.8rem; }
+  .hero__eyebrow { font-size: 0.72rem; }
+  .hero__title { font-size: 1.6rem; }
+  .hero__title br { display: none; }
+  .hero__subtitle { font-size: 0.86rem; line-height: 1.65; }
+
+  .announce__inner { padding: 2.2rem 1rem 3rem; }
+  .announce__heading { font-size: 1.05rem; }
+  .announce__body { font-size: 0.82rem; }
+  .announce__quote-text { font-size: 0.78rem; }
+
+  .mission-strip { padding: 2rem 0; }
+
+  .distinctives { padding: 2.5rem 0; }
+  .distinctive { padding: 1.2rem 0.5rem; }
+  .distinctive__title { font-size: 1rem; }
+  .distinctive__desc { font-size: 0.84rem; }
+
+  .testimonial-card__quote { font-size: 0.86rem; }
+
+  .programs { padding: 2.5rem 0 3rem; }
+  .program-group { padding: 1.5rem 1.2rem 1.2rem; }
+  .program-group__title { font-size: 1.08rem; }
+  .program-group__desc { font-size: 0.85rem; }
+
+  .spotlight { padding: 2.5rem 0; }
+  .spotlight__features {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .spotlight__badge { font-size: 0.58rem; }
+
+  .courses { padding: 2.5rem 0 3rem; }
+  .course-card { padding: 1.4rem 1.2rem 1.2rem; }
+
+  .donate-banner { padding: 1.5rem 0; }
+
+  .community-cta { padding: 2.5rem 0; }
+  .community-cta__title { font-size: 1.4rem; }
+  .community-cta__title br { display: none; }
+
+  .fb-widget { max-height: 560px; }
+  .fb-widget__embed iframe { min-height: 530px; }
+  .events-widget { max-height: 560px; }
+
+  /* Ensure event descriptions don't waste too much space */
+  .event-card__description { -webkit-line-clamp: 2; }
+}
+
+/* ================================================================
+   RESPONSIVE — VERY SMALL (max-width: 360px)
+   ================================================================ */
+@media (max-width: 360px) {
+  html { font-size: 90%; }
+  .container { padding: 0 0.85rem; }
+  .hero__title { font-size: 1.4rem; }
+  .hero__subtitle { font-size: 0.82rem; }
+  .announce__photo { width: 60px; height: 60px; }
+  .spotlight__title { font-size: 1.3rem; }
+  .event-card { grid-template-columns: 44px 1fr; gap: 0.75rem; }
+  .event-card__date-badge { width: 44px; height: 44px; }
+  .event-card__day { font-size: 1rem; }
+}
+
+/* ================================================================
+   TOUCH / HOVER OPTIMIZATION
+   ================================================================ */
+@media (hover: none) {
+  /* Disable hover transforms on touch devices to prevent sticky states */
+  .program-group:hover,
+  .course-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  /* Active states for tap feedback */
+  .btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+  .event-card:active {
+    background: rgba(168,90,50,0.08);
+  }
+  .program-group__link:active,
+  .course-card__link:active {
+    opacity: 0.7;
+  }
+}
+
+/* ================================================================
+   SAFE AREA (iPhone notch / dynamic island)
+   ================================================================ */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .site-footer {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+  .hero {
+    padding-top: calc(5rem + env(safe-area-inset-top));
+  }
+}
+
+/* ================================================================
+   REDUCED MOTION
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .events-widget__loading-spinner {
+    animation: none;
+  }
+  .btn, .program-group, .course-card, .announce__cta {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HERO — Campaign Forward
+     ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero__accent-rule"></div>
+  <div class="hero__bg">
+    <!-- PLACEHOLDER: Replace with ICS campus or Toronto scholarly image -->
+    <img src="https://lightroom.adobe.com/v2c/spaces/8e293c41299846de9eaf08c99ce6ee2a/assets/478461766be9402991c24f42f932b97b/revisions/996583608d5743f7b6805b409eb9ba09/renditions/11025fd94a12a0fd1ebcdaeb73d90f7a" alt="Students in scholarly discussion">
+  </div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content container">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Institute for Christian Studies · Toronto | Online</p>
+      <h1 class="hero__title">Where Faith Meets <br><em>Rigorous Scholarship</em></h1>
+      <p class="hero__subtitle">A graduate school in the reformational Christian tradition, cultivating wisdom at the intersection of philosophy, theology, and the disciplines that shape our world. Bring your questions. Learn in community. Let faith and thinking grow together.</p>
+      <div class="hero__ctas">
+        <a href="https://www.icscanada.edu/admissions" class="btn btn-accent btn-arrow">Explore Programs</a>
+        <a href="mailto:recruitment-coordinator@icscanada.edu" class="btn btn-outline-light btn-arrow">Request Info</a>
+        <a href="https://www.icscanada.edu/donate" class="btn btn-donate-hero">♡ Donate</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="accent-rule"></div>
+
+
+<!-- ═══════════════════════════════════════════
+     PRESIDENTIAL ANNOUNCEMENT BANNER
+     ═══════════════════════════════════════════ -->
+<section class="announce">
+  <div class="announce__accent-top"></div>
+  <div class="announce__inner container">
+
+    <div class="announce__photo-col">
+      <img
+        class="announce__photo"
+        src="https://files.constantcontact.com/0e42c4d3901/3609bbd0-5866-42ef-acef-7fee64bda332.jpg"
+        alt="John A. Olthuis, C.M."
+      >
+      <div class="announce__photo-info">
+        <p class="announce__photo-name">John A. Olthuis, C.M.</p>
+        <p class="announce__photo-title">Honorary Doctorate &middot; 2026</p>
+      </div>
+    </div>
+
+    <div class="announce__text-col">
+      <p class="announce__date">April 20, 2026</p>
+      <h2 class="announce__heading">A Homecoming: Honorary Doctorate for John A. Olthuis</h2>
+      <p class="announce__body">
+        ICS will confer an honorary doctorate on John A. Olthuis, C.M., at its May 29, 2026 convocation.
+      </p>
+
+      <div class="announce__quote">
+        <p class="announce__quote-text">
+          &ldquo;The world needs so much healing now that we can't be doctrinaire about it.&rdquo;
+        </p>
+        <p class="announce__quote-attr">&mdash; John A. Olthuis</p>
+      </div>
+
+      <a class="announce__cta" href="https://icscanada.edu/honouring-jo">
+        Read the Full Announcement
+        <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MISSION STRIP
+     ═══════════════════════════════════════════ -->
+<section class="mission-strip">
+  <div class="container">
+    <div class="mission-strip__content reveal">
+      <p class="mission-strip__eyebrow">Who We Are</p>
+      <h2 class="mission-strip__title">An interdisciplinary graduate school where <em>the gospel's message of renewal</em> guides our learning and research</h2>
+      <p class="mission-strip__body">For over fifty years we've formed scholars, educators, pastors, and public leaders through programs that bring together theology, philosophy, education, and culture&mdash;focusing on the intersection of reformational philosophy and contemporary scholarship and society.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     DISTINCTIVES
+     ═══════════════════════════════════════════ -->
+<section class="distinctives">
+  <div class="container">
+    <div class="distinctives__header reveal">
+      <h2 class="section-title">What Makes ICS Distinctive</h2>
+    </div>
+
+    <div class="distinctives__grid">
+      <div class="distinctive reveal">
+        <div class="distinctive__icon">✦</div>
+        <h3 class="distinctive__title">Spacious &amp; Inclusive</h3>
+        <p class="distinctive__desc">Intellectual hospitality across traditions. A home for those seeking faith with room to question, explore, and grow.</p>
+      </div>
+      <div class="distinctive reveal">
+        <div class="distinctive__icon">◈</div>
+        <h3 class="distinctive__title">Scholarly &amp; Practical</h3>
+        <p class="distinctive__desc">Academic excellence joined with spiritual formation and lived public impact. Scholarship that shapes the world.</p>
+      </div>
+      <div class="distinctive reveal">
+        <div class="distinctive__icon">⟡</div>
+        <h3 class="distinctive__title">Reformational Roots,<br>Forward Vision</h3>
+        <p class="distinctive__desc">A living tradition that continually reforms toward justice, humility, and hope. Accessible and global through online learning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS — Smith & Du Mez
+     ═══════════════════════════════════════════ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="programs__header reveal" style="margin-bottom:2rem;">
+      <h2 class="section-title">Distinguished Associates</h2>
+    </div>
+<br>
+    <div class="testimonials__grid">
+
+      <div class="testimonial-card reveal">
+        <!-- PLACEHOLDER: Replace with James K.A. Smith headshot -->
+        <img class="testimonial-card__photo" src="https://lightroom.adobe.com/v2c/spaces/8e293c41299846de9eaf08c99ce6ee2a/assets/ad3cecfef694db71213c3247eee3a41a/revisions/80179e152eb64a24ad912348d955a447/renditions/15e21a22eb09bf7b08a4e94beee89bbf" alt="James K.A. Smith">
+        <div class="testimonial-card__mark">&ldquo;</div>
+        <p class="testimonial-card__quote">The two years I spent at ICS were the most intellectually formative years of my life. I still drink from these deep wells. I think ICS is a hidden treasure, and I am excited to see all the ways ICS can be a vibrant learning community for the church and curious seekers in the coming years.</p>
+        <span class="testimonial-card__name">James K.A. Smith, Class of '95</span>
+        <span class="testimonial-card__role">Professor of Philosophy, Calvin University · Byker Chair in Applied Reformed Theology · Author of <em>You Are What You Love</em></span>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <!-- PLACEHOLDER: Replace with Kristin Kobes Du Mez headshot -->
+        <img class="testimonial-card__photo" src="https://sethgillihan.com/wp-content/uploads/Screen-Shot-2021-10-08-at-1.28.22-PM-sm.jpg" alt="Kristin Kobes Du Mez">
+        <div class="testimonial-card__mark">&ldquo;</div>
+        <p class="testimonial-card__quote">ICS has long served as a beacon for Christians seeking to think critically and to faithfully engage the culture. At a time when partisanship and propaganda too often substitute for robust intellectual engagement, ICS equips people of faith to engage difficult topics in a spirit of honesty and humility.</p>
+        <span class="testimonial-card__name">Kristin Kobes Du Mez</span>
+        <span class="testimonial-card__role">Professor of History, Calvin University · Author of <em>Jesus and John Wayne</em></span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     PROGRAMS — Three Streams
+     ═══════════════════════════════════════════ -->
+<section class="programs">
+  <div class="container">
+
+    <div class="programs__header reveal">
+      <h2 class="section-title">Three Streams of Study</h2>
+    </div>
+
+    <div class="programs-grid">
+
+      <!-- GROUP 1: Philosophical Apprenticeship -->
+      <div class="program-group reveal">
+        <span class="program-group__number">I</span>
+        <h3 class="program-group__title">Philosophical Apprenticeship</h3>
+        <p class="program-group__question">How can philosophy help engage my faith with the world honestly and deeply?</p>
+        <p class="program-group__desc">Rigorous graduate training in the philosophical foundations of the disciplines, shaped by the reformational tradition and aimed at bringing faith and scholarship into transformative dialogue.</p>
+        <ul class="program-group__programs">
+          <li>
+            <span class="program-group__degree">PhD</span>
+            <span class="program-group__name">Doctorate in Philosophy</span>
+          </li>
+          <li>
+            <span class="program-group__degree">MA</span>
+            <span class="program-group__name">Master of Arts in Philosophy</span>
+          </li>
+        </ul>
+        <a href="https://www.icscanada.edu/academics" class="program-group__link">Explore Programs →</a>
+      </div>
+
+      <!-- GROUP 2: Educational Leadership -->
+      <div class="program-group program-group--teal reveal">
+        <span class="program-group__number">II</span>
+        <h3 class="program-group__title">Educational Leadership</h3>
+        <p class="program-group__question">How can I renew my teaching so my students can connect faith, learning, and life?</p>
+        <p class="program-group__desc">Equipping Christian educators and school leaders with worldview-conscious, philosophically grounded approaches to teaching, curriculum, and formation in the classroom.</p>
+        <ul class="program-group__programs">
+          <li>
+            <span class="program-group__degree">MA-EL</span>
+            <span class="program-group__name">Master of Arts (Phil) in Educational Leadership</span>
+          </li>
+          <li>
+            <span class="program-group__degree">MWS-E</span>
+            <span class="program-group__name">Master of Worldview Studies in Education</span>
+          </li>
+        </ul>
+        <a href="https://education.icscanada.edu" class="program-group__link">Explore Programs →</a>
+      </div>
+
+      <!-- GROUP 3: Lifelong Learning -->
+      <div class="program-group reveal">
+        <span class="program-group__number">III</span>
+        <h3 class="program-group__title">Lifelong Learning</h3>
+        <p class="program-group__question">How can we renew the resources within our tradition to meet the demands of today's challenges?</p>
+        <p class="program-group__desc">Public lectures, community programming, and open conversations that make ICS's scholarship accessible to everyone, facilitating the kind of dialogue our communities need.</p>
+        <ul class="program-group__programs">
+          <li>
+            <span class="program-group__degree">F2BF</span>
+            <span class="program-group__name">Free to be Faithful</span>
+          </li>
+        </ul>
+        <a href="https://f2bf.icscanada.edu" class="program-group__link">Explore →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ═══════════════════════════════════════════
+     TAKE A COURSE
+     ═══════════════════════════════════════════ -->
+<section class="courses">
+  <div class="container">
+    <div class="courses__inner">
+
+      <div class="courses__header reveal">
+        <h2 class="section-title">Start with a Course</h2>
+        <p class="courses__header-desc">Not ready for a full program? Explore ICS's scholarship by enrolling in an individual course, whether graduate-level or community-oriented.</p>
+      </div>
+
+      <div class="course-card reveal">
+        <span class="course-card__eyebrow">Graduate Courses</span>
+        <h3 class="course-card__title">MA &amp; PhD Course Offerings</h3>
+        <p class="course-card__desc">Dive into the philosophical foundations of the disciplines with ICS's graduate-level courses. Explore topics in aesthetics, ethics, political theory, philosophy of education, and more, taught by leading scholars in the reformational tradition.</p>
+        <div class="course-card__details">
+          <span class="course-card__tag">For Credit</span>
+          <span class="course-card__tag">Audit Available</span>
+          <span class="course-card__tag">Online</span>
+        </div>
+        <a href="https://links.icscanada.edu/ma-phd-courses" class="course-card__link" target="_blank">Browse Graduate Courses →</a>
+      </div>
+
+      <div class="course-card reveal">
+        <span class="course-card__eyebrow">Community Learning</span>
+        <h3 class="course-card__title">Free to be Faithful Courses</h3>
+        <p class="course-card__desc">Accessible, non-credit courses for anyone curious about the intersection of Christian faith and contemporary life. No prerequisites, no applications, open to everyone.</p>
+        <div class="course-card__details">
+          <span class="course-card__tag">No Prerequisites</span>
+          <span class="course-card__tag">Open Enrollment</span>
+          <span class="course-card__tag">Online</span>
+        </div>
+        <a href="https://f2bf.icscanada.edu/courses" class="course-card__link" target="_blank">Browse F2BF Courses →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     DONATE BANNER
+     ═══════════════════════════════════════════ -->
+<section class="donate-banner">
+  <div class="container">
+    <div class="donate-banner__inner">
+      <div class="donate-banner__icon">♡</div>
+      <div class="donate-banner__text">
+        <h3 class="donate-banner__title">Supporting a Spacious Faith</h3>
+        <p class="donate-banner__desc">ICS is community-supported. Your generosity expands scholarships, sustains public engagement, and makes conversations that matter possible for people across Canada and beyond.</p>
+      </div>
+      <a href="https://www.icscanada.edu/donate" class="btn btn-donate-banner btn-arrow">Support ICS</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FEEDS — Facebook + Events
+     ═══════════════════════════════════════════ -->
+<section class="feeds" style="padding-top: 4rem;">
+  <div class="container">
+    <div class="feeds__grid">
+
+      <!-- FACEBOOK WIDGET -->
+      <div class="fb-widget reveal">
+        <div class="fb-widget__header">
+          <div class="fb-widget__logo">
+            <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <div class="fb-widget__name">ICS on Facebook</div>
+          <a href="https://www.facebook.com/instituteforchristianstudies" target="_blank" class="fb-widget__follow">Follow</a>
+        </div>
+
+        <div class="fb-widget__embed">
+          <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Finstituteforchristianstudies&tabs=timeline&width=340&height=700&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId"
+                  width="340" height="700"
+                  style="border:none;overflow:hidden"
+                  scrolling="no"
+                  frameborder="0"
+                  allowfullscreen="true"
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+        </div>
+
+        <div class="fb-widget__footer">
+          <a href="https://www.facebook.com/instituteforchristianstudies" target="_blank" class="fb-widget__more">Follow on Facebook →</a>
+        </div>
+      </div>
+
+      <!-- EVENTS WIDGET -->
+      <div class="events-widget reveal" id="eventsWidget">
+        <div class="events-widget__header">
+          <div class="events-widget__header-left">
+            <div class="events-widget__icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <span class="events-widget__label">Upcoming Events</span>
+          </div>
+          <a href="https://www.icscanada.edu/events" id="calendarLink" target="_blank" class="events-widget__cal-link">All Events →</a>
+        </div>
+
+        <div class="events-widget__scroll" id="eventsScroll">
+          <div class="events-widget__loading" id="eventsLoading">
+            <div class="events-widget__loading-spinner"></div>
+            Loading events…
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     COMMUNITY CTA
+     ═══════════════════════════════════════════ -->
+<section class="community-cta">
+  <div class="community-cta__bg">
+    <!-- PLACEHOLDER: Replace with community gathering image -->
+    <img src="https://lightroom.adobe.com/v2c/spaces/8e293c41299846de9eaf08c99ce6ee2a/assets/f0faaa0c016a4b8ea240f85f17e2cb1e/revisions/57a5dd3a9fd4465ebd0da11be4657afb/renditions/4c4b344875c946f60233f891b131730a" alt="ICS community gathering">
+  </div>
+  <div class="community-cta__overlay"></div>
+
+  <div class="container">
+    <div class="community-cta__content reveal">
+      <span class="eyebrow community-cta__eyebrow">Join the Conversation</span>
+      <h2 class="community-cta__title">Begin Your Journey <br><em>at ICS</em></h2>
+      <p class="community-cta__text">Whether you're an educator seeking philosophical depth, a thinker drawn to the intersection of faith and learning, or a scholar ready for doctoral research, ICS invites you into the kind of dialogue that transforms scholarship, teaching, and life.</p>
+      <div class="community-cta__buttons">
+        <a href="https://www.icscanada.edu/admissions" class="btn btn-accent btn-arrow">Apply Now</a>
+        <a href="mailto:recruitment-coordinator@icscanada.edu" class="btn btn-outline-light btn-arrow">Request Information</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">Institute for Christian Studies</div>
+        <p class="footer__desc">Graduate education, research, and community service in the Reformational tradition since 1967. Forming the next generation of Christian scholars.</p>
+        <address class="footer__address">
+          59 St. George Street<br>Toronto, Ontario M5S 2E6<br>Canada<br><br>
+          1-416-979-2331<br>
+          <a href="mailto:info@icscanada.edu" style="color:var(--accent-light)">info@icscanada.edu</a>
+        </address>
+      </div>
+      <div>
+        <h4 class="footer__heading">Programs</h4>
+        <ul class="footer__links">
+          <li><a href="https://www.icscanada.edu/academics/phd-program">PhD in Philosophy</a></li>
+          <li><a href="https://www.icscanada.edu/academics/master-of-arts-in-philosophy">MA in Philosophy</a></li>
+          <li><a href="https://education.icscanada.edu/mael">MA(Phil) Ed. Leadership</a></li>
+          <li><a href="https://education.icscanada.edu/mwse">Master of Worldview Studies in Education</a></li>
+          <li><a href="https://www.icscanada.edu/academics/courses-and-syllabi">Courses &amp; Syllabi</a></li>
+          <li><a href="https://f2bf.icscanada.edu">Free to be Faithful</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__heading">Admissions</h4>
+        <ul class="footer__links">
+          <li><a href="https://www.icscanada.edu/admissions">Prospective Students</a></li>
+          <li><a href="https://www.icscanada.edu/admissions/admission-requirements-modes-of-study">Requirements &amp; Modes</a></li>
+          <li><a href="https://www.icscanada.edu/admissions/financial-aid">Financial Aid</a></li>
+          <li><a href="https://www.icscanada.edu/admissions/tuition-fees">Tuition &amp; Fees</a></li>
+          <li><a href="https://www.icscanada.edu/admissions/international-students">International Students</a></li>
+          <li><a href="https://www.icscanada.edu/faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__heading">Connect</h4>
+        <ul class="footer__links">
+          <li><a href="https://www.icscanada.edu/about/our-story">Our Story</a></li>
+          <li><a href="https://www.icscanada.edu/about/mission-educational-creed">Mission &amp; Creed</a></li>
+          <li><a href="https://faculty.icscanada.edu/">Faculty</a></li>
+          <li><a href="https://www.icscanada.edu/research">Research (CPRSE)</a></li>
+          <li><a href="https://www.icscanada.edu/events">Events</a></li>
+          <li><a href="https://www.icscanada.edu/critical-faith-podcast">Critical Faith Podcast</a></li>
+          <li><a href="https://perspective.icscanada.edu/">Perspective Newsletter</a></li>
+          <li><a href="https://www.icscanada.edu/about/become-a-member">Become a Member</a></li>
+          <li><a href="https://www.icscanada.edu/donate">Donate</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; 2026 Institute for Christian Studies &middot;
+        <a href="https://www.icscanada.edu/about/privacy-policy" style="color:inherit">Privacy</a> &middot;
+        <a href="https://www.icscanada.edu/about/accessibility-policy" style="color:inherit">Accessibility</a>
+      </span>
+      <div class="footer__social">
+        <a href="https://www.facebook.com/instituteforchristianstudies" aria-label="Facebook" title="Facebook">f</a>
+        <a href="https://twitter.com/InsChr" aria-label="X" title="X / Twitter">𝕏</a>
+        <a href="https://www.instagram.com/instituteforchristianstudies/" aria-label="Instagram" title="Instagram">ig</a>
+        <a href="https://www.linkedin.com/school/icscanada" aria-label="LinkedIn" title="LinkedIn">in</a>
+        <a href="https://www.youtube.com/user/ChristianStudies" aria-label="YouTube" title="YouTube">▶</a>
+        <a href="https://instituteforchristianstudies.substack.com" aria-label="Substack" title="Substack" class="social-substack">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24l9.54-5.58L20.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ─── SCROLL REVEAL ─── */
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry, i) {
+      if (entry.isIntersecting) {
+        setTimeout(function() { entry.target.classList.add('visible'); }, i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  /* ─── DEEP-LINK: scroll to element via #hash or ?scrollTo= param ─── */
+  var scrollId = null;
+  if (window.location.hash) {
+    scrollId = window.location.hash.substring(1);
+  }
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('scrollTo')) {
+    scrollId = params.get('scrollTo');
+  }
+  if (scrollId) {
+    var scrollTarget = document.getElementById(scrollId);
+    if (scrollTarget) {
+      if (scrollTarget.classList.contains('reveal')) {
+        scrollTarget.classList.add('visible');
+      }
+      setTimeout(function() {
+        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }
+
+
+  /* ─── EVENTS FEED — Google Calendar Public JSON ─── */
+
+  var CALENDAR_ID = 'c_69d54f953052b91b0291db43e425f6a6d3fc4d132761d91188ea8aa25dec5880@group.calendar.google.com';
+  var API_KEY     = 'AIzaSyAFbb-BksOHBDNdCa7f5YP8g__ajn3NUJM';
+
+  var eventsScroll  = document.getElementById('eventsScroll');
+  var eventsLoading = document.getElementById('eventsLoading');
+  var calendarLink  = document.getElementById('calendarLink');
+
+  if (API_KEY !== 'YOUR_GOOGLE_API_KEY_HERE' && CALENDAR_ID !== 'YOUR_CALENDAR_ID_HERE') {
+    calendarLink.href = 'https://calendar.google.com/calendar/embed?src=' + encodeURIComponent(CALENDAR_ID);
+  }
+
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Parse date strings safely: YYYY-MM-DD (all-day) as local date, not UTC
+  function parseDate(str) {
+    if (!str) return new Date();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+      var p = str.split('-');
+      return new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+    }
+    return new Date(str);
+  }
+
+  function formatTime(dateStr) {
+    if (!dateStr) return 'All day';
+    var d = parseDate(dateStr);
+    var h = d.getHours();
+    var m = d.getMinutes();
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return m === 0 ? h + ' ' + ampm : h + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+  }
+
+  function isToday(dateStr) {
+    if (!dateStr) return false;
+    var d = parseDate(dateStr);
+    var n = new Date();
+    return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
+  }
+
+  function stripHtml(html) {
+    if (!html) return '';
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return (tmp.textContent || tmp.innerText || '').trim();
+  }
+
+  function renderEvents(events) {
+    eventsLoading.remove();
+    if (!events || events.length === 0) {
+      eventsScroll.innerHTML = '<div class="events-widget__empty">No upcoming events found.<br>Check back soon!</div>';
+      return;
+    }
+    var currentMonth = '';
+    events.forEach(function(event) {
+      var startRaw = event.start.dateTime || event.start.date;
+      var startDate = parseDate(startRaw);
+      var monthKey = startDate.getFullYear() + '-' + startDate.getMonth();
+
+      if (monthKey !== currentMonth) {
+        currentMonth = monthKey;
+        var divider = document.createElement('div');
+        divider.className = 'events-month-divider';
+        divider.textContent = MONTHS_FULL[startDate.getMonth()] + ' ' + startDate.getFullYear();
+        eventsScroll.appendChild(divider);
+      }
+
+      var todayClass = isToday(startRaw) ? ' event-card--today' : '';
+      var timeStr = event.start.dateTime ? formatTime(event.start.dateTime) : 'All day';
+      var location = event.location || '';
+      var descText = stripHtml(event.description);
+
+      var card = document.createElement('a');
+      card.className = 'event-card' + todayClass;
+      card.href = event.htmlLink || '#';
+      card.target = '_blank';
+      card.style.textDecoration = 'none';
+      card.innerHTML =
+        '<div class="event-card__date-badge">' +
+          '<span class="event-card__month">' + MONTHS[startDate.getMonth()] + '</span>' +
+          '<span class="event-card__day">' + startDate.getDate() + '</span>' +
+        '</div>' +
+        '<div class="event-card__info">' +
+          '<div class="event-card__title">' + (event.summary || 'Untitled Event') + '</div>' +
+          '<div class="event-card__time">' + timeStr + '</div>' +
+          (location ? '<div class="event-card__location">' + location + '</div>' : '') +
+          (descText ? '<div class="event-card__description">' + descText + '</div>' : '') +
+        '</div>';
+      eventsScroll.appendChild(card);
+    });
+  }
+
+  function renderFallbackEvents() {
+    eventsLoading.remove();
+    var now = new Date();
+    var sampleEvents = [
+      { summary: 'Free to be Faithful: Public Lecture', daysAhead: 3, time: '7:00 PM', location: '59 St. George St, Toronto', description: 'Join us for an evening of provocative dialogue on the role of faith in public life, featuring guest speakers from across the Reformed tradition.' },
+      { summary: 'Critical Faith Podcast: Live Recording', daysAhead: 8, time: '6:30 PM', location: 'ICS Campus', description: 'Be part of a live audience as we record the next episode of Critical Faith, exploring how Christian scholarship engages contemporary culture.' },
+      { summary: 'MWS-E Information Session (Online)', daysAhead: 14, time: '12:00 PM', location: 'Zoom', description: 'Learn about the new Master of Worldview Studies in Education program\u2014designed for working educators who want to integrate faith, philosophy, and classroom practice.' },
+      { summary: 'Scripture, Faith & Scholarship Series', daysAhead: 18, time: '7:00 PM', location: 'ICS Campus', description: 'A lecture series examining how Scripture informs and challenges academic inquiry across the disciplines.' },
+      { summary: 'PhD Colloquium: Philosophy of Education', daysAhead: 24, time: '3:00 PM', location: 'Seminar Room', description: 'Doctoral candidates present their latest research on philosophical approaches to education and formation.' },
+      { summary: 'Edvance Conference Workshop', daysAhead: 32, time: '9:00 AM', location: 'Ancaster, ON', description: 'ICS faculty lead a hands-on workshop on worldview-conscious pedagogy for Christian school educators at the annual Edvance conference.' },
+      { summary: 'Ground Motive Forum: Open Discussion', daysAhead: 40, time: '7:30 PM', location: 'Online', description: 'An open forum for exploring the reformational tradition and its relevance to today\'s cultural and political landscape.' },
+      { summary: 'Spring Convocation', daysAhead: 55, time: '2:00 PM', location: '59 St. George St, Toronto', description: 'Celebrate our graduating class as they receive their degrees and step into lives of integral Christian scholarship and service.' },
+    ];
+
+    var currentMonth = '';
+    sampleEvents.forEach(function(ev) {
+      var d = new Date(now);
+      d.setDate(d.getDate() + ev.daysAhead);
+      var monthKey = d.getFullYear() + '-' + d.getMonth();
+
+      if (monthKey !== currentMonth) {
+        currentMonth = monthKey;
+        var divider = document.createElement('div');
+        divider.className = 'events-month-divider';
+        divider.textContent = MONTHS_FULL[d.getMonth()] + ' ' + d.getFullYear();
+        eventsScroll.appendChild(divider);
+      }
+
+      var card = document.createElement('div');
+      card.className = 'event-card' + (ev.daysAhead === 0 ? ' event-card--today' : '');
+      card.innerHTML =
+        '<div class="event-card__date-badge">' +
+          '<span class="event-card__month">' + MONTHS[d.getMonth()] + '</span>' +
+          '<span class="event-card__day">' + d.getDate() + '</span>' +
+        '</div>' +
+        '<div class="event-card__info">' +
+          '<div class="event-card__title">' + ev.summary + '</div>' +
+          '<div class="event-card__time">' + ev.time + '</div>' +
+          '<div class="event-card__location">' + ev.location + '</div>' +
+          (ev.description ? '<div class="event-card__description">' + ev.description + '</div>' : '') +
+        '</div>';
+      eventsScroll.appendChild(card);
+    });
+  }
+
+  // Attempt live fetch; fallback to sample data
+  if (API_KEY !== 'YOUR_GOOGLE_API_KEY_HERE' && CALENDAR_ID !== 'YOUR_CALENDAR_ID_HERE') {
+    var now = new Date().toISOString();
+    var url = 'https://www.googleapis.com/calendar/v3/calendars/' +
+      encodeURIComponent(CALENDAR_ID) +
+      '/events?key=' + API_KEY +
+      '&timeMin=' + now +
+      '&maxResults=15&singleEvents=true&orderBy=startTime';
+
+    fetch(url)
+      .then(function(res) {
+        if (!res.ok) throw new Error('Calendar API error: ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        renderEvents(data.items);
+      })
+      .catch(function(err) {
+        console.warn('Google Calendar fetch failed, using fallback events:', err);
+        renderFallbackEvents();
+      });
+  } else {
+    renderFallbackEvents();
+  }
+
+})();
+</script>
+</body>
+</html>
