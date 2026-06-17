@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="/css/shared.css">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.png">
+  <title>Course Catalogue | Education at ICS</title>
+<meta name="description" content="Browse the full course catalogue for ICS educational leadership programs. Graduate-level courses in Christian worldview, pedagogy, and school leadership.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://education.icscanada.edu/courses/">
+<meta property="og:title" content="Course Catalogue | ICS Educational Leadership">
+<meta property="og:description" content="Browse the full course catalogue for ICS educational leadership programs. Graduate-level courses in Christian worldview, pedagogy, and school leadership.">
+<meta property="og:url" content="https://education.icscanada.edu/courses/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Educational Leadership at ICS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Course Catalogue | ICS Educational Leadership">
+<meta name="twitter:description" content="Browse the full course catalogue for ICS educational leadership programs. Graduate-level courses in Christian worldview, pedagogy, and school leadership.">
+  
+  <style>
+    /* Page-specific button overrides */
+    .ics-btn--outline-on-light:hover { border-color: var(--ics-purple); background: rgba(45, 24, 84, 0.04); transform: translateY(-2px); }
+    @media (max-width: 480px) {
+      .ics-catl-cta__actions .ics-btn { width: 100%; max-width: 280px; justify-content: center; }
+    }
+
+.ics-catl *, .ics-catl *::before, .ics-catl *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .ics-catl {
+      --ics-orange-dark:  #D89450;
+
+      --catl-accent:      #5BA4A4;
+      --catl-accent-light:#74BABA;
+
+      /* Faculty colours */
+      --instructor-edith:  #D89450;
+      --instructor-gideon: #6FA8DC;
+      --instructor-nik:    #E8896B;
+      --instructor-neal:   #7FA37A;
+
+      font-family: var(--font-sans);
+      color: #3a3330;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================= */
+    /* PAGE HEADER                   */
+    /* ============================= */
+    .ics-catl-header {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(20, 8, 40, 1) 0%, rgba(45, 24, 84, 0.98) 50%, rgba(91, 164, 164, 0.4) 100%);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+    }
+    .ics-catl-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(91, 164, 164, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(241, 171, 106, 0.08) 0%, transparent 50%);
+      z-index: 0;
+    }
+    .ics-catl-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(31, 15, 61, 0.75) 0%, rgba(45, 24, 84, 0.85) 100%);
+      z-index: 0;
+    }
+    .ics-catl-header__inner {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      animation: icsCatlFadeUp 0.8s ease-out both;
+    }
+    @keyframes icsCatlFadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ics-catl-header__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      margin-bottom: 1.4rem;
+      transition: color 0.2s;
+    }
+    .ics-catl-header__back:hover { color: rgba(255,255,255,0.85); }
+    .ics-catl-header__back svg { width: 16px; height: 16px; }
+    .ics-catl-header__badge {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35em 1em;
+      background: var(--catl-accent);
+      color: var(--ics-white);
+      margin-bottom: 1.4rem;
+    }
+    .ics-catl-header__title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: var(--ics-white);
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    .ics-catl-header__title em {
+      font-style: italic;
+      color: var(--catl-accent-light);
+    }
+    .ics-catl-header__subtitle {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ============================= */
+    /* INTRO / CONTEXT STRIP         */
+    /* ============================= */
+    .ics-catl-intro {
+      background: var(--ics-cream);
+      padding: 3rem 2rem 1.5rem;
+    }
+    .ics-catl-intro__inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .ics-catl-intro__text {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: #5c5550;
+      line-height: 1.85;
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+    .ics-catl-intro__legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .ics-catl-intro__legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #6b6460;
+    }
+    .ics-catl-intro__legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .ics-catl-intro__legend-dot--core { background: var(--ics-purple); }
+    .ics-catl-intro__legend-dot--immersive { background: var(--ics-orange); }
+    .ics-catl-intro__legend-dot--concentration { background: var(--catl-accent); }
+    .ics-catl-intro__legend-dot--capstone { background: var(--ics-coral); }
+    .ics-catl-intro__legend-dot--certificate { background: #8B7EC8; }
+
+    /* ============================= */
+    /* FILTER BAR                    */
+    /* ============================= */
+    .ics-catl-filters {
+      background: var(--ics-cream);
+      padding: 0 2rem 2.5rem;
+    }
+    .ics-catl-filters__inner { max-width: 860px; margin: 0 auto; }
+    .ics-catl-filters__group { margin-bottom: 1.25rem; }
+    .ics-catl-filters__group:last-child { margin-bottom: 0; }
+    .ics-catl-filters__label {
+      display: block;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9a9490;
+      margin-bottom: 0.6rem;
+    }
+    .ics-catl-filters__row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .ics-catl-filter-btn {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45em 1em;
+      border: 1.5px solid var(--ics-border-light);
+      background: #FAF7F2;
+      color: #6b6460;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .ics-catl-filter-btn:hover { border-color: var(--ics-purple); color: var(--ics-purple); }
+    .ics-catl-filter-btn.active { background: var(--ics-purple); border-color: var(--ics-purple); color: var(--ics-white); }
+    .ics-catl-filter-btn--season:hover { border-color: var(--ics-coral); color: var(--ics-coral); }
+    .ics-catl-filter-btn--season.active { background: var(--ics-coral); border-color: var(--ics-coral); color: var(--ics-white); }
+
+    /* ============================= */
+    /* DIVIDER                       */
+    /* ============================= */
+    .ics-divider { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 0 2rem; }
+    .ics-divider__line { flex: 1; max-width: 120px; height: 1px; background: var(--ics-border-light); }
+    .ics-divider__diamond { width: 7px; height: 7px; background: var(--catl-accent); transform: rotate(45deg); flex-shrink: 0; }
+
+    /* ============================= */
+    /* COURSE SECTIONS               */
+    /* ============================= */
+    .ics-catl-courses { background: var(--ics-cream); padding: 2.5rem 2rem 3rem; }
+    .ics-catl-courses__inner { max-width: 960px; margin: 0 auto; }
+    .ics-catl-courses__section { margin-bottom: 3rem; }
+    .ics-catl-courses__section:last-child { margin-bottom: 0; }
+    .ics-catl-courses__section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--ics-border-light);
+    }
+    .ics-catl-courses__section-icon {
+      width: 28px; height: 28px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .ics-catl-courses__section-icon--core { background: var(--ics-purple); }
+    .ics-catl-courses__section-icon--immersive { background: var(--ics-orange); }
+    .ics-catl-courses__section-icon--concentration { background: var(--catl-accent); }
+    .ics-catl-courses__section-icon--capstone { background: var(--ics-coral); }
+    .ics-catl-courses__section-icon--special { background: #8B7EC8; }
+    .ics-catl-courses__section-icon svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ics-catl-courses__section-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ics-purple);
+      line-height: 1.3;
+    }
+    .ics-catl-courses__section-desc {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      color: #7a7570;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .ics-catl-courses__grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+    /* ============================= */
+    /* COURSE CARD                   */
+    /* ============================= */
+    .ics-cc {
+      background: var(--ics-white);
+      border: 1px solid rgba(45, 24, 84, 0.08);
+      border-radius: 6px;
+      padding: 1.4rem 1.5rem;
+      transition: box-shadow 0.25s, border-color 0.25s;
+      position: relative;
+    }
+    .ics-cc:hover { box-shadow: 0 4px 20px rgba(45, 24, 84, 0.08); border-color: rgba(45, 24, 84, 0.15); }
+    .ics-cc__top { display: flex; align-items: flex-start; gap: 1rem; }
+    .ics-cc__indicator { width: 4px; border-radius: 2px; align-self: stretch; flex-shrink: 0; min-height: 40px; }
+    .ics-cc__indicator--core { background: var(--ics-purple); }
+    .ics-cc__indicator--immersive { background: var(--ics-orange); }
+    .ics-cc__indicator--concentration { background: var(--catl-accent); }
+    .ics-cc__indicator--capstone { background: var(--ics-coral); }
+    .ics-cc__indicator--special { background: #8B7EC8; }
+    .ics-cc__body { flex: 1; min-width: 0; }
+    .ics-cc__name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ics-purple);
+      line-height: 1.35;
+      margin-bottom: 0.15rem;
+    }
+    .ics-cc__instructor {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .ics-cc__instructor a { text-decoration: none; transition: opacity 0.2s; }
+    .ics-cc__instructor a:hover { opacity: 0.75; text-decoration: underline; }
+    .ics-cc__instructor--edith a { color: var(--instructor-edith); }
+    .ics-cc__instructor--gideon a { color: var(--instructor-gideon); }
+    .ics-cc__instructor--nik a { color: var(--instructor-nik); }
+    .ics-cc__instructor--neal a { color: var(--instructor-neal); }
+    .ics-cc__subtitle {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #9a9490;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Description: full text visible, collapsible extended section */
+    .ics-cc__desc {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      color: #5c5550;
+      line-height: 1.8;
+      margin-bottom: 0.4rem;
+    }
+    .ics-cc__desc p { margin-bottom: 0.7rem; }
+    .ics-cc__desc p:last-child { margin-bottom: 0; }
+
+    /* Collapsible extra content */
+    .ics-cc__more {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.35s ease;
+      opacity: 0;
+    }
+    .ics-cc__more.open {
+      max-height: 800px;
+      opacity: 1;
+    }
+    .ics-cc__more-inner {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      color: #5c5550;
+      line-height: 1.8;
+      padding-top: 0.6rem;
+      margin-top: 0.3rem;
+      border-top: 1px dashed rgba(45, 24, 84, 0.08);
+    }
+    .ics-cc__more-inner p { margin-bottom: 0.7rem; }
+    .ics-cc__more-inner p:last-child { margin-bottom: 0; }
+
+    .ics-cc__toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--catl-accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.25em 0;
+      margin-top: 0.2rem;
+      transition: color 0.2s;
+    }
+    .ics-cc__toggle:hover { color: var(--cert-teal-dark); }
+    .ics-cc__toggle svg { width: 14px; height: 14px; transition: transform 0.3s; }
+    .ics-cc__toggle.open svg { transform: rotate(180deg); }
+
+    .ics-cc__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.85rem;
+    }
+    .ics-cc__tag {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 0.25em 0.65em;
+      border-radius: 3px;
+      background: rgba(45, 24, 84, 0.06);
+      color: #6b6460;
+      white-space: nowrap;
+    }
+    .ics-cc__tag--core { background: var(--ics-purple); color: var(--ics-white); }
+    .ics-cc__tag--immersive { background: var(--ics-orange); color: var(--ics-purple-deep); }
+    .ics-cc__tag--concentration { background: var(--catl-accent); color: var(--ics-white); }
+    .ics-cc__tag--capstone { background: var(--ics-coral); color: var(--ics-white); }
+    .ics-cc__tag--program { background: rgba(45, 24, 84, 0.08); color: var(--ics-purple); font-weight: 700; }
+    .ics-cc__tag--cert { background: rgba(91, 164, 164, 0.12); color: var(--cert-teal-dark); }
+    .ics-cc__tag--term { background: #FAF7F2; border: 1px solid rgba(45, 24, 84, 0.12); color: #8a8480; }
+    .ics-cc__tag--partner { background: rgba(139, 126, 200, 0.12); color: #6B5FA0; }
+
+    /* Hidden state for filtering */
+    .ics-cc.ics-cc--hidden { display: none; }
+    .ics-catl-courses__section.ics-section--hidden { display: none; }
+
+    /* Partnership card */
+    .ics-cc--partnership {
+      background: linear-gradient(135deg, rgba(139, 126, 200, 0.05) 0%, rgba(91, 164, 164, 0.05) 100%);
+      border: 1px dashed rgba(139, 126, 200, 0.25);
+      text-align: center;
+    }
+    .ics-cc--partnership .ics-cc__top { justify-content: center; }
+    .ics-cc--partnership .ics-cc__body { flex: unset; }
+    .ics-cc--partnership .ics-cc__desc { max-width: 560px; margin-left: auto; margin-right: auto; }
+    .ics-cc--partnership .ics-cc__meta { justify-content: center; }
+
+    /* ============================= */
+    /* COURSE FORMAT                 */
+    /* ============================= */
+    .ics-catl-format { background: var(--ics-purple); padding: 3rem 2rem; }
+    .ics-catl-format__inner {
+      max-width: 860px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
+    }
+    .ics-catl-format__eyebrow { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--catl-accent-light); margin-bottom: 0.75rem; }
+    .ics-catl-format__heading { font-family: var(--font-serif); font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700; color: var(--ics-white); line-height: 1.3; margin-bottom: 0.75rem; }
+    .ics-catl-format__body { font-family: var(--font-sans); font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.8; }
+    .ics-catl-format__details { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 1.5rem; }
+    .ics-catl-format__detail-title { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
+    .ics-catl-format__detail-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.8rem; }
+    .ics-catl-format__detail-item:last-child { margin-bottom: 0; }
+    .ics-catl-format__detail-icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; color: var(--catl-accent-light); }
+    .ics-catl-format__detail-text { font-family: var(--font-sans); font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
+    .ics-catl-format__detail-text strong { color: var(--ics-white); font-weight: 600; }
+
+    /* ============================= */
+    /* TEAM DISCOUNT                 */
+    /* ============================= */
+    .ics-catl-discount { background: var(--ics-cream); padding: 2rem 2rem; }
+    .ics-catl-discount__inner {
+      max-width: 680px; margin: 0 auto;
+      background: linear-gradient(135deg, rgba(91, 164, 164, 0.08) 0%, rgba(241, 171, 106, 0.06) 100%);
+      border: 1px solid rgba(91, 164, 164, 0.2); border-radius: 6px;
+      padding: 1.5rem 1.75rem; display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .ics-catl-discount__icon { width: 36px; height: 36px; flex-shrink: 0; color: var(--catl-accent); }
+    .ics-catl-discount__text { font-family: var(--font-sans); font-size: 0.92rem; color: #5c5550; line-height: 1.7; }
+    .ics-catl-discount__text strong { color: var(--ics-purple); }
+
+    /* ============================= */
+    /* CTA                           */
+    /* ============================= */
+    .ics-catl-cta { background: var(--ics-cream); padding: 2rem 2rem 3.5rem; }
+    .ics-catl-cta__inner { max-width: 640px; margin: 0 auto; text-align: center; }
+    .ics-catl-cta__heading { font-family: var(--font-serif); font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700; color: var(--ics-purple); margin-bottom: 0.75rem; }
+    .ics-catl-cta__text { font-family: var(--font-sans); font-size: 0.95rem; color: #6b6460; line-height: 1.75; margin-bottom: 1.5rem; }
+    .ics-catl-cta__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    
+    
+    
+    
+    
+
+    /* No results */
+    .ics-catl-no-results { display: none; text-align: center; padding: 3rem 2rem; font-family: var(--font-sans); font-size: 1rem; color: #9a9490; }
+    .ics-catl-no-results.visible { display: block; }
+
+    /* ============================= */
+    /* RESPONSIVE                    */
+    /* ============================= */
+    @media (max-width: 768px) {
+      .ics-catl-header { padding: 2.5rem 1.25rem 2rem; }
+      .ics-catl-intro { padding: 2rem 1.25rem 1rem; }
+      .ics-catl-filters { padding: 0 1.25rem 2rem; }
+      .ics-catl-courses { padding: 2rem 1.25rem 2.5rem; }
+      .ics-catl-format { padding: 2rem 1.25rem; }
+      .ics-catl-format__inner { grid-template-columns: 1fr; }
+      .ics-catl-discount { padding: 1.5rem 1.25rem; }
+      .ics-catl-cta { padding: 1.5rem 1.25rem 2.5rem; }
+      .ics-cc { padding: 1.1rem 1.2rem; }
+      .ics-cc__name { font-size: 0.98rem; }
+      .ics-cc__desc, .ics-cc__more-inner { font-size: 0.88rem; }
+      .ics-catl-filter-btn { font-size: 0.78rem; padding: 0.4em 0.8em; }
+    }
+    @media (max-width: 540px) {
+      .ics-catl-discount__inner { flex-direction: column; align-items: center; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .ics-catl-header { padding: 2rem 1rem 1.5rem; }
+      .ics-catl-intro__legend { gap: 0.4rem 0.8rem; }
+      .ics-catl-cta__actions { flex-direction: column; align-items: center; }
+      .ics-catl-cta__actions 
+    }
+
+    /* ═══════════════════════════════════════════
+       PRINT STYLES
+       ═══════════════════════════════════════════ */
+    @media print {
+
+      /* ── Reset variables to light-mode ── */
+      :root, .ics-mael, .ics-mael-pd, .ics-faq, .ics-catl {
+        --ics-cream:        #FFFFFF !important;
+        --footer-navy:      #FFFFFF !important;
+      }
+
+      /* ── Global resets ── */
+      *, *::before, *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+
+      body, html {
+        background: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* ── Force all sections to light background + dark text ── */
+      section, div[class*="ics-"] {
+        background: #fff !important;
+        background-image: none !important;
+        color: #1a1a1a !important;
+      }
+
+      /* Hero sections: flatten to simple layout */
+      [class*="hero"] {
+        background: #f5f3f0 !important;
+        background-image: none !important;
+        color: #1a1a1a !important;
+        padding: 2rem 1.5rem !important;
+        min-height: auto !important;
+        height: auto !important;
+      }
+
+      [class*="hero"] *,
+      [class*="hero__title"],
+      [class*="hero__subtitle"],
+      [class*="hero__eyebrow"] {
+        color: #1a1a1a !important;
+      }
+
+      [class*="hero"]::before,
+      [class*="hero"]::after,
+      [class*="hero__overlay"],
+      [class*="hero__bg"],
+      [class*="hero__image"] {
+        display: none !important;
+      }
+
+      /* ── All headings and text dark ── */
+      h1, h2, h3, h4, h5, h6,
+      p, li, td, th, span, a, strong, em, label,
+      [class*="__title"],
+      [class*="__heading"],
+      [class*="__subtitle"],
+      [class*="__eyebrow"],
+      [class*="__body"],
+      [class*="__desc"],
+      [class*="__text"],
+      [class*="__name"],
+      [class*="__label"],
+      [class*="__value"],
+      [class*="__detail"],
+      [class*="__note"],
+      [class*="__footnote"] {
+        color: #1a1a1a !important;
+      }
+
+      /* Eyebrow labels: keep accent visible */
+      [class*="__eyebrow"] {
+        color: #6b4c9a !important;
+      }
+
+      /* ── Links ── */
+      a {
+        color: #2D1854 !important;
+        text-decoration: underline !important;
+      }
+
+      /* ── Cards: light bg with border ── */
+      [class*="-card"],
+      [class*="-tile"],
+      .ics-cc,
+      .ics-pd-card,
+      .ics-pd-card--light {
+        background: #ffffff !important;
+        border: 1px solid #dddddd !important;
+        color: #1a1a1a !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      [class*="-card"] *,
+      [class*="-tile"] *,
+      .ics-cc *,
+      .ics-pd-card * {
+        color: #1a1a1a !important;
+      }
+
+      /* ── Tags / badges ── */
+      [class*="__tag"],
+      [class*="__badge"] {
+        background: #f0edf5 !important;
+        color: #2D1854 !important;
+        border: 1px solid #d0c8e0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Accent tags keep subtle color distinction */
+      [class*="__tag--accent"],
+      [class*="__tag--core"],
+      [class*="__tag--capstone"] {
+        background: #e8e0f3 !important;
+        color: #2D1854 !important;
+      }
+
+      /* ── Tables ── */
+      table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+      }
+
+      th, td {
+        border: 1px solid #cccccc !important;
+        padding: 0.5rem 0.75rem !important;
+        background: #ffffff !important;
+        color: #1a1a1a !important;
+      }
+
+      th {
+        background: #f0edf5 !important;
+        font-weight: 600 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* ── Buttons: show as text links ── */
+      
+
+      /* Hide CTA banners, they're redundant in print */
+      [class*="cta-banner"],
+      [class*="-cta"] {
+        display: none !important;
+      }
+
+      /* ── Accordion / collapsed content: show everything ── */
+      [class*="__more"],
+      [class*="__panel"],
+      .ics-cc__more,
+      .ics-accordion__panel {
+        display: block !important;
+        max-height: none !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        height: auto !important;
+      }
+
+      /* Hide toggle buttons */
+      [class*="__toggle"],
+      .ics-cc__toggle,
+      .ics-accordion__icon {
+        display: none !important;
+      }
+
+      /* ── Decorative elements: hide ── */
+      .ics-divider,
+      [class*="__accent"],
+      [class*="__diamond"],
+      [class*="__indicator"],
+      [class*="legend"],
+      svg.ics-pd-card__icon,
+      svg.ics-pd-conc__group-icon {
+        display: none !important;
+      }
+
+      /* Keep checkmark icons in detail lists */
+      [class*="__detail-icon"],
+      [class*="__list-icon"],
+      .ics-structure__list-icon {
+        display: inline-block !important;
+        width: 1em !important;
+        height: 1em !important;
+        color: #2D1854 !important;
+        stroke: #2D1854 !important;
+      }
+
+      /* ── Footer: hide entirely for print ── */
+      
+
+      /* ── Filter bar (courses page): hide ── */
+      .ics-catl-filters,
+      .ics-catl-filter-btn,
+      .ics-catl-no-results {
+        display: none !important;
+      }
+
+      /* FAQ nav tabs: hide */
+      .ics-faq-nav {
+        display: none !important;
+      }
+
+      /* ── Images ── */
+      img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* ── Page break rules ── */
+      section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      h2, h3 {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      /* ── Grids: simplify to single column for narrow print ── */
+      [class*="__grid"] {
+        display: block !important;
+      }
+
+      [class*="__grid"] > * {
+        margin-bottom: 1rem !important;
+      }
+
+      /* Two-column layouts: stack */
+      [class*="__inner"] {
+        display: block !important;
+      }
+
+      /* ── Spacing: tighten for print ── */
+      section {
+        padding: 1.5rem 0 !important;
+      }
+
+      /* ── Bursary / callout boxes ── */
+      [class*="bursary"],
+      [class*="callout"],
+      [class*="detail-box"] {
+        background: #f9f7f4 !important;
+        border: 1px solid #cccccc !important;
+        color: #1a1a1a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        page-break-inside: avoid;
+      }
+
+      [class*="bursary"] *,
+      [class*="detail-box"] * {
+        color: #1a1a1a !important;
+      }
+
+      /* ── Costs breakdown ── */
+      [class*="breakdown"] {
+        background: #ffffff !important;
+      }
+
+      [class*="breakdown"] * {
+        color: #1a1a1a !important;
+      }
+
+      /* ── Concentration group headers ── */
+      [class*="conc__group"] {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* ── Rotation table section ── */
+      .ics-pd-rotation__table-wrap {
+        overflow: visible !important;
+      }
+    }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Course Catalogue | ICS Educational Leadership",
+  "url": "https://education.icscanada.edu/courses/",
+  "description": "Browse the full course catalogue for ICS educational leadership programs. Graduate-level courses in Christian worldview, pedagogy, and school leadership.",
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "Course Catalogue"
+  }
+}
+</script>
+</head>
+<body>
+<div id="site-header"></div>
+<noscript>
+  <nav style="background:#2D1854;padding:1rem 2rem;">
+    <a href="/" style="color:#fff;margin-right:1rem;">Home</a>
+    <a href="/mwse/" style="color:#fff;margin-right:1rem;">MWS-E</a>
+    <a href="/mael/" style="color:#fff;margin-right:1rem;">MA-EL</a>
+    <a href="/educator-certificates/" style="color:#fff;margin-right:1rem;">Certificates</a>
+    <a href="/courses/" style="color:#fff;margin-right:1rem;">Courses</a>
+    <a href="/faculty/" style="color:#fff;margin-right:1rem;">Faculty</a>
+    <a href="/admission/" style="color:#fff;">Admission</a>
+  </nav>
+</noscript>
+
+<!-- Mobile Menu Overlay -->
+
+<div class="ics-catl">
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="ics-catl-header">
+    <div class="ics-catl-header__inner">
+      <div class="ics-catl-header__badge">Course Catalogue</div>
+      <h1 class="ics-catl-header__title">Education <em>Course Catalogue</em></h1>
+      <p class="ics-catl-header__subtitle">Every course offered through ICS's education programs, from foundation studies to advanced concentrations. Browse by program, type, or term.</p>
+    </div>
+  </header>
+
+  <!-- ===== INTRO ===== -->
+  <section class="ics-catl-intro">
+    <div class="ics-catl-intro__inner">
+      <p class="ics-catl-intro__text">ICS education courses serve our MA-EL and MWS-E degree programs as well as our three educator certificates (CILC, CSAC, and CSTC). Courses are delivered online with asynchronous work and scheduled Zoom sessions, and rotate on a regular cycle so that working educators can plan ahead.</p>
+      <div class="ics-catl-intro__legend">
+        <span class="ics-catl-intro__legend-item"><span class="ics-catl-intro__legend-dot ics-catl-intro__legend-dot--core"></span> Foundation / Core</span>
+        <span class="ics-catl-intro__legend-item"><span class="ics-catl-intro__legend-dot ics-catl-intro__legend-dot--immersive"></span> Immersive / Elective</span>
+        <span class="ics-catl-intro__legend-item"><span class="ics-catl-intro__legend-dot ics-catl-intro__legend-dot--concentration"></span> Concentration</span>
+        <span class="ics-catl-intro__legend-item"><span class="ics-catl-intro__legend-dot ics-catl-intro__legend-dot--capstone"></span> Capstone</span>
+        <span class="ics-catl-intro__legend-item"><span class="ics-catl-intro__legend-dot ics-catl-intro__legend-dot--certificate"></span> Partnership / Special</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FILTERS ===== -->
+  <section class="ics-catl-filters">
+    <div class="ics-catl-filters__inner">
+      <div class="ics-catl-filters__group">
+        <span class="ics-catl-filters__label">Filter by Term</span>
+        <div class="ics-catl-filters__row">
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--season" data-filter-group="season" data-filter="all">All Terms</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--season active" data-filter-group="season" data-filter="summer26">Summer 2026</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--season" data-filter-group="season" data-filter="fall26">Fall 2026</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--season" data-filter-group="season" data-filter="winter27">Winter 2027</button>
+        </div>
+      </div>
+      <div class="ics-catl-filters__group">
+        <span class="ics-catl-filters__label">Filter by Program</span>
+        <div class="ics-catl-filters__row">
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program active" data-filter-group="program" data-filter="all">All Programs</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program" data-filter-group="program" data-filter="mael">MA-EL</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program" data-filter-group="program" data-filter="mwse">MWS-E</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program" data-filter-group="program" data-filter="cilc">CILC</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program" data-filter-group="program" data-filter="csac">CSAC</button>
+          <button class="ics-catl-filter-btn ics-catl-filter-btn--program" data-filter-group="program" data-filter="cstc">CSTC</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ics-divider"><div class="ics-divider__line"></div><div class="ics-divider__diamond"></div><div class="ics-divider__line"></div></div>
+
+  <!-- ===== COURSE LISTINGS ===== -->
+  <section class="ics-catl-courses">
+    <div class="ics-catl-courses__inner">
+
+      <!-- ════════════════════════════ -->
+      <!-- FOUNDATION / CORE            -->
+      <!-- ════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="core">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--core"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+          <h2 class="ics-catl-courses__section-title">Foundation &amp; Core Courses</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">These courses establish the biblical, philosophical, and methodological foundations of the MA-EL and MWS-E. Every degree student begins here.</p>
+
+        <div class="ics-catl-courses__grid">
+
+          <!-- ──── Biblical Foundations ──── -->
+          <div class="ics-cc" id="course-biblical-foundations" data-programs="mael mwse cstc" data-terms="fall26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--core"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Biblical Foundations: Narrative, Wisdom, and the Art of Interpretation</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--nik"><a href="/faculty/#faculty-nik-ansell">Dr. Nik Ansell</a></p>
+                <div class="ics-cc__desc">
+                  <p>How can we read and experience the Scriptures as the Word of Life in the midst of an Academy that believes the biblical witness will restrict human freedom and thwart our maturity? How may we pursue biblical wisdom as we "re-think the world" when our Christian traditions seem convinced that biblical truth may be disconnected from the most pressing and perplexing issues of our time?</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>This course will explore the Bible as the ongoing story of and for God and all God's creatures, paying special attention to the way in which humanity's attempt to find its way is interwoven with the story of the Divine presence and with the wisdom and promise of creation-new creation. In asking whether and how the biblical story may find its future in our ongoing narratives, we will attempt to identify which hermeneutical methods and sensitivities might help us discern its significance for present day educational practice and worldview formation.</p>
+                    <p>Become more familiar with the Bible as an ongoing story of God and creation. Increase your ability to think creatively and constructively about the relationship between the biblical text, academic reflection, and contemporary discernment.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--core">Core</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 1</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Fall Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── What Is Christian About Christian Education? ──── -->
+          <div class="ics-cc" id="course-what-is-christian" data-programs="mael mwse cstc" data-terms="summer26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--core"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">What Is Christian About Christian Education?: Reformational Philosophy</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--neal"><a href="/faculty/#faculty-neal-deroo">Dr. Neal DeRoo</a></p>
+                <div class="ics-cc__desc">
+                  <p>This course will offer you an opportunity to reflect about what it means to teach or educate "Christianly." It will situate a Reformational understanding of Christian education within two distinct types of "context": first, the "spirits of the age" that are at work influencing our shared modern, Canadian society; and second, the local context of the school you work at.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>The 'spiritual' context will help us see Christian education as an alternative, not simply to "secular" education, but to other patterns of spiritual formation, like consumerist education or workaholic education. The 'local' context will then allow us to discuss how Christian education can be 'put to work' in your day-to-day activities as a teacher or administrator.</p>
+                    <p>The goal is to give you time, space, and resources to develop a clearer understanding of how faith impacts education in general, and how your faith shapes what you do as an educator more specifically.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--core">Core</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Areas 2 &amp; 4</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Summer Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════ -->
+      <!-- IMMERSIVE / ELECTIVE         -->
+      <!-- ════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="immersive">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--immersive"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+          <h2 class="ics-catl-courses__section-title">Immersive &amp; Elective Courses</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">These courses cultivate reflective practice, vocational clarity, adaptive leadership, and inclusive community. Taken as immersive courses (MA-EL) or electives (MWS-E), they also serve as required courses for the CILC and CSAC certificates.</p>
+
+        <div class="ics-catl-courses__grid">
+
+          <!-- ──── Called to Teach: From Formation to Transformation ──── -->
+          <div class="ics-cc" id="course-called-to-teach" data-programs="mael mwse cilc cstc" data-terms="summer26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--immersive"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Called to Teach: From Formation to Transformation</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--edith"><a href="/faculty/#faculty-edith-van-der-boom">Dr. Edith van der Boom</a></p>
+                <div class="ics-cc__desc">
+                  <p>Called to Teach: From Formation to Transformation is designed to inspire and support K-12 educators in their personal and professional journey of teaching and learning. Through this course, participants will explore their vocation as educators, reflecting on their teaching practice in the context of faith and spiritual disciplines.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>This inner journey invites educators to seek refreshment and renewal in their work while considering the formation and learning of their students. The course provides educators with a vocational vision of Christian educational innovation and leadership, guiding them as they begin cultivating personal competency in critical and constructive reflection on their professional practice.</p>
+                    <p>The course aims to address these key questions: What is my calling as an educator? How can I intentionally live out my calling in teaching and leadership?</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--immersive">Immersive / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CILC Required</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Areas 2, 3 &amp; 4</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Summer Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── Lead From Where You Are ──── -->
+          <div class="ics-cc" id="course-lead-from-where-you-are" data-programs="mael mwse cilc csac cstc" data-terms="summer26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--immersive"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Lead From Where You Are: Making a Difference in the Face of Tough Problems, Big Questions, and Organizational Politics</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--gideon"><a href="/faculty/#faculty-gideon-strauss">Dr. Gideon Strauss</a></p>
+                <div class="ics-cc__desc">
+                  <p>Leadership is not about personality, authority, position, influence, or power as such. Leadership is an art, a craft, a practice, to which everyone is called sometime or other, in widely different situations. Leadership can be practiced with varying degrees of authority, from any position, at varying scales of influence, and with varying access to different sources of power. Leadership is the work of motivating a group of people to act in certain ways as they shape what they share.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>In this course we will explore how to contribute leadership when we have a particular, recognized position of authority in a group, and also regardless of our position in a group. We will learn how to contribute leadership when our group has clear, commonly agreed-upon procedures and goals, and when there are not (or not yet) clear, commonly agreed-upon procedures and goals (so that we must practice imaginative discernment). We will learn how to contribute leadership both to make beneficial change happen and to ensure needed maintenance.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--immersive">Immersive / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CILC &amp; CSAC Required</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Areas 2 &amp; 4</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Summer Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── The Craft of Reflective Practice ──── -->
+          <div class="ics-cc" id="course-craft-of-reflective-practice" data-programs="mael mwse" data-terms="fall26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--immersive"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">The Craft of Reflective Practice</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--gideon"><a href="/faculty/#faculty-gideon-strauss">Dr. Gideon Strauss</a></p>
+                <div class="ics-cc__desc">
+                  <p>Engage in how to do critical reflective practice by telling stories about everyday working lives. Learn qualitative research skills, receive an introduction to phenomenology, develop your own approach to praxis, and consider what you want to change in your practice.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>Develop the habits and skills of a reflective practitioner who can examine, articulate, and improve their own professional work, moving from experience to insight. This course helps you cultivate the capacity for sustained self-reflection that is central to the life of a thoughtful educator.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--immersive">Immersive / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Fall Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── Cultivating Learning Communities of Belonging ──── -->
+          <div class="ics-cc" id="course-cultivating-learning-communities" data-programs="mael mwse cilc csac cstc" data-terms="fall26">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--immersive"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Cultivating Learning Communities of Belonging</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--edith"><a href="/faculty/#faculty-edith-van-der-boom">Dr. Edith van der Boom</a></p>
+                <div class="ics-cc__desc">
+                  <p>This is a course for instructional leaders and administrators considering school and classroom cultures. Course content will include attention to social and cultural contexts, racial justice, Indigenous perspectives, human sexuality, restorative practices, and how these topics impact and form school and classroom cultures.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>This course seeks to help students find clarity in answers to the following questions: What is the relationship between the daily behaviour of educational leaders and the cultures of schools? How do we awaken our students' knowledge, creativity, and critical reflective capacities in our schools and classrooms? How do racism and other forms of oppression underlie achievement gaps and alienation within our schools? How can classroom learning be linked to larger movements seeking to effect change in the community? How can school culture be a vehicle for social change? How do we cultivate learning communities of belonging in our schools?</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--immersive">Immersive / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CILC &amp; CSAC Required</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 3</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Fall Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ -->
+      <!-- CONCENTRATION: INSTRUCTIONAL     -->
+      <!-- ════════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="concentration-instr">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--concentration"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+          <h2 class="ics-catl-courses__section-title">Concentration: Instructional Leadership</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">A pedagogical concentration for K-12 teachers in the classroom. Deepen your understanding of teaching practice, curriculum design, and what it means to lead learning in a Christian context.</p>
+        <div class="ics-catl-courses__grid">
+
+          <!-- ──── Christian Deeper Learning ──── -->
+          <div class="ics-cc" id="course-christian-deeper-learning" data-programs="mael cstc" data-terms="winter27">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--concentration"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Christian Deeper Learning: From Wonder to Inquiry to Practise</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--edith"><a href="/faculty/#faculty-edith-van-der-boom">Dr. Edith van der Boom</a></p>
+                <div class="ics-cc__desc">
+                  <p>Christian Deeper Learning is a course that seeks to help Christian educators develop their understanding and application of deeper learning. We will consider what it means to be image-bearers of God called to care for our neighbours and to be engaged in real work that is part of God's story.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>Considering these ideas will inform classroom practices and signature pedagogies in apparent, unintended, and even transformative ways. Together we will examine the importance of global citizenship as a form of Christian Deeper Learning and the impact it has on developing a caring and just world.</p>
+                    <p>Explore learning as a journey from wonder to inquiry to action. Develop Deeper Learning within the context of celebrating the learner as image-bearer, mindful learning design, and a responsiveness to culture.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--concentration">Concentration</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 3</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Summer &middot; Every Other Year</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── Transformative Teaching: The Practice of Christ-Centred Education ──── -->
+          <div class="ics-cc" id="course-transformative-teaching" data-programs="mael mwse cilc cstc" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--concentration"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Transformative Teaching: The Practice of Christ-Centred Education</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--edith"><a href="/faculty/#faculty-edith-van-der-boom">Dr. Edith van der Boom</a></p>
+                <div class="ics-cc__desc">
+                  <p>Transformative Teaching: The Practice of Christ-Centred Education is a course for instructional leaders as they consider their roles as Christian educators called to be transformers of society and culture by seeking justice for those who are marginalized and disenfranchised. In this course we will consider constructivism (a dominant educational theory in the twenty-first century that informs student-centred pedagogies such as Project Based Learning) through the lens of Scripture and investigate the assumptions that it makes.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>We will explore our calling as Christian educators to transform culture in our schools, local community, and the world. This course seeks to help Christian educators find clarity in answers to the following questions: Who am I called to be as a Christian educator in my particular place and time? It frames holiness, justice, and restoration as the foundations of Christian pedagogy.</p>
+                    <p>Examine your posture, the cultural narratives that shape your teaching, and how to integrate faith into classroom life. Learn strategies to align pedagogy with school mission and foster spiritual formation.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--concentration">Concentration / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CILC Alternate</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 2</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Winter &middot; Every Other Year</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ -->
+      <!-- CONCENTRATION: ADMINISTRATION    -->
+      <!-- ════════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="concentration-admin">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--concentration"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+          <h2 class="ics-catl-courses__section-title">Concentration: School Administration</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">An organizational concentration for current and prospective school administrators. Develop the capacities to lead Christian school communities with wisdom, justice, and vision.</p>
+        <div class="ics-catl-courses__grid">
+
+          <!-- ──── How to Coach a Strong Team ──── -->
+          <div class="ics-cc" id="course-how-to-coach" data-programs="mael mwse csac" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--concentration"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">How to Coach a Strong Team: Leading People, Building Relationships</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--gideon"><a href="/faculty/#faculty-gideon-strauss">Dr. Gideon Strauss</a></p>
+                <div class="ics-cc__desc">
+                  <p>How to Coach a Strong Team is a course for current and aspiring school administrators who want to cultivate their people skills. The course will focus on the competencies involved in having crucial conversations and coaching colleagues for professional development purposes, while also providing opportunities for learning about the competencies relevant to talent acquisition and employment termination.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>All of this will be grounded in meditations on being human and imaging God in the world. The course provides frameworks and tools for setting directions, building relationships, developing people, developing a school culture and structures to support desired practices, and securing accountability.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--concentration">Concentration / Elective</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSAC Required</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Winter &middot; Every 3 Years</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── How to Finance a Vision ──── -->
+          <div class="ics-cc" id="course-how-to-finance" data-programs="mael csac" data-terms="winter27">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--concentration"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">How to Finance a Vision</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--gideon"><a href="/faculty/#faculty-gideon-strauss">Dr. Gideon Strauss</a></p>
+                <div class="ics-cc__desc">
+                  <p>Provides frameworks and tools for leadership in making the connections between the vision of a school, the budgeting process, and the cultivation of sources of revenue. Begins with Henri Nouwen's spirituality of fundraising and continues through financial documents, storytelling through budgets, and working with school boards and staff.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>Create your own personal playbook for the financing of a school's vision. This course equips administrators with the practical skills and spiritual grounding to connect vision with financial stewardship in the context of Christian school leadership.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--concentration">Concentration</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSAC Required</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Winter &middot; Every 3 Years</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── How to Govern a School ──── -->
+          <div class="ics-cc" id="course-how-to-govern" data-programs="mael csac" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--concentration"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">How to Govern a School</h3>
+                <p class="ics-cc__instructor ics-cc__instructor--gideon"><a href="/faculty/#faculty-gideon-strauss">Dr. Gideon Strauss</a></p>
+                <div class="ics-cc__desc">
+                  <p>Provides frameworks and tools for leadership in governance. For principals, school leadership teams, and school boards. Introduces students to the work of nurturing the relationships among the school's stakeholders, with a focus on the pivotal relationship between the board and the principal.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>Topics include stewardship of vision and mission, strategic policy formulation, monitoring executive performance, and accountability to the school community. A Team Audit option is available for school board members and executive leadership teams who wish to take this course together.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--concentration">Concentration</span>
+                  <span class="ics-cc__tag">3 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSAC Alternate</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Winter &middot; Every 3 Years</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ -->
+      <!-- PARTNERSHIPS                     -->
+      <!-- ════════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="partnerships">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--special"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <h2 class="ics-catl-courses__section-title">Partnership Concentrations: Inclusion &amp; Literacy</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">The Inclusion and Literacy concentrations are offered in partnership with Calvin University. ICS students contact Calvin directly for course schedules, registration, and fee payment. Courses taken through Calvin are worth 3 credits each (equivalent to 1 ICS unit).</p>
+        <div class="ics-catl-courses__grid">
+
+          <div class="ics-cc ics-cc--partnership" id="course-inclusion-concentration" data-programs="mael" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Inclusion Concentration</h3>
+                <p class="ics-cc__subtitle">In Partnership with Calvin University</p>
+                <div class="ics-cc__desc">
+                  <p>An inclusive practice concentration for teachers and administrators. Learn to cultivate just and welcoming learning communities where every student belongs. Concentration courses are delivered through the ICS-Calvin University partnership, expanding your scholarly network and community. Contact us for the current course rotation and descriptions.</p>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag--partner ics-cc__tag">Calvin University Partnership</span>
+                  <span class="ics-cc__tag">3 Courses &middot; 9 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ics-cc ics-cc--partnership" id="course-literacy-concentration" data-programs="mael" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Literacy Concentration</h3>
+                <p class="ics-cc__subtitle">In Partnership with Calvin University</p>
+                <div class="ics-cc__desc">
+                  <p>A literacy concentration for K-12 teachers. Explore the intersections of reading, writing, language, and faith-informed pedagogy in developing literate learners. Concentration courses are delivered through the ICS-Calvin University partnership. Contact us for the current course rotation and descriptions.</p>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag--partner ics-cc__tag">Calvin University Partnership</span>
+                  <span class="ics-cc__tag">3 Courses &middot; 9 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ -->
+      <!-- CAPSTONE                         -->
+      <!-- ════════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="capstone">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--capstone"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <h2 class="ics-catl-courses__section-title">Capstone</h2>
+        </div>
+        <p class="ics-catl-courses__section-desc">The culminating experience of the degree programs. The MA-EL capstone is a sustained piece of original research; the MWS-E offers two completion pathways.</p>
+        <div class="ics-catl-courses__grid">
+
+          <!-- ──── Praxis & Project + Celebrating Joyful Learning ──── -->
+          <div class="ics-cc" id="course-praxis-project" data-programs="mael" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--capstone"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Praxis &amp; Project</h3>
+                <p class="ics-cc__subtitle">MA-EL Capstone</p>
+                <div class="ics-cc__desc">
+                  <p>The culmination of the MA-EL is a sustained piece of original research undertaken under faculty mentorship. The Praxis &amp; Project (the MA-EL equivalent of a thesis) integrates everything you have learned (biblical foundations, philosophical worldview, and concentration expertise) into a significant scholarly contribution to Christian educational thought.</p>
+                </div>
+                <button class="ics-cc__toggle" aria-expanded="false">Read more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                <div class="ics-cc__more">
+                  <div class="ics-cc__more-inner">
+                    <p>The Praxis &amp; Project may take a variety of forms, such as a professional development workshop, a podcast series, a video documentation, a curriculum, a playbook, a conference paper, or a journal article. It comprises 12 credit hours of sustained original research with individualized mentoring from ICS faculty throughout.</p>
+                    <p>After completing most coursework and the Praxis &amp; Project, MA-EL students participate in <strong>Celebrating Joyful Learning</strong>, the program's capstone course. In this immersive experience, students integrate their learning across the entire program, critically reflect on their development as scholar-practitioners, and share insights with peers across both the instructional leadership and school administration concentrations.</p>
+                  </div>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--capstone">Capstone</span>
+                  <span class="ics-cc__tag">12 Credits</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MA-EL Only</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Across Final Terms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ──── MWS-E Completion Pathways ──── -->
+          <div class="ics-cc" id="course-mwse-completion" data-programs="mwse" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--capstone"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">MWS-E Completion Pathways</h3>
+                <p class="ics-cc__subtitle">MWS-E Capstone</p>
+                <div class="ics-cc__desc">
+                  <p>The MWS-E offers two completion pathways. <strong>Pathway A (6 Courses + Action Project):</strong> Ideal for educators who want to apply their learning directly in their school context. Carry out a hands-on Action Project in your own school setting and write a summative paper reflecting on the experience. <strong>Pathway B (7 Courses + Research Paper):</strong> For those who prefer a more scholarly route. Complete an additional elective course and write a guided Research Paper demonstrating sustained engagement with a question in Christian educational thought.</p>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag ics-cc__tag--capstone">Capstone</span>
+                  <span class="ics-cc__tag">Action Project or Research Paper</span>
+                  <span class="ics-cc__tag--program ics-cc__tag">MWS-E Only</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════ -->
+      <!-- SPECIAL PROGRAMS                 -->
+      <!-- ════════════════════════════════ -->
+      <div class="ics-catl-courses__section" data-section="special">
+        <div class="ics-catl-courses__section-header">
+          <div class="ics-catl-courses__section-icon ics-catl-courses__section-icon--special"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+          <h2 class="ics-catl-courses__section-title">Special Programs</h2>
+        </div>
+        <div class="ics-catl-courses__grid">
+
+          <div class="ics-cc" id="course-art-in-orvieto" data-programs="cstc" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--special"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">ART in Orvieto</h3>
+                <p class="ics-cc__subtitle">ICS Summer Study Abroad &middot; Orvieto, Italy</p>
+                <div class="ics-cc__desc">
+                  <p>ICS's summer study-abroad program in Orvieto, Italy. Courses offered through ART in Orvieto are approved for Area 4 of the CSTC, providing a unique opportunity to engage faith, art, and culture in an immersive international setting.</p>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag" style="background: rgba(139,126,200,0.15); color: #6B5FA0;">Study Abroad</span>
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 4</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Summer Intensive</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ics-cc" id="course-additional-philosophy" data-programs="cstc" data-terms="">
+            <div class="ics-cc__top">
+              <div class="ics-cc__indicator ics-cc__indicator--special"></div>
+              <div class="ics-cc__body">
+                <h3 class="ics-cc__name">Additional ICS Philosophy Courses</h3>
+                <p class="ics-cc__subtitle">Worldview Studies</p>
+                <div class="ics-cc__desc">
+                  <p>Several ICS graduate philosophy courses are also approved for Area 4 of the CSTC. Check the <a href="http://courses.icscanada.edu/" style="color: var(--catl-accent); font-weight: 600;">ICS Course Catalogue</a> or contact the Academic Registrar for the most current list of approved courses each term.</p>
+                </div>
+                <div class="ics-cc__meta">
+                  <span class="ics-cc__tag--cert ics-cc__tag">CSTC Area 4</span>
+                  <span class="ics-cc__tag--term ics-cc__tag">Varies by Term</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ics-catl-no-results" id="noResults">No courses match the selected filter. Try selecting "All Courses" to see the full catalogue.</div>
+
+    </div>
+  </section>
+
+  <!-- ===== COURSE FORMAT ===== -->
+  <section class="ics-catl-format">
+    <div class="ics-catl-format__inner">
+      <div>
+        <p class="ics-catl-format__eyebrow">Course Format</p>
+        <h2 class="ics-catl-format__heading">Designed for Working Educators</h2>
+        <p class="ics-catl-format__body">Every ICS education course is delivered online in a blended format that combines asynchronous learning with scheduled live sessions. Courses are built around the rhythms of the school year so that you can pursue graduate study without stepping away from the classroom.</p>
+      </div>
+      <div class="ics-catl-format__details">
+        <p class="ics-catl-format__detail-title">What to Expect</p>
+        <div class="ics-catl-format__detail-item">
+          <svg class="ics-catl-format__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <p class="ics-catl-format__detail-text"><strong>Asynchronous work</strong> including readings, reflections, and projects on your own schedule</p>
+        </div>
+        <div class="ics-catl-format__detail-item">
+          <svg class="ics-catl-format__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <p class="ics-catl-format__detail-text"><strong>6 live Zoom sessions</strong> scheduled with consideration for students' time zones</p>
+        </div>
+        <div class="ics-catl-format__detail-item">
+          <svg class="ics-catl-format__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <p class="ics-catl-format__detail-text"><strong>Small cohorts</strong> of up to 12 students for meaningful dialogue</p>
+        </div>
+        <div class="ics-catl-format__detail-item">
+          <svg class="ics-catl-format__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <p class="ics-catl-format__detail-text"><strong>Summer courses</strong> pause in July so you can enjoy your break</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM DISCOUNT ===== -->
+  <section class="ics-catl-discount">
+    <div class="ics-catl-discount__inner">
+      <svg class="ics-catl-discount__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <p class="ics-catl-discount__text"><strong>Team Discount:</strong> Two or more educators from the same school who register for the same course (for credit) at the same time each receive a $100 rebate on their course tuition. We believe that when teachers from the same school take a course together, they become stronger conversation partners and can better support each other in implementation. <strong>First-time ICS auditors and ICS alumni</strong> can take courses for only $425 (registration included).</p>
+    </div>
+  </section>
+
+  <div class="ics-divider"><div class="ics-divider__line"></div><div class="ics-divider__diamond"></div><div class="ics-divider__line"></div></div>
+
+  <!-- ===== CTA ===== -->
+  <section class="ics-catl-cta">
+    <div class="ics-catl-cta__inner">
+      <h2 class="ics-catl-cta__heading">Ready to Register?</h2>
+      <p class="ics-catl-cta__text">Contact the ICS Academic Registrar to register for a course, or explore our degree programs and certificates to find the right pathway for you.</p>
+      <div class="ics-catl-cta__actions">
+        <a href="mailto:academic-registrar@icscanada.edu" class="ics-btn ics-btn--primary-on-light">Email the Registrar &rarr;</a>
+        <a href="/mael/" class="ics-btn ics-btn--outline-on-light">Explore the MA-EL</a>
+        <a href="/mwse/" class="ics-btn ics-btn--outline-on-light">Explore the MWS-E</a>
+        <a href="/educator-certificates/" class="ics-btn ics-btn--outline-on-light">Educator Certificates</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function() {
+  /* ---- FILTERS ---- */
+  var cards = document.querySelectorAll('.ics-cc');
+  var sections = document.querySelectorAll('.ics-catl-courses__section');
+  var noResults = document.getElementById('noResults');
+  var seasonButtons = document.querySelectorAll('[data-filter-group="season"]');
+  var programButtons = document.querySelectorAll('[data-filter-group="program"]');
+
+  var currentSeason = 'summer26';
+  var currentProgram = 'all';
+
+  function applyFilters() {
+    var visibleCount = 0;
+    cards.forEach(function(card) {
+      var programs = (card.getAttribute('data-programs') || '');
+      var terms = (card.getAttribute('data-terms') || '');
+
+      var seasonMatch;
+      if (currentSeason === 'all') {
+        seasonMatch = true;
+      } else {
+        seasonMatch = terms.indexOf(currentSeason) !== -1;
+      }
+
+      var programMatch;
+      if (currentProgram === 'all') {
+        programMatch = true;
+      } else {
+        programMatch = programs.indexOf(currentProgram) !== -1;
+      }
+
+      if (seasonMatch && programMatch) {
+        card.classList.remove('ics-cc--hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('ics-cc--hidden');
+      }
+    });
+
+    sections.forEach(function(section) {
+      var sc = section.querySelectorAll('.ics-cc');
+      var anyVisible = false;
+      sc.forEach(function(c) { if (!c.classList.contains('ics-cc--hidden')) anyVisible = true; });
+      section.classList.toggle('ics-section--hidden', !anyVisible);
+    });
+
+    noResults.classList.toggle('visible', visibleCount === 0);
+  }
+
+  seasonButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      seasonButtons.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentSeason = btn.getAttribute('data-filter');
+      applyFilters();
+    });
+  });
+
+  programButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      programButtons.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentProgram = btn.getAttribute('data-filter');
+      applyFilters();
+    });
+  });
+
+  // Apply default filters on load (Summer + All Programs)
+  applyFilters();
+
+  /* ---- COLLAPSIBLE DESCRIPTIONS ---- */
+  document.querySelectorAll('.ics-cc__toggle').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      var more = this.nextElementSibling;
+      var isOpen = more.classList.contains('open');
+      more.classList.toggle('open');
+      this.classList.toggle('open');
+      this.setAttribute('aria-expanded', !isOpen);
+      var textNode = this.firstChild;
+      if (!isOpen) { textNode.textContent = 'Show less '; }
+      else { textNode.textContent = 'Read more '; }
+    });
+  });
+})();
+</script>
+
+<div id="site-footer"></div>
+<script src="/js/includes.js"></script>
+</body>
+</html>
