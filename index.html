@@ -1329,7 +1329,7 @@ function renderSections() {
   }
 
   const grid = document.createElement("section");
-  grid.className = "catl-flat-grid reveal";
+  grid.className = "catl-flat-grid";
   grid.innerHTML = `<div class="catl-section__grid">${state.courses.map(cardHtml).join("")}</div>`;
   container.appendChild(grid);
 
