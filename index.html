@@ -187,22 +187,6 @@ a:hover { color: var(--accent); }
   text-align: center;
 }
 .catl-intro__lede em { color: var(--accent-muted); }
-.catl-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem 1.5rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-.catl-legend__item { display: inline-flex; align-items: center; gap: 0.55rem; }
-.catl-legend__dot {
-  width: 9px; height: 9px;
-  display: inline-block;
-}
 
 /* ---------- FILTERS ---------- */
 .catl-filters {
@@ -250,10 +234,99 @@ a:hover { color: var(--accent); }
   color: var(--cream);
 }
 
+.catl-search {
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+}
+.catl-search__input {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-dark);
+  background: var(--cream-warm);
+  border: 1px solid var(--border-mid);
+  border-radius: 0;
+  padding: 0.85rem 2.75rem 0.85rem 2.85rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.catl-search__input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.catl-search__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--cream);
+  box-shadow: 0 0 0 3px var(--accent-pale);
+}
+.catl-search__icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--accent-muted);
+  pointer-events: none;
+}
+.catl-search__clear {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  transition: color 140ms ease;
+}
+.catl-search__clear:hover { color: var(--wine); }
+.catl-search.has-value .catl-search__clear { display: inline-flex; }
+
+.catl-results-count {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-height: 1em;
+}
+.catl-results-count strong {
+  color: var(--accent-muted);
+  font-weight: 700;
+}
+
+mark.catl-hit {
+  background: var(--accent-pale);
+  color: var(--accent-deep);
+  padding: 0 0.1em;
+  border-radius: 0;
+  font-weight: 600;
+}
+
 /* ---------- COURSE SECTIONS ---------- */
 .catl-sections {
   background: var(--cream);
   padding: 1rem 1.5rem 4rem;
+}
+.catl-flat-grid {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-top: 2rem;
 }
 .catl-section {
   max-width: 920px;
@@ -711,14 +784,31 @@ a:hover { color: var(--accent); }
 <section class="catl-intro">
   <div class="catl-intro__inner reveal">
     <p class="catl-intro__lede">
-      Our offerings move from <em>foundational</em> philosophical and theological grounding into <em>topical immersions</em>, professional <em>concentrations</em> for working educators, and <em>capstone</em> pathways. Use the filters below to find courses by term and by program.
+      Browse our graduate offerings — philosophical and theological seminars, courses for working educators, and partnership courses with affiliated institutions. Use the search and filters below to find a course by term, program, instructor, or topic.
     </p>
-    <div class="catl-legend" id="legend"></div>
   </div>
 </section>
 
 <section class="catl-filters">
   <div class="catl-filters__inner reveal">
+    <div class="catl-filters__group">
+      <span class="catl-filters__label">Search the Catalogue</span>
+      <div class="catl-search" id="search-wrap">
+        <svg class="catl-search__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="7" cy="7" r="5"/>
+          <line x1="10.5" y1="10.5" x2="14" y2="14" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="search"
+          class="catl-search__input"
+          id="search-input"
+          placeholder="Search by title, instructor, topic, course code…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search courses">
+        <button type="button" class="catl-search__clear" id="search-clear" aria-label="Clear search">✕</button>
+      </div>
+    </div>
     <div class="catl-filters__group">
       <span class="catl-filters__label">Filter by Term</span>
       <div class="catl-filters__row" id="term-filters"></div>
@@ -727,6 +817,7 @@ a:hover { color: var(--accent); }
       <span class="catl-filters__label">Filter by Program</span>
       <div class="catl-filters__row" id="program-filters"></div>
     </div>
+    <div class="catl-results-count" id="results-count" aria-live="polite"></div>
   </div>
 </section>
 
@@ -994,6 +1085,7 @@ const state = {
   courses: [],
   activeTerm: "all",
   activeProgram: "all",
+  searchQuery: "",
   updated: null
 };
 
@@ -1056,6 +1148,42 @@ function sortTerms(a, b) {
   return ay !== by ? ay - by : as - bs;
 }
 
+// Map a term id ("fall26") to its [start, end] window as Date objects.
+// Fall = Sep-Dec, Winter = Jan-Apr, Summer = May-Aug. Returns null on bad input.
+function termWindow(termId) {
+  const m = String(termId || "").match(/^([a-z]+?)(\d{2,4})$/i);
+  if (!m) return null;
+  let yr = parseInt(m[2], 10);
+  if (m[2].length === 2) yr += 2000;
+  const s = m[1][0].toLowerCase();
+  if (s === "w") return [new Date(yr, 0, 1), new Date(yr, 3, 30, 23, 59, 59)];   // Jan 1 – Apr 30
+  if (s === "s") return [new Date(yr, 4, 1), new Date(yr, 7, 31, 23, 59, 59)];   // May 1 – Aug 31
+  if (s === "f") return [new Date(yr, 8, 1), new Date(yr, 11, 31, 23, 59, 59)];  // Sep 1 – Dec 31
+  return null;
+}
+
+// Sort by "what's relevant now":
+//   1. Currently-running terms (start ≤ today ≤ end), ascending start
+//   2. Upcoming terms (start > today), ascending start (soonest first)
+//   3. Completed terms (end < today), descending start (most-recently-finished first)
+//   4. Anything with no parseable term sinks to the very bottom.
+// Within a bucket, courses sharing the same start date preserve sheet order.
+function sortCoursesByTerm(courses) {
+  const now = Date.now();
+  return courses
+    .map((c, idx) => {
+      const win = termWindow(c.term);
+      if (!win) return { c, idx, bucket: 3, key: 0 };
+      const start = win[0].getTime();
+      const end = win[1].getTime();
+      if (start <= now && now <= end) return { c, idx, bucket: 0, key: start };
+      if (start > now)                 return { c, idx, bucket: 1, key: start };
+      return                                  { c, idx, bucket: 2, key: -start };
+    })
+    .sort((a, b) => a.bucket - b.bucket || a.key - b.key || a.idx - b.idx)
+    .map(r => r.c);
+}
+
 function uniquePairs(courses, idKey, labelKey) {
   const map = new Map();
   for (const c of courses) {
@@ -1074,15 +1202,6 @@ function uniqueTokens(courses, key) {
     }
   }
   return [...set];
-}
-
-function renderLegend() {
-  const html = CATEGORIES.map(cat => `
-    <span class="catl-legend__item">
-      <span class="catl-legend__dot" style="background: var(--cat-${cat.id});"></span>
-      ${escapeHtml(cat.label)}
-    </span>`).join("");
-  $("#legend").innerHTML = html;
 }
 
 function renderFilters() {
@@ -1130,6 +1249,17 @@ function cardHtml(c) {
     ? `<a href="${escapeHtml(instructorHref)}" target="_blank" rel="noopener">${escapeHtml(c.instructorName || "")}</a>`
     : escapeHtml(c.instructorName || "");
 
+  // Build the searchable blob — lowercased concatenation of every field the
+  // search bar should reach into. Strip our *markdown* asterisks so a query
+  // like "kant" still matches "*Kant*"-styled titles.
+  const searchBlob = [
+    c.title, c.subtitle, c.code, c.termCode, c.termLabel,
+    c.instructorName, c.descriptionShort, c.descriptionMore,
+    c.programTagsDisplay, c.certificateTags, c.cstcArea,
+    c.format, c.meetingDay, c.requiredBooks, c.prerequisites,
+    c.partnerNote
+  ].filter(Boolean).join(" ").toLowerCase().replace(/\*/g, "");
+
   const tags = [];
   if (c.credits) tags.push(`<span class="catl-tag catl-tag--credits">${escapeHtml(c.credits)}</span>`);
   if (c.programTagsDisplay) {
@@ -1164,6 +1294,7 @@ function cardHtml(c) {
            style="--cat-color: ${catColor}; --instr-color: ${instrColor};"
            data-programs="${escapeHtml(c.programs || "")}"
            data-term="${escapeHtml(c.term || "")}"
+           data-search="${escapeHtml(searchBlob)}"
            id="course-${escapeHtml(c.id || "")}">
     <div class="catl-card__topline">
       <span class="catl-card__code">${escapeHtml(c.code || "")}</span>
@@ -1188,43 +1319,19 @@ function cardHtml(c) {
 
 function renderSections() {
   const container = $("#sections");
-  const statusEl = $("#status");
-  // Clear existing sections but keep status
-  $$(".catl-section", container).forEach(s => s.remove());
+  // Clear existing sections/grid but keep status
+  $$(".catl-section, .catl-flat-grid", container).forEach(s => s.remove());
   $(".catl-no-results", container)?.remove();
 
-  const byCategory = new Map();
-  for (const c of state.courses) {
-    if (!byCategory.has(c.category)) byCategory.set(c.category, []);
-    byCategory.get(c.category).push(c);
+  if (!state.courses.length) {
+    observeReveals();
+    return;
   }
 
-  // Render in CATEGORIES order; categories not in the registry render at the end.
-  const renderedCategories = new Set();
-  const orderedCats = CATEGORIES.filter(cat => byCategory.has(cat.id))
-    .concat([...byCategory.keys()]
-      .filter(id => !CATEGORIES.find(c => c.id === id))
-      .map(id => ({ id, label: id, eyebrow: "", lede: "" })));
-
-  for (const cat of orderedCats) {
-    const courses = byCategory.get(cat.id) || [];
-    if (!courses.length) continue;
-    renderedCategories.add(cat.id);
-
-    const section = document.createElement("section");
-    section.className = "catl-section reveal";
-    section.dataset.category = cat.id;
-    section.innerHTML = `
-      <div class="catl-section__header">
-        ${cat.eyebrow ? `<div class="catl-section__eyebrow" style="color: var(--cat-${escapeHtml(cat.id)});">${escapeHtml(cat.eyebrow)}</div>` : ""}
-        <h2 class="catl-section__title">${escapeHtml(cat.label)}</h2>
-        ${cat.lede ? `<p class="catl-section__lede">${escapeHtml(cat.lede)}</p>` : ""}
-      </div>
-      <div class="catl-section__grid">
-        ${courses.map(cardHtml).join("")}
-      </div>`;
-    container.appendChild(section);
-  }
+  const grid = document.createElement("section");
+  grid.className = "catl-flat-grid reveal";
+  grid.innerHTML = `<div class="catl-section__grid">${state.courses.map(cardHtml).join("")}</div>`;
+  container.appendChild(grid);
 
   // Wire card toggles + reveal observer
   $$(".catl-card__toggle").forEach(btn => btn.addEventListener("click", () => {
@@ -1238,28 +1345,96 @@ function renderSections() {
 }
 
 function applyFilters() {
-  let anyVisible = false;
-  $$(".catl-section").forEach(section => {
-    let sectionHasMatch = false;
-    $$(".catl-card", section).forEach(card => {
-      const programs = (card.dataset.programs || "").split(/\s+/).filter(Boolean);
-      const term = card.dataset.term || "";
-      const termMatch = state.activeTerm === "all" || term === state.activeTerm;
-      const programMatch = state.activeProgram === "all" || programs.includes(state.activeProgram);
-      const show = termMatch && programMatch;
-      card.hidden = !show;
-      if (show) { sectionHasMatch = true; anyVisible = true; }
-    });
-    section.hidden = !sectionHasMatch;
+  const query = state.searchQuery.trim().toLowerCase();
+  const queryTokens = query ? query.split(/\s+/).filter(Boolean) : [];
+
+  let totalCards = 0, visibleCards = 0;
+  $$(".catl-card").forEach(card => {
+    totalCards++;
+    const programs = (card.dataset.programs || "").split(/\s+/).filter(Boolean);
+    const term = card.dataset.term || "";
+    const blob = card.dataset.search || "";
+    const termMatch = state.activeTerm === "all" || term === state.activeTerm;
+    const programMatch = state.activeProgram === "all" || programs.includes(state.activeProgram);
+    const searchMatch = !queryTokens.length || queryTokens.every(t => blob.includes(t));
+    const show = termMatch && programMatch && searchMatch;
+    card.hidden = !show;
+    if (show) visibleCards++;
   });
 
+  // Highlight search hits in visible cards
+  applyHighlights(queryTokens);
+
+  // Results count
+  const countEl = $("#results-count");
+  if (countEl) {
+    if (queryTokens.length || state.activeTerm !== "all" || state.activeProgram !== "all") {
+      countEl.innerHTML = `Showing <strong>${visibleCards}</strong> of ${totalCards} course${totalCards === 1 ? "" : "s"}`;
+    } else {
+      countEl.textContent = "";
+    }
+  }
+
+  // Empty state
   $(".catl-no-results")?.remove();
-  if (!anyVisible) {
+  if (!visibleCards) {
     const empty = document.createElement("div");
     empty.className = "catl-no-results";
-    empty.innerHTML = `No courses match this combination of filters. Try <em>All Terms</em> or <em>All Programs</em> to broaden the view.`;
+    if (query) {
+      empty.innerHTML = `No courses match <em>"${escapeHtml(query)}"</em>${
+        (state.activeTerm !== "all" || state.activeProgram !== "all")
+          ? " under the current filters" : ""
+      }. Try a different keyword or clear your filters.`;
+    } else {
+      empty.innerHTML = `No courses match this combination of filters. Try <em>All Terms</em> or <em>All Programs</em> to broaden the view.`;
+    }
     $("#sections").appendChild(empty);
   }
+}
+
+// Highlight visible occurrences of search tokens inside titles + descriptions.
+// Rewrites text nodes only, never markup or attributes — and clears prior
+// highlights on every call so stale <mark> tags don't accumulate.
+function applyHighlights(tokens) {
+  const HILITE_SELECTOR = ".catl-card__title, .catl-card__instructor, .catl-card__subtitle, .catl-card__desc";
+  // First, clear any existing highlights everywhere
+  $$("mark.catl-hit").forEach(m => {
+    const parent = m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+  if (!tokens.length) return;
+  // Build a single regex from tokens, longest first to avoid partial overlap
+  const sorted = [...tokens].sort((a, b) => b.length - a.length)
+    .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp(`(${sorted.join("|")})`, "gi");
+  $$(".catl-card:not([hidden])").forEach(card => {
+    $$(HILITE_SELECTOR, card).forEach(el => highlightTextNodes(el, re));
+  });
+}
+
+function highlightTextNodes(root, re) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const targets = [];
+  let n;
+  while ((n = walker.nextNode())) {
+    if (n.parentNode && n.parentNode.tagName === "MARK") continue;
+    if (re.test(n.nodeValue)) targets.push(n);
+  }
+  targets.forEach(node => {
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    node.nodeValue.replace(re, (match, _g, offset) => {
+      if (offset > last) frag.appendChild(document.createTextNode(node.nodeValue.slice(last, offset)));
+      const mark = document.createElement("mark");
+      mark.className = "catl-hit";
+      mark.textContent = match;
+      frag.appendChild(mark);
+      last = offset + match.length;
+    });
+    if (last < node.nodeValue.length) frag.appendChild(document.createTextNode(node.nodeValue.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
 }
 
 function observeReveals() {
@@ -1286,11 +1461,42 @@ function setHeroMeta(updated, courseCount) {
   $("#updated").textContent = updated || "—";
 }
 
+function initSearch() {
+  const input = $("#search-input");
+  const wrap  = $("#search-wrap");
+  const clear = $("#search-clear");
+  if (!input || !wrap || !clear) return;
+
+  let debounceTimer = null;
+  const apply = () => {
+    state.searchQuery = input.value;
+    wrap.classList.toggle("has-value", !!input.value);
+    applyFilters();
+  };
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(apply, 120);
+  });
+  // Esc clears the field
+  input.addEventListener("keydown", e => {
+    if (e.key === "Escape" && input.value) {
+      input.value = "";
+      apply();
+      e.preventDefault();
+    }
+  });
+  clear.addEventListener("click", () => {
+    input.value = "";
+    apply();
+    input.focus();
+  });
+}
+
 /* ==========================================================================
  *  DATA LOAD
  * ========================================================================== */
 async function load() {
-  renderLegend();
+  initSearch();
   $("#year").textContent = new Date().getFullYear();
 
   let data = null;
@@ -1310,6 +1516,7 @@ async function load() {
   }
 
   state.courses = (data.courses || []).filter(c => c.published !== false && c.published !== "FALSE" && c.published !== "false");
+  state.courses = sortCoursesByTerm(state.courses);
   state.updated = data.updated || null;
 
   setHeroMeta(state.updated, state.courses.length);
