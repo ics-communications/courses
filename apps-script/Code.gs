@@ -204,10 +204,12 @@ function listCourses() {
 
 function getCourse(id) {
   const sheet = sheet_();
+  const headers = getSheetHeaders_(sheet);
+  const idCol = headers.indexOf("id");
   const rows = sheet.getDataRange().getValues();
   for (let i = 1; i < rows.length; i++) {
-    if (String(rows[i][HEADERS.indexOf("id")]) === String(id)) {
-      return rowToObject_(rows[i]);
+    if (String(rows[i][idCol]) === String(id)) {
+      return rowToObject_(rows[i], headers);
     }
   }
   return null;
@@ -215,8 +217,9 @@ function getCourse(id) {
 
 function saveCourse(form) {
   const sheet = sheet_();
+  const headers = getSheetHeaders_(sheet);
   const rows = sheet.getDataRange().getValues();
-  const idCol = HEADERS.indexOf("id");
+  const idCol = headers.indexOf("id");
 
   // Coerce types & normalize before writing
   const clean = sanitizeForm_(form);
@@ -226,17 +229,20 @@ function saveCourse(form) {
   if (clean.id) {
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][idCol]) === String(clean.id)) {
-        const merged = mergeRow_(rows[i], clean);
-        sheet.getRange(i + 1, 1, 1, HEADERS.length).setValues([merged]);
+        // Merge against the sheet's real columns: prefer the form value when
+        // explicitly provided (including ""), otherwise keep what's there.
+        const merged = headers.map((h, c) =>
+          Object.prototype.hasOwnProperty.call(clean, h) ? clean[h] : rows[i][c]);
+        sheet.getRange(i + 1, 1, 1, headers.length).setValues([merged]);
         clearCache();
         return { id: clean.id, action: "updated" };
       }
     }
   }
 
-  // New row
+  // New row — written in the sheet's actual column order
   clean.id = clean.id || generateId_(clean.code, clean.term);
-  const newRow = HEADERS.map(h => clean[h] !== undefined ? clean[h] : "");
+  const newRow = headers.map(h => clean[h] !== undefined ? clean[h] : "");
   sheet.appendRow(newRow);
   clearCache();
   return { id: clean.id, action: "created" };
@@ -244,8 +250,9 @@ function saveCourse(form) {
 
 function deleteCourse(id) {
   const sheet = sheet_();
+  const headers = getSheetHeaders_(sheet);
   const rows = sheet.getDataRange().getValues();
-  const idCol = HEADERS.indexOf("id");
+  const idCol = headers.indexOf("id");
   for (let i = 1; i < rows.length; i++) {
     if (String(rows[i][idCol]) === String(id)) {
       sheet.deleteRow(i + 1);
@@ -266,27 +273,32 @@ function sheet_() {
   return sheet;
 }
 
+// Read the sheet's ACTUAL header row and use it (not the hardcoded HEADERS
+// constant) as the source of truth for column → field mapping. This makes
+// every read/write robust to column reordering or schema changes: as long as
+// the header cell says "term", we read/write the "term" field there, no matter
+// which physical column it sits in. HEADERS is still used to bootstrap/repair
+// the sheet and to order newly written rows.
+function getSheetHeaders_(sheet) {
+  const lastCol = sheet.getLastColumn();
+  if (lastCol < 1) return [];
+  return sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(h => String(h).trim());
+}
+
 function readAllRows_() {
   const sheet = sheet_();
   if (sheet.getLastRow() < 2) return [];
-  const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, HEADERS.length).getValues();
+  const headers = getSheetHeaders_(sheet);
+  const values = sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length).getValues();
   return values
     .filter(row => row.some(v => v !== "" && v !== null))
-    .map(rowToObject_);
+    .map(row => rowToObject_(row, headers));
 }
 
-function rowToObject_(row) {
+function rowToObject_(row, headers) {
   const obj = {};
-  HEADERS.forEach((h, i) => { obj[h] = row[i]; });
+  headers.forEach((h, i) => { if (h) obj[h] = row[i]; });
   return obj;
-}
-
-function mergeRow_(existingRow, form) {
-  // For each header, prefer form value if explicitly provided (including ""),
-  // otherwise keep existing.
-  return HEADERS.map((h, i) =>
-    Object.prototype.hasOwnProperty.call(form, h) ? form[h] : existingRow[i]
-  );
 }
 
 function sanitizeForm_(form) {
