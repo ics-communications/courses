@@ -20,23 +20,17 @@ const CACHE_KEY  = "catalogue-v1";
 const CACHE_TTL  = 300; // seconds (5 min)
 
 const HEADERS = [
-  "id", "published", "category", "sectionOrder",
+  "id", "published", "sectionOrder",
   "title", "code", "termCode", "term", "termLabel",
   "programs", "programTagsDisplay", "credits",
-  "instructorName", "instructorSlug", "instructorUrl",
+  "instructorName", "instructorUrl",
   "subtitle", "descriptionShort", "descriptionMore",
   "tstCode", "format", "meetingDay", "meetingTime",
   "syllabusUrl", "requiredBooks",
   "prerequisites", "cstcArea", "certificateTags",
   "enrolmentNotes", "registrationEmail",
-  "lastDateToRegister", "maxEnrolment", "partnerNote",
+  "lastDateToRegister", "maxEnrolment",
   "updatedAt"
-];
-
-const CATEGORY_OPTIONS = [
-  "core", "immersive",
-  "concentration-instr", "concentration-admin",
-  "partnership", "capstone", "special"
 ];
 
 const PROGRAM_OPTIONS = [
@@ -51,21 +45,19 @@ const PROGRAM_OPTIONS = [
   { id: "tcpce", label: "TCPCE" }
 ];
 
-const INSTRUCTOR_SLUG_OPTIONS = ["1", "2", "3", "4", "5", "6"];
-
 // Whitelist of fields exposed in the public JSON payload. Anything not listed
 // here (e.g. future internal-only columns) is never served to the public page.
 const PUBLIC_FIELDS = [
-  "id", "published", "category",
+  "id", "published",
   "title", "code", "termCode", "term", "termLabel",
   "programs", "programTagsDisplay", "credits",
-  "instructorName", "instructorSlug", "instructorUrl",
+  "instructorName", "instructorUrl",
   "subtitle", "descriptionShort", "descriptionMore",
   "tstCode", "format", "meetingDay", "meetingTime",
   "syllabusUrl", "requiredBooks",
   "prerequisites", "cstcArea", "certificateTags",
   "enrolmentNotes", "registrationEmail",
-  "lastDateToRegister", "maxEnrolment", "partnerNote"
+  "lastDateToRegister", "maxEnrolment"
 ];
 
 // ============================================================================
@@ -107,9 +99,6 @@ function normalizeCourseForPublic_(row) {
   PUBLIC_FIELDS.forEach(h => { if (row[h] !== undefined) out[h] = row[h]; });
   // coerce published into a boolean
   out.published = (row.published === true || /^(true|yes|1)$/i.test(String(row.published || "").trim()));
-  // drop categories that aren't in the known set, so the page never renders
-  // an unexpected category value (defense in depth alongside front-end escaping)
-  if (CATEGORY_OPTIONS.indexOf(out.category) === -1) out.category = "core";
   // serialize dates
   if (row.lastDateToRegister instanceof Date) {
     out.lastDateToRegister = Utilities.formatDate(row.lastDateToRegister, Session.getScriptTimeZone(), "yyyy-MM-dd");
@@ -173,8 +162,6 @@ function initializeSheet() {
   const colIndex = h => HEADERS.indexOf(h) + 1;
 
   applyDropdown_(sheet, colIndex("published"),    2, dataRange, ["TRUE", "FALSE"]);
-  applyDropdown_(sheet, colIndex("category"),     2, dataRange, CATEGORY_OPTIONS);
-  applyDropdown_(sheet, colIndex("instructorSlug"),2, dataRange, INSTRUCTOR_SLUG_OPTIONS);
 
   // Column widths for readable editing
   sheet.setColumnWidth(colIndex("id"), 90);
@@ -201,9 +188,7 @@ function applyDropdown_(sheet, col, fromRow, toRow, options) {
 
 function getFormOptions() {
   return {
-    categories: CATEGORY_OPTIONS,
-    programs: PROGRAM_OPTIONS,
-    instructorSlugs: INSTRUCTOR_SLUG_OPTIONS
+    programs: PROGRAM_OPTIONS
   };
 }
 
@@ -213,7 +198,6 @@ function listCourses() {
     title: r.title,
     code: r.code,
     termCode: r.termCode,
-    category: r.category,
     published: r.published === true || /^(true|yes|1)$/i.test(String(r.published || ""))
   })).filter(r => r.id);
 }

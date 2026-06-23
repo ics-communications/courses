@@ -238,15 +238,9 @@
         <strong>Published</strong> — visible on the public catalogue
       </label>
       <label class="field">
-        <span class="field-label">Category</span>
-        <select name="category" id="f-category" required>
-          <option value="">— choose category —</option>
-        </select>
-      </label>
-      <label class="field">
         <span class="field-label">Section Order</span>
         <input type="number" name="sectionOrder" min="0" step="1">
-        <span class="hint">Sort order within the category section. Leave blank if unsure.</span>
+        <span class="hint">Sort order within the catalogue. Leave blank if unsure.</span>
       </label>
     </div>
   </details>
@@ -347,13 +341,6 @@
         <span class="field-label">Instructor Bio URL</span>
         <input type="url" name="instructorUrl">
       </label>
-      <label class="field">
-        <span class="field-label">Color Key</span>
-        <select name="instructorSlug" id="f-instructor-slug">
-          <option value="">— default —</option>
-        </select>
-        <span class="hint">Pick 1–6. Each value maps to a distinct instructor link color on the card.</span>
-      </label>
     </div>
   </details>
 
@@ -411,10 +398,6 @@
         <span class="field-label">Last Date to Register</span>
         <input type="date" name="lastDateToRegister">
       </label>
-      <label class="field">
-        <span class="field-label">Partner Note</span>
-        <input type="text" name="partnerNote" placeholder="In Partnership with Calvin University">
-      </label>
     </div>
   </details>
 
@@ -449,29 +432,25 @@
   }
 
   // ----- Bootstrap options from server -----
+  // Load the form options FIRST, then the course picker. Populating the picker
+  // only after the program checkboxes exist guarantees that selecting a course
+  // can never run the form-fill before its option-driven fields are in the DOM
+  // (otherwise those fields would silently come up blank).
   function loadOptions() {
     google.script.run
       .withSuccessHandler(opts => {
-        const catSel = $("#f-category");
-        opts.categories.forEach(c => {
-          const o = document.createElement("option");
-          o.value = c; o.textContent = c;
-          catSel.appendChild(o);
-        });
-        const slugSel = $("#f-instructor-slug");
-        opts.instructorSlugs.forEach(s => {
-          const o = document.createElement("option");
-          o.value = s; o.textContent = "Color " + s;
-          slugSel.appendChild(o);
-        });
         const progBox = $("#program-checkboxes");
         opts.programs.forEach(p => {
           const label = document.createElement("label");
           label.innerHTML = `<input type="checkbox" name="program" value="${p.id}"> ${p.label}`;
           progBox.appendChild(label);
         });
+        loadList();
       })
-      .withFailureHandler(err => toast("Could not load form options: " + err.message, true))
+      .withFailureHandler(err => {
+        toast("Could not load form options: " + err.message, true);
+        loadList();
+      })
       .getFormOptions();
   }
 
@@ -579,7 +558,6 @@
     e.preventDefault();
     const data = readForm();
     if (!data.title) { toast("Title is required.", true); return; }
-    if (!data.category) { toast("Category is required.", true); return; }
     setBusy(true);
     google.script.run
       .withSuccessHandler(res => {
@@ -609,9 +587,8 @@
       .deleteCourse(state.editingId);
   });
 
-  // Boot
+  // Boot — loadOptions() chains loadList() once the option fields are in place.
   loadOptions();
-  loadList();
 </script>
 
 </body>

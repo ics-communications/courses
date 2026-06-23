@@ -34,21 +34,6 @@
 
   --font-serif: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
   --font-sans: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
-
-  --cat-core: var(--wine);
-  --cat-immersive: var(--accent);
-  --cat-concentration-instr: var(--umber);
-  --cat-concentration-admin: var(--wine-mid);
-  --cat-partnership: var(--accent-deep);
-  --cat-capstone: var(--wine-deep);
-  --cat-special: var(--wine-soft);
-
-  --instr-1: var(--accent);
-  --instr-2: var(--umber);
-  --instr-3: var(--wine);
-  --instr-4: var(--accent-deep);
-  --instr-5: var(--wine-mid);
-  --instr-6: var(--umber-light);
 }
 
 * { box-sizing: border-box; }
@@ -375,7 +360,7 @@ mark.catl-hit {
 .catl-card {
   background: var(--cream-warm);
   border: 1px solid var(--border-light);
-  border-top: 3px solid var(--cat-color, var(--accent));
+  border-top: 3px solid var(--accent);
   padding: 1.85rem 1.85rem 1.6rem;
   position: relative;
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
@@ -383,13 +368,9 @@ mark.catl-hit {
 .catl-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 35px rgba(155,13,36,0.08);
-  border-top-color: var(--cat-color, var(--accent));
+  border-top-color: var(--accent);
 }
 .catl-card[hidden] { display: none; }
-.catl-card.is-partnership {
-  border-style: dashed;
-  border-top-style: solid;
-}
 .catl-card__topline {
   display: flex;
   flex-wrap: wrap;
@@ -429,7 +410,7 @@ mark.catl-hit {
   font-weight: 500;
   margin-bottom: 0.2rem;
 }
-.catl-card__instructor a { color: var(--instr-color, var(--wine)); }
+.catl-card__instructor a { color: var(--wine); }
 .catl-card__instructor a:hover { color: var(--text-dark); }
 .catl-card__subtitle {
   font-family: var(--font-serif);
@@ -464,7 +445,6 @@ mark.catl-hit {
   border-radius: 0;
   white-space: nowrap;
 }
-.catl-tag--cat { background: var(--cat-color, var(--wine)); color: var(--cream); }
 .catl-tag--program { background: rgba(155,13,36,0.08); color: var(--wine-deep); }
 .catl-tag--credits { background: var(--umber-pale); color: var(--accent-deep); }
 .catl-tag--term { background: var(--parchment); color: var(--text-dark); border: 1px solid var(--border-light); }
@@ -863,33 +843,9 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzC-hmu2I2qSbc
 
 /* ==========================================================================
  *  TAXONOMY
- *  These tables drive the section headings, legend, and tag display labels.
- *  If you add a new category or program, add it here too.
+ *  Drives the program filter pills and tag display labels.
+ *  If you add a new program, add it here too.
  * ========================================================================== */
-const CATEGORIES = [
-  { id: "core",                  label: "Foundation & Core",
-    eyebrow: "Begin Here",
-    lede: "The anchor courses every MA, MA-EL, and MWS-E student takes — the philosophical and theological grounding for the rest of the programs." },
-  { id: "immersive",             label: "Immersive & Elective",
-    eyebrow: "Go Deeper",
-    lede: "Topical seminars and immersive studies that go deep on a single thinker, tradition, or pressing question." },
-  { id: "concentration-instr",   label: "Concentration: Instructional Leadership",
-    eyebrow: "For Classroom Educators",
-    lede: "For working teachers and curriculum leaders pursuing the MA-EL with a focus on classroom practice." },
-  { id: "concentration-admin",   label: "Concentration: School Administration",
-    eyebrow: "For School Leaders",
-    lede: "For administrators, principals, and aspiring leaders pursuing the MA-EL." },
-  { id: "partnership",           label: "Partnership Concentrations",
-    eyebrow: "In Partnership",
-    lede: "Concentration courses delivered in partnership with Calvin University and other affiliated institutions." },
-  { id: "capstone",              label: "Capstone",
-    eyebrow: "Culmination",
-    lede: "The culminating essay, project, or pathway that completes each program." },
-  { id: "special",               label: "Special Programs",
-    eyebrow: "Beyond the Catalogue",
-    lede: "Orvieto intensives, summer institutes, and additional philosophy offerings outside the regular term schedule." }
-];
-
 const PROGRAM_LABELS = {
   ma:   "MA",
   mael: "MA-EL",
@@ -914,12 +870,12 @@ const SAMPLE_DATA = {
   courses: [
     {
       id: "demo-1", published: true,
-      category: "core", title: "Foundations of Christian Philosophy",
+      title: "Foundations of Christian Philosophy",
       code: "120504", termCode: "F26", term: "fall26", termLabel: "Fall Term",
       programs: "ma mws mael phd",
       programTagsDisplay: "MA, MWS, MA-EL, PhD",
       credits: "3 Credits",
-      instructorName: "Dr. Nik Ansell", instructorSlug: "1",
+      instructorName: "Dr. Nik Ansell",
       instructorUrl: "https://faculty.icscanada.edu/nansell",
       subtitle: "Required for MA and MWS",
       descriptionShort: "An introduction to the central questions, methods, and traditions of Christian philosophy from a reformational-evangelical perspective. Reads classic sources alongside contemporary engagements.",
@@ -936,17 +892,16 @@ const SAMPLE_DATA = {
       enrolmentNotes: "Maximum enrolment 12. Register by August 15, 2026.",
       registrationEmail: "registrar@icscanada.edu",
       lastDateToRegister: "2026-08-15",
-      maxEnrolment: 12,
-      partnerNote: ""
+      maxEnrolment: 12
     },
     {
       id: "demo-2", published: true,
-      category: "immersive", title: "Augustine's *Confessions*",
+      title: "Augustine's *Confessions*",
       code: "260004", termCode: "W27", term: "winter27", termLabel: "Winter Term",
       programs: "ma mws mael phd",
       programTagsDisplay: "MA, MWS, MA-EL, PhD",
       credits: "3 Credits",
-      instructorName: "Dr. Ronald Kuipers", instructorSlug: "2",
+      instructorName: "Dr. Ronald Kuipers",
       instructorUrl: "https://faculty.icscanada.edu/rkuipers",
       subtitle: "",
       descriptionShort: "A close reading of Augustine's *Confessions* in dialogue with contemporary questions about memory, desire, and the formation of the self.",
@@ -963,17 +918,16 @@ const SAMPLE_DATA = {
       enrolmentNotes: "Maximum enrolment 10. Register by December 1, 2026.",
       registrationEmail: "registrar@icscanada.edu",
       lastDateToRegister: "2026-12-01",
-      maxEnrolment: 10,
-      partnerNote: ""
+      maxEnrolment: 10
     },
     {
       id: "demo-3", published: true,
-      category: "concentration-instr", title: "Curriculum & Christian Imagination",
+      title: "Curriculum & Christian Imagination",
       code: "320108", termCode: "S26", term: "summer26", termLabel: "Summer Intensive",
       programs: "mael cilc",
       programTagsDisplay: "MA-EL, CILC Required",
       credits: "3 Credits",
-      instructorName: "Dr. Edith van der Boom", instructorSlug: "3",
+      instructorName: "Dr. Edith van der Boom",
       instructorUrl: "https://faculty.icscanada.edu/evanderboom",
       subtitle: "MA-EL Instructional Concentration · CILC Required",
       descriptionShort: "Examines curriculum design as a formative practice, drawing on the Christian intellectual tradition and contemporary curriculum theory.",
@@ -990,17 +944,16 @@ const SAMPLE_DATA = {
       enrolmentNotes: "Includes a one-week residential intensive at the ICS campus. Maximum enrolment 14.",
       registrationEmail: "registrar@icscanada.edu",
       lastDateToRegister: "2026-05-15",
-      maxEnrolment: 14,
-      partnerNote: ""
+      maxEnrolment: 14
     },
     {
       id: "demo-4", published: true,
-      category: "partnership", title: "Foundations of Inclusive Education",
+      title: "Foundations of Inclusive Education",
       code: "EDUC-561", termCode: "F26", term: "fall26", termLabel: "Fall Term",
       programs: "mael cilc",
       programTagsDisplay: "MA-EL, CILC Elective",
       credits: "3 Credits",
-      instructorName: "Calvin University Faculty", instructorSlug: "4",
+      instructorName: "Calvin University Faculty",
       instructorUrl: "",
       subtitle: "In Partnership with Calvin University",
       descriptionShort: "Cross-listed graduate course in inclusive education, available to MA-EL students through the ICS–Calvin partnership.",
@@ -1017,17 +970,16 @@ const SAMPLE_DATA = {
       enrolmentNotes: "Register through Calvin University's online portal; contact ICS Registrar first to arrange cross-registration.",
       registrationEmail: "registrar@icscanada.edu",
       lastDateToRegister: "2026-08-15",
-      maxEnrolment: 20,
-      partnerNote: "In Partnership with Calvin University"
+      maxEnrolment: 20
     },
     {
       id: "demo-5", published: true,
-      category: "capstone", title: "MA-EL Capstone Project",
+      title: "MA-EL Capstone Project",
       code: "490001", termCode: "W27", term: "winter27", termLabel: "Winter · Every Other Year",
       programs: "mael",
       programTagsDisplay: "MA-EL",
       credits: "3 Credits",
-      instructorName: "Dr. Gideon Strauss", instructorSlug: "5",
+      instructorName: "Dr. Gideon Strauss",
       instructorUrl: "https://faculty.icscanada.edu/gstrauss",
       subtitle: "MA-EL Culminating Project",
       descriptionShort: "The MA-EL capstone is a substantial individual project — a curriculum design, a school-improvement plan, or a leadership case study — undertaken in close consultation with a faculty advisor.",
@@ -1044,8 +996,7 @@ const SAMPLE_DATA = {
       enrolmentNotes: "Approval from the MA-EL program director required before registration.",
       registrationEmail: "registrar@icscanada.edu",
       lastDateToRegister: "2026-12-01",
-      maxEnrolment: 8,
-      partnerNote: ""
+      maxEnrolment: 8
     }
   ]
 };
@@ -1213,9 +1164,6 @@ function renderFilters() {
 }
 
 function cardHtml(c) {
-  const catColor = `var(--cat-${escapeHtml(c.category || "core")})`;
-  const instrColor = c.instructorSlug ? `var(--instr-${escapeHtml(c.instructorSlug)})` : `var(--wine)`;
-  const isPartnership = c.category === "partnership";
   const instructorHref = safeUrl(c.instructorUrl);
   const instructorMarkup = instructorHref
     ? `<a href="${escapeHtml(instructorHref)}" target="_blank" rel="noopener">${escapeHtml(c.instructorName || "")}</a>`
@@ -1228,8 +1176,7 @@ function cardHtml(c) {
     c.title, c.subtitle, c.code, c.termCode, c.termLabel,
     c.instructorName, c.descriptionShort, c.descriptionMore,
     c.programTagsDisplay, c.certificateTags, c.cstcArea,
-    c.format, c.meetingDay, c.requiredBooks, c.prerequisites,
-    c.partnerNote
+    c.format, c.meetingDay, c.requiredBooks, c.prerequisites
   ].filter(Boolean).join(" ").toLowerCase().replace(/\*/g, "");
 
   const tags = [];
@@ -1267,8 +1214,7 @@ function cardHtml(c) {
   const isCompleted = !!(win && win[1].getTime() < Date.now());
 
   return `
-  <article class="catl-card ${isPartnership ? "is-partnership" : ""}"
-           style="--cat-color: ${catColor}; --instr-color: ${instrColor};"
+  <article class="catl-card"
            data-programs="${escapeHtml(c.programs || "")}"
            data-term="${escapeHtml(c.term || "")}"
            data-completed="${isCompleted}"
@@ -1290,7 +1236,6 @@ function cardHtml(c) {
       ${c.descriptionMore ? paragraphs(c.descriptionMore) : ""}
       ${detailGridHtml}
       ${bookList(c.requiredBooks)}
-      ${c.partnerNote ? `<p><em>${escapeHtml(c.partnerNote)}</em></p>` : ""}
     </div>
   </article>`;
 }
