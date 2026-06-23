@@ -1038,13 +1038,13 @@ function richify(text) {
 }
 
 function paragraphs(text) {
-  if (!text) return "";
-  return text.split(/\n\s*\n/).map(p => `<p>${richify(p).replace(/\n/g, "<br>")}</p>`).join("");
+  if (text == null || text === "") return "";
+  return String(text).split(/\n\s*\n/).map(p => `<p>${richify(p).replace(/\n/g, "<br>")}</p>`).join("");
 }
 
 function bookList(text) {
-  if (!text) return "";
-  const items = text.split(/\n+/).map(s => s.trim()).filter(Boolean);
+  if (text == null || text === "") return "";
+  const items = String(text).split(/\n+/).map(s => s.trim()).filter(Boolean);
   if (!items.length) return "";
   return `<div class="catl-books">
     <h4>Required Books</h4>
@@ -1198,7 +1198,7 @@ function cardHtml(c) {
   programLabels.forEach(p =>
     tags.push(`<span class="catl-tag catl-tag--program">${escapeHtml(p)}</span>`));
   if (c.certificateTags) {
-    c.certificateTags.split(/,\s*/).filter(Boolean).forEach(t =>
+    String(c.certificateTags).split(/,\s*/).filter(Boolean).forEach(t =>
       tags.push(`<span class="catl-tag catl-tag--cert">${escapeHtml(t)}</span>`));
   }
   if (termLabel) tags.push(`<span class="catl-tag catl-tag--term">${escapeHtml(termLabel)}</span>`);
@@ -1265,7 +1265,10 @@ function renderSections() {
 
   const grid = document.createElement("section");
   grid.className = "catl-flat-grid";
-  grid.innerHTML = `<div class="catl-section__grid">${state.courses.map(cardHtml).join("")}</div>`;
+  grid.innerHTML = `<div class="catl-section__grid">${state.courses.map(c => {
+    try { return cardHtml(c); }
+    catch (err) { console.error("Skipped a malformed course row:", c && c.id, err); return ""; }
+  }).join("")}</div>`;
   container.appendChild(grid);
 
   // Wire card toggles + reveal observer
