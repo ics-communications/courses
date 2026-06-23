@@ -871,9 +871,8 @@ const SAMPLE_DATA = {
     {
       id: "demo-1", published: true,
       title: "Foundations of Christian Philosophy",
-      code: "120504", termCode: "F26", term: "fall26", termLabel: "Fall Term",
+      code: "120504", term: "fall26",
       programs: "ma mws mael phd",
-      programTagsDisplay: "MA, MWS, MA-EL, PhD",
       credits: "3 Credits",
       instructorName: "Dr. Nik Ansell",
       instructorUrl: "https://faculty.icscanada.edu/nansell",
@@ -897,9 +896,8 @@ const SAMPLE_DATA = {
     {
       id: "demo-2", published: true,
       title: "Augustine's *Confessions*",
-      code: "260004", termCode: "W27", term: "winter27", termLabel: "Winter Term",
+      code: "260004", term: "winter27",
       programs: "ma mws mael phd",
-      programTagsDisplay: "MA, MWS, MA-EL, PhD",
       credits: "3 Credits",
       instructorName: "Dr. Ronald Kuipers",
       instructorUrl: "https://faculty.icscanada.edu/rkuipers",
@@ -923,9 +921,8 @@ const SAMPLE_DATA = {
     {
       id: "demo-3", published: true,
       title: "Curriculum & Christian Imagination",
-      code: "320108", termCode: "S26", term: "summer26", termLabel: "Summer Intensive",
+      code: "320108", term: "summer26",
       programs: "mael cilc",
-      programTagsDisplay: "MA-EL, CILC Required",
       credits: "3 Credits",
       instructorName: "Dr. Edith van der Boom",
       instructorUrl: "https://faculty.icscanada.edu/evanderboom",
@@ -949,9 +946,8 @@ const SAMPLE_DATA = {
     {
       id: "demo-4", published: true,
       title: "Foundations of Inclusive Education",
-      code: "EDUC-561", termCode: "F26", term: "fall26", termLabel: "Fall Term",
+      code: "EDUC-561", term: "fall26",
       programs: "mael cilc",
-      programTagsDisplay: "MA-EL, CILC Elective",
       credits: "3 Credits",
       instructorName: "Calvin University Faculty",
       instructorUrl: "",
@@ -975,9 +971,8 @@ const SAMPLE_DATA = {
     {
       id: "demo-5", published: true,
       title: "MA-EL Capstone Project",
-      code: "490001", termCode: "W27", term: "winter27", termLabel: "Winter · Every Other Year",
+      code: "490001", term: "winter27",
       programs: "mael",
-      programTagsDisplay: "MA-EL",
       credits: "3 Credits",
       instructorName: "Dr. Gideon Strauss",
       instructorUrl: "https://faculty.icscanada.edu/gstrauss",
@@ -1085,6 +1080,30 @@ function termWindow(termId) {
   return null;
 }
 
+// The catalogue stores each course's term once, as a single id like "fall26".
+// The short code, display label, and program tags shown on the card are all
+// derived from that (and from the program tokens) — never stored separately.
+const SEASON_LABELS = { f: "Fall", w: "Winter", s: "Summer" };
+function termParts(termId) {
+  const m = String(termId || "").match(/^([a-z]+?)(\d{2,4})$/i);
+  if (!m) return null;
+  const letter = m[1][0].toLowerCase();
+  const yy = m[2].length === 2 ? m[2] : m[2].slice(-2);
+  return { letter, season: SEASON_LABELS[letter] || "", yy };
+}
+function termCodeOf(termId) {                 // "fall26" → "F26"
+  const p = termParts(termId);
+  return p ? p.letter.toUpperCase() + p.yy : "";
+}
+function termLabelOf(termId) {                // "fall26" → "Fall Term"
+  const p = termParts(termId);
+  return p && p.season ? p.season + " Term" : "";
+}
+function programLabelsOf(programs) {          // "ma mael" → ["MA", "MA-EL"]
+  return String(programs || "").split(/\s+/).filter(Boolean)
+    .map(p => PROGRAM_LABELS[p] || p.toUpperCase());
+}
+
 // Sort by "what's relevant now":
 //   1. Currently-running terms (start ≤ today ≤ end), ascending start
 //   2. Upcoming terms (start > today), ascending start (soonest first)
@@ -1107,16 +1126,6 @@ function sortCoursesByTerm(courses) {
     .map(r => r.c);
 }
 
-function uniquePairs(courses, idKey, labelKey) {
-  const map = new Map();
-  for (const c of courses) {
-    const id = (c[idKey] || "").trim();
-    if (!id) continue;
-    if (!map.has(id)) map.set(id, c[labelKey] || id);
-  }
-  return [...map.entries()];
-}
-
 function uniqueTokens(courses, key) {
   const set = new Set();
   for (const c of courses) {
@@ -1128,13 +1137,13 @@ function uniqueTokens(courses, key) {
 }
 
 function renderFilters() {
-  const termPairs = uniquePairs(state.courses, "term", "termLabel")
-    .sort(([a], [b]) => sortTerms(a, b));
+  const termIds = [...new Set(state.courses.map(c => String(c.term || "").trim()).filter(Boolean))]
+    .sort((a, b) => sortTerms(a, b));
   const programTokens = uniqueTokens(state.courses, "programs");
 
   const termHtml = ['<button class="catl-pill is-active" data-term="all">All Terms</button>']
-    .concat(termPairs.map(([id, label]) =>
-      `<button class="catl-pill" data-term="${escapeHtml(id)}">${escapeHtml(label)}</button>`))
+    .concat(termIds.map(id =>
+      `<button class="catl-pill" data-term="${escapeHtml(id)}">${escapeHtml(termLabelOf(id) || id)}</button>`))
     .join("");
   $("#term-filters").innerHTML = termHtml;
 
@@ -1169,31 +1178,34 @@ function cardHtml(c) {
     ? `<a href="${escapeHtml(instructorHref)}" target="_blank" rel="noopener">${escapeHtml(c.instructorName || "")}</a>`
     : escapeHtml(c.instructorName || "");
 
+  // Derived display values — see termCodeOf/termLabelOf/programLabelsOf.
+  const termCode = termCodeOf(c.term);
+  const termLabel = termLabelOf(c.term);
+  const programLabels = programLabelsOf(c.programs);
+
   // Build the searchable blob — lowercased concatenation of every field the
   // search bar should reach into. Strip our *markdown* asterisks so a query
   // like "kant" still matches "*Kant*"-styled titles.
   const searchBlob = [
-    c.title, c.subtitle, c.code, c.termCode, c.termLabel,
+    c.title, c.subtitle, c.code, termCode, termLabel,
     c.instructorName, c.descriptionShort, c.descriptionMore,
-    c.programTagsDisplay, c.certificateTags, c.cstcArea,
+    programLabels.join(" "), c.certificateTags, c.cstcArea,
     c.format, c.meetingDay, c.requiredBooks, c.prerequisites
   ].filter(Boolean).join(" ").toLowerCase().replace(/\*/g, "");
 
   const tags = [];
   if (c.credits) tags.push(`<span class="catl-tag catl-tag--credits">${escapeHtml(c.credits)}</span>`);
-  if (c.programTagsDisplay) {
-    c.programTagsDisplay.split(/,\s*/).filter(Boolean).forEach(p =>
-      tags.push(`<span class="catl-tag catl-tag--program">${escapeHtml(p)}</span>`));
-  }
+  programLabels.forEach(p =>
+    tags.push(`<span class="catl-tag catl-tag--program">${escapeHtml(p)}</span>`));
   if (c.certificateTags) {
     c.certificateTags.split(/,\s*/).filter(Boolean).forEach(t =>
       tags.push(`<span class="catl-tag catl-tag--cert">${escapeHtml(t)}</span>`));
   }
-  if (c.termLabel) tags.push(`<span class="catl-tag catl-tag--term">${escapeHtml(c.termLabel)}</span>`);
+  if (termLabel) tags.push(`<span class="catl-tag catl-tag--term">${escapeHtml(termLabel)}</span>`);
 
   // details grid — only show rows that have content
   const detailRows = [];
-  const termValue = [c.termLabel, c.termCode].filter(Boolean).join(" · ");
+  const termValue = [termLabel, termCode].filter(Boolean).join(" · ");
   const syllabusHref = safeUrl(c.syllabusUrl);
   if (termValue)            detailRows.push(["Term", escapeHtml(termValue)]);
   if (c.format)             detailRows.push(["Format", escapeHtml(c.format)]);
@@ -1222,7 +1234,7 @@ function cardHtml(c) {
            id="course-${escapeHtml(c.id || "")}">
     <div class="catl-card__topline">
       <span class="catl-card__code">${escapeHtml(c.code || "")}</span>
-      <span class="catl-card__termcode">${escapeHtml(c.termCode || "")}</span>
+      <span class="catl-card__termcode">${escapeHtml(termCode)}</span>
     </div>
     <h3 class="catl-card__title">${richify(c.title || "")}</h3>
     ${c.instructorName ? `<div class="catl-card__instructor">${instructorMarkup}</div>` : ""}

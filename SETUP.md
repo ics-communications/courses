@@ -59,8 +59,7 @@ account; choose **Advanced → Go to ICS Course Catalogue (unsafe)** and
 **Allow**).
 
 This creates a `Courses` sheet with all the right columns, frozen
-headers, and dropdown validation on the `category`, `published`, and
-`instructorSlug` columns.
+headers, and dropdown validation on the `published` column.
 
 ## 4. Deploy the web app
 
@@ -133,23 +132,17 @@ Important fields:
 |---------------------------|--------------------------------------------------------------------|
 | `id`                      | Auto-generated. Don't edit.                                        |
 | `published`               | `TRUE` shows on the page, `FALSE` hides it (draft).                |
-| `category`                | Drives section grouping + indicator color. Use the dropdown.       |
-| `programs`                | Space-separated lowercase tokens (`mael mwse cilc`). Drives filter.|
-| `term`                    | Filter key (`fall26`, `winter27`). Lowercase, no spaces.           |
-| `termLabel`               | Display version (`Fall Term`, `Winter · Every Other Year`).        |
-| `programTagsDisplay`      | Comma-separated display labels (`MA-EL, CILC Required`).           |
+| `programs`                | Space-separated lowercase tokens (`mael mwse cilc`). Drives the program filter **and** the program tags shown on the card. |
+| `term`                    | Entered once via the sidebar's Season + Year. Stored as a key like `fall26`. The card's term code (`F26`) and label (`Fall Term`) are derived from it automatically. |
 | `descriptionShort`        | Always-visible blurb. Use `*asterisks*` for italic.                |
 | `descriptionMore`         | Behind "Course details" — separate paragraphs with a blank line.   |
 | `requiredBooks`           | One citation per line. `*asterisks*` for italic titles.            |
-| `instructorSlug`          | `1`–`6` — picks one of six distinct link colors.                   |
 
-If you ever need to add a new category or program, edit two places:
+If you ever need to add a new program, edit two places:
 
-1. In `index.html`, add to the `CATEGORIES` or `PROGRAM_LABELS` constant
-   near the top of the `<script>` block.
-2. In `apps-script/Code.gs`, add to `CATEGORY_OPTIONS` or
-   `PROGRAM_OPTIONS`, then run **Initialize / repair sheet…** to refresh
-   the dropdowns.
+1. In `index.html`, add to the `PROGRAM_LABELS` constant near the top of
+   the `<script>` block.
+2. In `apps-script/Code.gs`, add to `PROGRAM_OPTIONS`.
 
 ## Troubleshooting
 

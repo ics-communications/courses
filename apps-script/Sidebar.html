@@ -280,25 +280,26 @@
           <input type="text" name="code">
         </label>
         <label class="field">
-          <span class="field-label">Term Code</span>
-          <input type="text" name="termCode" placeholder="F26">
+          <span class="field-label">Credits</span>
+          <input type="text" name="credits" placeholder="3 Credits">
         </label>
       </div>
       <div class="row-2">
         <label class="field">
-          <span class="field-label">Term ID</span>
-          <input type="text" name="term" placeholder="fall26">
-          <span class="hint">Filter key.</span>
+          <span class="field-label">Term — Season</span>
+          <select name="season" id="f-season">
+            <option value="">— choose —</option>
+            <option value="fall">Fall</option>
+            <option value="winter">Winter</option>
+            <option value="summer">Summer</option>
+          </select>
         </label>
         <label class="field">
-          <span class="field-label">Term Display Label</span>
-          <input type="text" name="termLabel" placeholder="Fall Term">
+          <span class="field-label">Term — Year</span>
+          <input type="number" name="year" min="2000" max="2099" step="1" placeholder="2026">
         </label>
       </div>
-      <label class="field">
-        <span class="field-label">Credits</span>
-        <input type="text" name="credits" placeholder="3 Credits">
-      </label>
+      <span class="hint" style="display:block;margin:-4px 0 6px;">Enter the term once. The card's term code (e.g. F26), label (e.g. Fall Term), and the term filter are all generated from this.</span>
     </div>
   </details>
 
@@ -308,12 +309,7 @@
       <label class="field">
         <span class="field-label">Programs</span>
         <div class="checkboxes" id="program-checkboxes"></div>
-        <span class="hint">Drives the program filter.</span>
-      </label>
-      <label class="field">
-        <span class="field-label">Program Display Labels</span>
-        <input type="text" name="programTagsDisplay" placeholder="MA, MWS, MA-EL">
-        <span class="hint">Comma-separated, exactly as shown on the card.</span>
+        <span class="hint">Drives the program filter and the program tags shown on the card.</span>
       </label>
       <label class="field">
         <span class="field-label">Certificate Tags</span>
@@ -463,7 +459,7 @@
         list.forEach(c => {
           const o = document.createElement("option");
           o.value = c.id;
-          o.textContent = `${c.title || "(untitled)"} ${c.termCode ? "· " + c.termCode : ""} ${c.published ? "" : "[draft]"}`;
+          o.textContent = `${c.title || "(untitled)"} ${c.term ? "· " + c.term : ""} ${c.published ? "" : "[draft]"}`;
           sel.appendChild(o);
         });
       })
@@ -509,6 +505,21 @@
     // Programs
     const progTokens = String(course.programs || "").split(/\s+/).filter(Boolean);
     $$('input[name="program"]').forEach(cb => cb.checked = progTokens.includes(cb.value));
+
+    // Term — split the single stored value (e.g. "fall26") back into Season + Year
+    const seasonSel = form.elements.namedItem("season");
+    const yearInp = form.elements.namedItem("year");
+    const tm = String(course.term || "").match(/^([a-z]+?)(\d{2,4})$/i);
+    if (tm) {
+      const seasonWord = { f: "fall", w: "winter", s: "summer" }[tm[1][0].toLowerCase()] || "";
+      let yr = parseInt(tm[2], 10);
+      if (tm[2].length === 2) yr += 2000;
+      if (seasonSel) seasonSel.value = seasonWord;
+      if (yearInp) yearInp.value = yr;
+    } else {
+      if (seasonSel) seasonSel.value = "";
+      if (yearInp) yearInp.value = "";
+    }
   }
 
   function readForm() {
@@ -525,6 +536,12 @@
       }
     });
     data.programs = $$('input[name="program"]:checked').map(cb => cb.value).join(" ");
+    // Term — combine Season + Year into the single stored filter key (e.g. "fall26")
+    const season = String(data.season || "").trim().toLowerCase();
+    const yr = data.year;
+    data.term = (season && yr !== "" && yr != null) ? season + String(yr).slice(-2) : "";
+    delete data.season;
+    delete data.year;
     return data;
   }
 

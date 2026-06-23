@@ -21,8 +21,8 @@ const CACHE_TTL  = 300; // seconds (5 min)
 
 const HEADERS = [
   "id", "published", "sectionOrder",
-  "title", "code", "termCode", "term", "termLabel",
-  "programs", "programTagsDisplay", "credits",
+  "title", "code", "term",
+  "programs", "credits",
   "instructorName", "instructorUrl",
   "subtitle", "descriptionShort", "descriptionMore",
   "tstCode", "format", "meetingDay", "meetingTime",
@@ -49,8 +49,8 @@ const PROGRAM_OPTIONS = [
 // here (e.g. future internal-only columns) is never served to the public page.
 const PUBLIC_FIELDS = [
   "id", "published",
-  "title", "code", "termCode", "term", "termLabel",
-  "programs", "programTagsDisplay", "credits",
+  "title", "code", "term",
+  "programs", "credits",
   "instructorName", "instructorUrl",
   "subtitle", "descriptionShort", "descriptionMore",
   "tstCode", "format", "meetingDay", "meetingTime",
@@ -197,7 +197,7 @@ function listCourses() {
     id: r.id,
     title: r.title,
     code: r.code,
-    termCode: r.termCode,
+    term: r.term,
     published: r.published === true || /^(true|yes|1)$/i.test(String(r.published || ""))
   })).filter(r => r.id);
 }
@@ -235,7 +235,7 @@ function saveCourse(form) {
   }
 
   // New row
-  clean.id = clean.id || generateId_(clean.code, clean.termCode);
+  clean.id = clean.id || generateId_(clean.code, clean.term);
   const newRow = HEADERS.map(h => clean[h] !== undefined ? clean[h] : "");
   sheet.appendRow(newRow);
   clearCache();
@@ -310,8 +310,8 @@ function sanitizeForm_(form) {
   return out;
 }
 
-function generateId_(code, termCode) {
-  const base = [code, termCode].filter(Boolean).join("-").toLowerCase().replace(/[^a-z0-9-]/g, "-");
+function generateId_(code, term) {
+  const base = [code, term].filter(Boolean).join("-").toLowerCase().replace(/[^a-z0-9-]/g, "-");
   if (base) return base + "-" + Math.random().toString(36).slice(2, 7);
   return Utilities.getUuid().slice(0, 8);
 }
