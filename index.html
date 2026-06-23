@@ -1099,6 +1099,22 @@ function termLabelOf(termId) {                // "fall26" → "Fall Term"
   const p = termParts(termId);
   return p && p.season ? p.season + " Term" : "";
 }
+function termYearLabelOf(termId) {            // "winter27" → "Winter 2027"
+  const p = termParts(termId);
+  return p && p.season ? `${p.season} 20${p.yy}` : "";
+}
+// The term to preselect on load: the current term if one is in session, else
+// the soonest one still to come. (Winter starts Jan, Summer May, Fall Sep —
+// boundaries defined in termWindow.) Expects termIds sorted ascending by date;
+// returns the first whose window has not yet ended, or "" if all are over.
+function upcomingTermId(sortedTermIds) {
+  const now = Date.now();
+  for (const id of sortedTermIds) {
+    const win = termWindow(id);
+    if (win && win[1].getTime() >= now) return id;
+  }
+  return "";
+}
 function programLabelsOf(programs) {          // "ma mael" → ["MA", "MA-EL"]
   return String(programs || "").split(/\s+/).filter(Boolean)
     .map(p => PROGRAM_LABELS[p] || p.toUpperCase());
@@ -1141,9 +1157,16 @@ function renderFilters() {
     .sort((a, b) => sortTerms(a, b));
   const programTokens = uniqueTokens(state.courses, "programs");
 
-  const termHtml = ['<button class="catl-pill is-active" data-term="all">All Terms</button>']
-    .concat(termIds.map(id =>
-      `<button class="catl-pill" data-term="${escapeHtml(id)}">${escapeHtml(termLabelOf(id) || id)}</button>`))
+  // Default the term filter to the upcoming term (only if the visitor hasn't
+  // already chosen one — i.e. on first render, when activeTerm is still "all").
+  if (state.activeTerm === "all") {
+    state.activeTerm = upcomingTermId(termIds) || "all";
+  }
+
+  const termPill = (term, label) =>
+    `<button class="catl-pill${state.activeTerm === term ? " is-active" : ""}" data-term="${escapeHtml(term)}">${escapeHtml(label)}</button>`;
+  const termHtml = [termPill("all", "All Terms")]
+    .concat(termIds.map(id => termPill(id, termYearLabelOf(id) || id)))
     .join("");
   $("#term-filters").innerHTML = termHtml;
 
