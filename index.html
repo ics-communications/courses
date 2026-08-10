@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICS Course Catalogue</title>
 <meta name="description" content="Graduate course catalogue for the Institute for Christian Studies — MA, MA-EL, MWS-E, and PhD offerings.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -427,9 +429,12 @@ mark.catl-hit {
   color: var(--text-body);
   margin: 0.85rem 0 1.1rem;
 }
+.catl-desc__teaser { margin: 0; }
 .catl-desc__full { display: none; }
+.catl-desc__full p { margin: 0 0 1rem; }
+.catl-desc__full p:last-child { margin-bottom: 0; }
 .catl-card.is-open .catl-desc__teaser { display: none; }
-.catl-card.is-open .catl-desc__full { display: inline; }
+.catl-card.is-open .catl-desc__full { display: block; }
 .catl-card__meta {
   display: flex;
   flex-wrap: wrap;
@@ -696,7 +701,7 @@ mark.catl-hit {
   .catl-filters, .catl-card__toggle { display: none; }
   .catl-card__details { display: block !important; }
   .catl-desc__teaser { display: none; }
-  .catl-desc__full { display: inline !important; }
+  .catl-desc__full { display: block !important; }
   body { background: white; }
 }
 </style>
@@ -1120,13 +1125,22 @@ function termYearLabelOf(termId) {            // "winter27" → "Winter 2027"
 }
 // The term to preselect on load: the current term if one is in session, else
 // the soonest one still to come. (Winter starts Jan, Summer May, Fall Sep —
-// boundaries defined in termWindow.) Expects termIds sorted ascending by date;
-// returns the first whose window has not yet ended, or "" if all are over.
+// boundaries defined in termWindow.) Once we're within one month of the next
+// term's start, the default rolls over to that term (e.g. from Aug 1 the
+// default is Fall, not Summer). Expects termIds sorted ascending by date;
+// returns "" if all terms are over.
 function upcomingTermId(sortedTermIds) {
   const now = Date.now();
-  for (const id of sortedTermIds) {
-    const win = termWindow(id);
-    if (win && win[1].getTime() >= now) return id;
+  for (let i = 0; i < sortedTermIds.length; i++) {
+    const win = termWindow(sortedTermIds[i]);
+    if (!win || win[1].getTime() < now) continue;
+    const nextWin = termWindow(sortedTermIds[i + 1]);
+    if (nextWin) {
+      const cutoff = new Date(nextWin[0]);
+      cutoff.setMonth(cutoff.getMonth() - 1);
+      if (now >= cutoff.getTime()) return sortedTermIds[i + 1];
+    }
+    return sortedTermIds[i];
   }
   return "";
 }
@@ -1297,16 +1311,19 @@ function cardHtml(c) {
   const win = termWindow(c.term);
   const isCompleted = !!(win && win[1].getTime() < Date.now());
 
-  // Description: collapsed cards show only the first sentence with an
-  // ellipsis; "Show more" reveals the full text (see .catl-desc__* rules).
+  // Description: descriptionShort and descriptionMore render as one flowing
+  // description — descriptionMore follows as additional paragraph(s).
+  // Collapsed cards show only the first sentence with an ellipsis; "Show
+  // more" reveals the combined text (see .catl-desc__* rules).
+  const fullDesc = [c.descriptionShort, c.descriptionMore].filter(Boolean).join("\n\n");
   let descHtml = "";
-  if (c.descriptionShort) {
-    const lead = splitFirstSentence(c.descriptionShort);
+  if (fullDesc) {
+    const lead = splitFirstSentence(fullDesc);
     if (lead) {
       const teaser = lead.replace(/\.$/, "") + "…";
-      descHtml = `<p class="catl-card__desc"><span class="catl-desc__teaser">${richify(teaser)}</span><span class="catl-desc__full">${richify(c.descriptionShort)}</span></p>`;
+      descHtml = `<div class="catl-card__desc"><p class="catl-desc__teaser">${richify(teaser)}</p><div class="catl-desc__full">${paragraphs(fullDesc)}</div></div>`;
     } else {
-      descHtml = `<p class="catl-card__desc">${richify(c.descriptionShort)}</p>`;
+      descHtml = `<div class="catl-card__desc">${paragraphs(fullDesc)}</div>`;
     }
   }
 
@@ -1330,7 +1347,6 @@ function cardHtml(c) {
       Show more
     </button>
     <div class="catl-card__details">
-      ${c.descriptionMore ? paragraphs(c.descriptionMore) : ""}
       ${detailGridHtml}
       ${bookList(c.requiredBooks)}
     </div>
