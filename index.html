@@ -552,6 +552,171 @@ mark.catl-hit {
   margin: 0 auto;
 }
 
+/* ---------- REGISTRATION OPTIONS + INQUIRY POPOUT ---------- */
+.catl-register { display: grid; gap: 0.55rem; }
+.catl-register__opt { display: flex; align-items: baseline; gap: 0.65rem; }
+.catl-register__num {
+  flex: none;
+  width: 20px; height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 0.62rem; font-weight: 700;
+  color: var(--accent-muted);
+  border: 1px solid var(--border-mid);
+  transform: translateY(0.2em);
+}
+.catl-register__btn {
+  font-family: var(--font-sans);
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--cream); background: var(--wine);
+  border: 1px solid var(--wine); border-radius: 0;
+  padding: 0.55rem 1.05rem;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.catl-register__btn:hover { background: var(--wine-deep); border-color: var(--wine-deep); }
+
+.catl-inq-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(46,19,24,0.6);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+  padding: 1.5rem; opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.catl-inq-overlay.is-active { display: flex; }
+.catl-inq-overlay.is-visible { opacity: 1; }
+.catl-inq {
+  background: var(--cream);
+  border-top: 3px solid var(--accent);
+  width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 40px 80px rgba(46,19,24,0.35);
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+  position: relative;
+}
+.catl-inq-overlay.is-visible .catl-inq { transform: translateY(0) scale(1); }
+.catl-inq__close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 34px; height: 34px;
+  border: 1px solid var(--border-mid); border-radius: 0;
+  background: transparent; color: var(--text-muted);
+  font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 160ms ease; z-index: 2;
+}
+.catl-inq__close:hover { background: var(--wine); border-color: var(--wine); color: var(--cream); }
+.catl-inq__header { padding: 2.2rem 2.2rem 0; }
+.catl-inq__eyebrow {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent-muted);
+  margin-bottom: 0.6rem;
+}
+.catl-inq__title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem; font-weight: 700; line-height: 1.3;
+  color: var(--text-dark);
+  margin: 0 0 0.4rem; padding-right: 2.25rem;
+}
+.catl-inq__meta {
+  font-family: var(--font-sans);
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+.catl-inq__body { padding: 1.5rem 2.2rem 2.2rem; }
+.catl-inq__note {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.88rem; line-height: 1.7;
+  color: var(--text-body);
+  margin: 0 0 1.4rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--accent-pale);
+}
+.catl-inq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.catl-inq__field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.catl-inq__label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent-muted);
+}
+.catl-inq__label span { color: var(--wine); }
+.catl-inq__label em {
+  font-style: italic; font-weight: 400;
+  text-transform: none; letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+.catl-inq__input, .catl-inq__textarea {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.95rem; color: var(--text-dark);
+  background: var(--cream-warm);
+  border: 1px solid var(--border-mid); border-radius: 0;
+  padding: 0.7rem 0.85rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  -webkit-appearance: none; appearance: none;
+}
+.catl-inq__textarea { resize: vertical; min-height: 4.5rem; }
+.catl-inq__input::placeholder, .catl-inq__textarea::placeholder {
+  color: var(--text-muted); font-style: italic;
+}
+.catl-inq__input:focus, .catl-inq__textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--cream);
+  box-shadow: 0 0 0 3px var(--accent-pale);
+}
+.catl-inq__input.is-invalid, .catl-inq__textarea.is-invalid {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 3px rgba(155,13,36,0.12);
+}
+.catl-inq__submit {
+  width: 100%; margin-top: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  background: var(--wine); color: var(--cream);
+  border: 1px solid var(--wine); border-radius: 0;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.catl-inq__submit:hover { background: var(--wine-deep); border-color: var(--wine-deep); }
+.catl-inq__submit:disabled { opacity: 0.6; cursor: default; }
+.catl-inq__submit--done { width: auto; padding: 0.7rem 1.8rem; }
+.catl-inq__alt {
+  text-align: center;
+  font-size: 0.8rem; color: var(--text-muted);
+  margin: 1.1rem 0 0;
+}
+.catl-inq__panel { display: none; text-align: center; padding: 0.5rem 0 0.25rem; }
+.catl-inq__panel.is-active { display: block; }
+.catl-inq__panel-icon {
+  width: 44px; height: 44px;
+  margin: 0 auto 1rem;
+  border: 1px solid var(--border-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--accent);
+}
+.catl-inq__panel p {
+  font-family: var(--font-serif);
+  font-size: 0.95rem; line-height: 1.75;
+  color: var(--text-body);
+  margin: 0 0 1.25rem;
+}
+@media (max-width: 520px) {
+  .catl-inq__row { grid-template-columns: 1fr; }
+  .catl-inq__header { padding: 1.8rem 1.4rem 0; }
+  .catl-inq__body { padding: 1.25rem 1.4rem 1.6rem; }
+}
+
 /* ---------- FOOTER ---------- */
 .site-footer {
   background: var(--wine-deep);
@@ -702,6 +867,8 @@ mark.catl-hit {
   .catl-card__details { display: block !important; }
   .catl-desc__teaser { display: none; }
   .catl-desc__full { display: block !important; }
+  .catl-register__num, .catl-register__opt--form { display: none; }
+  .catl-inq-overlay { display: none !important; }
   body { background: white; }
 }
 </style>
@@ -838,6 +1005,55 @@ mark.catl-hit {
   </div>
 </footer>
 
+<!-- Registration inquiry popout — opened from a course card's Register row.
+     Submits to the Google Form configured in INQUIRY_FORM (see the script
+     below and apps-script/InquiryForm.gs). -->
+<div class="catl-inq-overlay" id="inq-overlay">
+  <div class="catl-inq" role="dialog" aria-modal="true" aria-labelledby="inq-title">
+    <button type="button" class="catl-inq__close" id="inq-close" aria-label="Close inquiry form">✕</button>
+    <div class="catl-inq__header">
+      <div class="catl-inq__eyebrow">Registration Inquiry</div>
+      <h3 class="catl-inq__title" id="inq-title"></h3>
+      <p class="catl-inq__meta" id="inq-meta"></p>
+    </div>
+    <div class="catl-inq__body">
+      <form id="inq-form" novalidate>
+        <p class="catl-inq__note">Submitting this inquiry starts the registration process — the Registrar will reply within two business days with next steps.</p>
+        <div class="catl-inq__row">
+          <div class="catl-inq__field">
+            <label class="catl-inq__label" for="inq-first">First Name <span aria-hidden="true">*</span></label>
+            <input class="catl-inq__input" type="text" id="inq-first" autocomplete="given-name" required>
+          </div>
+          <div class="catl-inq__field">
+            <label class="catl-inq__label" for="inq-last">Last Name <span aria-hidden="true">*</span></label>
+            <input class="catl-inq__input" type="text" id="inq-last" autocomplete="family-name" required>
+          </div>
+        </div>
+        <div class="catl-inq__field">
+          <label class="catl-inq__label" for="inq-email">Email <span aria-hidden="true">*</span></label>
+          <input class="catl-inq__input" type="email" id="inq-email" autocomplete="email" required>
+        </div>
+        <div class="catl-inq__field">
+          <label class="catl-inq__label" for="inq-questions">Questions or Comments <em>(optional)</em></label>
+          <textarea class="catl-inq__textarea" id="inq-questions" rows="3" placeholder="Anything you'd like the Registrar to know or answer?"></textarea>
+        </div>
+        <button type="submit" class="catl-inq__submit" id="inq-submit">Submit Inquiry</button>
+        <p class="catl-inq__alt">Prefer email? Write to <a id="inq-mailto" href="#"></a></p>
+      </form>
+      <div class="catl-inq__panel" id="inq-success" role="status">
+        <div class="catl-inq__panel-icon" aria-hidden="true">✓</div>
+        <p>Thank you — your inquiry about <strong id="inq-success-course"></strong> has been received. The Registrar will follow up within two business days to guide you through registration.</p>
+        <button type="button" class="catl-inq__submit catl-inq__submit--done" id="inq-done">Close</button>
+      </div>
+      <div class="catl-inq__panel" id="inq-error" role="alert">
+        <div class="catl-inq__panel-icon" aria-hidden="true">!</div>
+        <p>Something went wrong submitting your inquiry. Please email the Registrar directly at <a id="inq-error-mailto" href="#"></a> and we'll take it from there.</p>
+        <button type="button" class="catl-inq__submit catl-inq__submit--done" id="inq-error-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Course data baked in by bake.py (run by .github/workflows/bake-catalogue.yml).
      Everything between the markers is machine-written — do not edit by hand. -->
 <!-- BAKED-DATA-START -->
@@ -863,6 +1079,24 @@ const PROGRAM_LABELS = {
 };
 
 const TERM_ORDER = ["s","f","w"]; // season sort: Spring/Summer → Fall → Winter
+
+/* ==========================================================================
+ *  REGISTRATION INQUIRY FORM
+ *  The popout in each card's Register row posts to a Google Form. Run
+ *  createInquiryForm() in apps-script/InquiryForm.gs once — its log prints
+ *  a filled-in copy of this constant to paste over the empty one below.
+ *  While `action` is blank the cards show only the email option.
+ * ========================================================================== */
+const INQUIRY_FORM = {
+  action: "https://docs.google.com/forms/d/e/1FAIpQLSe4tH-4sgueuGzcOWqIUW1J3fB_-nXSm-OnVJ2V1zX1x1WfSQ/formResponse",
+  fields: {
+    course:    "entry.1547775240",
+    first:     "entry.1689619449",
+    last:      "entry.622259094",
+    email:     "entry.666173787",
+    questions: "entry.1808294900"
+  }
+};
 
 /* ==========================================================================
  *  SAMPLE DATA — used when APPS_SCRIPT_URL is blank, so the page renders
@@ -1301,7 +1535,23 @@ function cardHtml(c) {
   if (c.format)             detailRows.push(["Format", escapeHtml(c.format)]);
   if (syllabusHref)         detailRows.push(["Syllabus", `<a href="${escapeHtml(syllabusHref)}" target="_blank" rel="noopener">View syllabus →</a>`]);
   if (c.enrolmentNotes)     detailRows.push(["Enrolment", escapeHtml(c.enrolmentNotes)]);
-  if (c.registrationEmail)  detailRows.push(["Register", `<a href="mailto:${encodeURIComponent(c.registrationEmail)}">${escapeHtml(c.registrationEmail)}</a>`]);
+  // Register row: two options — 1. email the registrar, 2. open the inquiry
+  // popout (only once INQUIRY_FORM is configured; see the constant up top).
+  const regEmail = String(c.registrationEmail || "").trim();
+  const emailOpt = regEmail
+    ? `Email <a href="mailto:${encodeURIComponent(regEmail)}">${escapeHtml(regEmail)}</a>`
+    : "";
+  const formOpt = inquiryReady()
+    ? `<button type="button" class="catl-register__btn" data-course-id="${escapeHtml(c.id || "")}">Registration Inquiry Form<span aria-hidden="true"> →</span></button>`
+    : "";
+  if (emailOpt && formOpt) {
+    detailRows.push(["Register", `<div class="catl-register">
+      <div class="catl-register__opt"><span class="catl-register__num" aria-hidden="true">1</span><span>${emailOpt}</span></div>
+      <div class="catl-register__opt catl-register__opt--form"><span class="catl-register__num" aria-hidden="true">2</span>${formOpt}</div>
+    </div>`]);
+  } else if (emailOpt || formOpt) {
+    detailRows.push(["Register", emailOpt || `<div class="catl-register">${formOpt}</div>`]);
+  }
   if (c.meetingDay || c.meetingTime) detailRows.push(["Schedule", escapeHtml([c.meetingDay, c.meetingTime].filter(Boolean).join(" · "))]);
   if (c.tstCode)            detailRows.push(["TST Code", escapeHtml(c.tstCode)]);
   if (c.prerequisites)      detailRows.push(["Prerequisites", escapeHtml(c.prerequisites)]);
@@ -1382,6 +1632,12 @@ function renderSections() {
     const open = card.classList.toggle("is-open");
     btn.setAttribute("aria-expanded", open ? "true" : "false");
     btn.firstChild.textContent = open ? "Show less" : "Show more";
+  }));
+
+  // Wire the inquiry-popout buttons in the Register rows
+  $$(".catl-register__btn").forEach(btn => btn.addEventListener("click", () => {
+    const course = state.courses.find(c => String(c.id) === btn.dataset.courseId);
+    if (course) openInquiry(course, btn);
   }));
 
   observeReveals();
@@ -1533,6 +1789,124 @@ function initSearch() {
 }
 
 /* ==========================================================================
+ *  REGISTRATION INQUIRY POPOUT
+ *  Overlay mechanics mirror the registration modal on f2bf.icscanada.edu/
+ *  courses (fade + lift, body scroll lock, Escape / overlay-click close);
+ *  the form itself is an inquiry that starts the registration process, like
+ *  education.icscanada.edu/mael-apply, posted to a Google Form via no-cors.
+ * ========================================================================== */
+function inquiryReady() {
+  const f = INQUIRY_FORM.fields;
+  return !!(INQUIRY_FORM.action && f.course && f.first && f.last && f.email);
+}
+
+let inqCourse = null;   // course whose Register row opened the popout
+let inqOpener = null;   // button to restore focus to on close
+
+function openInquiry(course, opener) {
+  inqCourse = course;
+  inqOpener = opener || null;
+
+  const plainTitle = String(course.title || "").replace(/\*/g, "");
+  $("#inq-title").textContent = plainTitle;
+  $("#inq-meta").textContent = [course.code, termYearLabelOf(course.term)].filter(Boolean).join(" · ");
+  $("#inq-success-course").textContent = plainTitle;
+
+  // Per-course email for the "prefer email?" line and the error fallback
+  const regEmail = String(course.registrationEmail || "").trim();
+  const mailHref = regEmail
+    ? `mailto:${encodeURIComponent(regEmail)}?subject=${encodeURIComponent("Registration inquiry — " + plainTitle)}`
+    : "";
+  ["#inq-mailto", "#inq-error-mailto"].forEach(sel => {
+    const a = $(sel);
+    a.textContent = regEmail;
+    a.setAttribute("href", mailHref || "#");
+    a.closest("p").style.display = regEmail ? "" : "none";
+  });
+
+  // Reset to a fresh form on every open
+  const form = $("#inq-form");
+  form.reset();
+  form.style.display = "";
+  $$(".is-invalid", form).forEach(el => el.classList.remove("is-invalid"));
+  $("#inq-success").classList.remove("is-active");
+  $("#inq-error").classList.remove("is-active");
+  const btn = $("#inq-submit");
+  btn.disabled = false;
+  btn.textContent = "Submit Inquiry";
+
+  const overlay = $("#inq-overlay");
+  overlay.classList.add("is-active");
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add("is-visible")));
+  setTimeout(() => $("#inq-first").focus(), 80);
+}
+
+function closeInquiry() {
+  const overlay = $("#inq-overlay");
+  if (!overlay.classList.contains("is-active")) return;
+  overlay.classList.remove("is-visible");
+  setTimeout(() => {
+    overlay.classList.remove("is-active");
+    document.body.style.overflow = "";
+  }, 300);
+  if (inqOpener) { inqOpener.focus(); inqOpener = null; }
+}
+
+function initInquiry() {
+  const overlay = $("#inq-overlay");
+  if (!overlay) return;
+
+  $("#inq-close").addEventListener("click", closeInquiry);
+  $("#inq-done").addEventListener("click", closeInquiry);
+  $("#inq-error-close").addEventListener("click", closeInquiry);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeInquiry(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.classList.contains("is-active")) closeInquiry();
+  });
+
+  $("#inq-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const first = $("#inq-first"), last = $("#inq-last"), email = $("#inq-email");
+    let valid = true;
+    [first, last, email].forEach(el => el.classList.remove("is-invalid"));
+    if (!first.value.trim()) { first.classList.add("is-invalid"); valid = false; }
+    if (!last.value.trim())  { last.classList.add("is-invalid");  valid = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { email.classList.add("is-invalid"); valid = false; }
+    if (!valid) { $(".is-invalid", $("#inq-form"))?.focus(); return; }
+
+    const btn = $("#inq-submit");
+    btn.disabled = true;
+    btn.textContent = "Submitting…";
+
+    const c = inqCourse || {};
+    const courseLine = [
+      String(c.title || "").replace(/\*/g, ""),
+      [c.code, termYearLabelOf(c.term)].filter(Boolean).join(" · ")
+    ].filter(Boolean).join(" — ");
+
+    const fd = new FormData();
+    fd.append(INQUIRY_FORM.fields.course, courseLine);
+    fd.append(INQUIRY_FORM.fields.first, first.value.trim());
+    fd.append(INQUIRY_FORM.fields.last, last.value.trim());
+    fd.append(INQUIRY_FORM.fields.email, email.value.trim());
+    const questions = $("#inq-questions").value.trim();
+    if (INQUIRY_FORM.fields.questions && questions) fd.append(INQUIRY_FORM.fields.questions, questions);
+
+    // no-cors: the response is opaque, so success = the request went out.
+    fetch(INQUIRY_FORM.action, { method: "POST", body: fd, mode: "no-cors" })
+      .then(() => {
+        $("#inq-form").style.display = "none";
+        $("#inq-success").classList.add("is-active");
+      })
+      .catch(() => {
+        $("#inq-form").style.display = "none";
+        $("#inq-error").classList.add("is-active");
+      });
+  });
+}
+
+/* ==========================================================================
  *  DATA LOAD
  *  Course data is baked into this file by bake.py (see the BAKED-DATA
  *  markers above) and refreshed by the GitHub Action — no runtime fetch.
@@ -1541,6 +1915,7 @@ function initSearch() {
  * ========================================================================== */
 function load() {
   initSearch();
+  initInquiry();
   $("#year").textContent = new Date().getFullYear();
 
   let data;

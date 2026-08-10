@@ -11,6 +11,8 @@ apps-script/
   appsscript.json       ← Apps Script manifest
   Code.gs               ← backend (web app + sheet menu + CRUD)
   Sidebar.html          ← the editor form opened from the sheet menu
+  InquiryForm.gs        ← one-time setup for the registration inquiry popout
+                          (separate standalone Apps Script project — see §9)
 ```
 
 The architecture: a Google Sheet holds the courses, and the course data is
@@ -132,7 +134,34 @@ If you don't have hosting handy, the simplest options are:
   → Pages → Source: `main` branch, root). Within a minute you'll have a
   URL like `https://<your-org>.github.io/courses/` you can point Sites at.
 
-## 8. Field reference
+## 9. Registration inquiry popout
+
+Each course card's **Register** row offers two options: **1.** email the
+course's `registrationEmail`, and **2.** a popout inquiry form (styled like
+the rest of the page, mechanically like the registration modal on
+f2bf.icscanada.edu/courses). The form is *not* a full registration — like
+the MA-EL apply page, it kicks off the process: name, email, optional
+questions, with the course attached automatically. Submissions go to a
+Google Form; each one lands in a response spreadsheet and is emailed to
+the Registrar with the inquirer as Reply-To.
+
+To wire it up (once):
+
+1. Go to [script.new](https://script.new) — a **new standalone** Apps
+   Script project, *not* the catalogue sheet's project (which runs with
+   deliberately narrow permissions).
+2. Paste in `apps-script/InquiryForm.gs`, save, run **`createInquiryForm`**,
+   and approve the permission prompts.
+3. The Execution log prints a filled-in `INQUIRY_FORM` constant. Paste it
+   over the empty `const INQUIRY_FORM = {…}` near the top of the `<script>`
+   block in `index.html`. Commit and push.
+
+Until that constant is filled in, the cards simply show the email option
+alone — nothing breaks. To change who gets notified, edit
+`INQUIRY_NOTIFY_EMAIL` at the top of the standalone project and save (no
+redeploy needed).
+
+## 10. Field reference
 
 Each row in the `Courses` sheet is one course. The columns map 1:1 to
 fields in the editor sidebar — the dropdowns there are the source of
