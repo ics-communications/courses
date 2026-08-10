@@ -24,6 +24,8 @@ import io
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -52,10 +54,20 @@ PUBLIC_FIELDS = [
 TRUTHY = re.compile(r"^(true|yes|1)$", re.I)
 
 
-def fetch(url):
+def fetch(url, attempts=4):
+    # Apps Script intermittently 404s or 5xxes on the redirect hop; a short
+    # retry with backoff rides those out instead of failing the whole bake.
     req = urllib.request.Request(url, headers={"User-Agent": "ics-catalogue-bake/1.0"})
-    with urllib.request.urlopen(req, timeout=60) as res:
-        return res.read().decode("utf-8")
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as res:
+                return res.read().decode("utf-8")
+        except (urllib.error.URLError, TimeoutError) as err:
+            if attempt == attempts:
+                raise
+            wait = 10 * attempt
+            print(f"bake: fetch attempt {attempt} failed ({err}), retrying in {wait}s")
+            time.sleep(wait)
 
 
 def payload_from_csv(text):

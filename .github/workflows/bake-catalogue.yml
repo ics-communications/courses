@@ -21,7 +21,7 @@ jobs:
   bake:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Bake course data into index.html
         run: python3 bake.py
