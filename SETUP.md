@@ -3,16 +3,24 @@
 This repo contains:
 
 ```
-index.html              ← the public catalogue page (single file)
+index.html              ← the public catalogue page (single file, data baked in)
+bake.py                 ← refreshes the course data inside index.html
+.github/workflows/
+  bake-catalogue.yml    ← runs bake.py hourly (+ manual "Run workflow" button)
 apps-script/
   appsscript.json       ← Apps Script manifest
   Code.gs               ← backend (web app + sheet menu + CRUD)
   Sidebar.html          ← the editor form opened from the sheet menu
 ```
 
-The architecture: a Google Sheet holds the courses, an Apps Script web app
-serves them as JSON, and `index.html` fetches that JSON and renders the
-catalogue. Editors never touch HTML or columns directly — they use a
+The architecture: a Google Sheet holds the courses, and the course data is
+**baked into `index.html` itself** by `bake.py`, which a GitHub Action runs
+hourly (or on demand). Visitors load a fully static page — no runtime calls
+to Google, so the catalogue renders instantly and never breaks if Apps
+Script is unavailable; at worst it shows data up to an hour old. The bake
+script currently reads the Apps Script web app's JSON; it can be switched
+to a published-CSV URL later (see GITHUB-ACTION-PLAN.md) to retire the web
+app entirely. Editors never touch HTML or columns directly — they use a
 sidebar form built into the sheet.
 
 ---
@@ -61,7 +69,7 @@ account; choose **Advanced → Go to ICS Course Catalogue (unsafe)** and
 This creates a `Courses` sheet with all the right columns, frozen
 headers, and dropdown validation on the `published` column.
 
-## 4. Deploy the web app
+## 4. Deploy the web app (data source for the bake)
 
 Back in Apps Script: **Deploy → New deployment**.
 
@@ -73,20 +81,23 @@ Back in Apps Script: **Deploy → New deployment**.
 Click **Deploy**. Authorize when prompted. You'll get a URL that ends in
 `/exec` — copy it.
 
-## 5. Wire the URL into `index.html`
+Note: visitors never call this URL. Only `bake.py` reads it, on the
+GitHub Action's hourly schedule.
 
-Open `index.html` (in this repo, or wherever you're hosting it), find
-this line near the top of the `<script>` block:
+## 5. Wire the URL into `bake.py`
 
-```js
-const APPS_SCRIPT_URL = "";
-```
+Open `bake.py`, find the `SOURCE_URL` constant near the top, and paste
+the `/exec` URL inside the quotes. Save, commit, push.
 
-Paste the `/exec` URL inside the quotes. Save.
+The hourly **Bake catalogue** Action (or a local `python3 bake.py`) now
+refreshes the data inside `index.html` between the `BAKED-DATA` marker
+comments and commits the result. If the baked block is ever missing,
+the page falls back to a small bundled sample so the layout is still
+visible.
 
-The page now fetches live data from your sheet. If the URL is left
-blank or the fetch fails, the page falls back to a small bundled
-sample so the layout is still visible.
+`SOURCE_URL` also accepts a Google Sheets "Publish to web" CSV URL for
+the Courses tab — use that to remove the web-app dependency entirely
+(GITHUB-ACTION-PLAN.md, Phase 1).
 
 ## 6. Add or edit courses
 
@@ -97,10 +108,11 @@ load a row, or click **+ Add new course**. Fill in the fields and
 **Save**. The form handles all the columns; editors never have to know
 the schema.
 
-> **Cache:** The web app caches JSON for 5 minutes for speed. Saves
-> automatically clear the cache, so changes appear on the next page
-> load. If you ever need to force-refresh, use **ICS Catalogue →
-> Republish (clear cache)**.
+> **When changes appear:** the public page updates when the **Bake
+> catalogue** GitHub Action next runs — hourly on a schedule. For an
+> urgent update, open the repo on GitHub → **Actions** tab → **Bake
+> catalogue** → **Run workflow**; the page refreshes within a minute
+> or two of the run going green.
 
 ## 7. Embed in Google Sites (for now)
 
@@ -135,7 +147,7 @@ Important fields:
 | `programs`                | Space-separated lowercase tokens (`mael mwse cilc`). Drives the program filter **and** the program tags shown on the card. |
 | `term`                    | Entered once via the sidebar's Season + Year. Stored as a key like `fall26`. The card's term code (`F26`) and label (`Fall Term`) are derived from it automatically. |
 | `descriptionShort`        | Always-visible blurb. Use `*asterisks*` for italic.                |
-| `descriptionMore`         | Behind "Course details" — separate paragraphs with a blank line.   |
+| `descriptionMore`         | Shown after `descriptionShort` when a card is expanded ("Show more") — separate paragraphs with a blank line. |
 | `requiredBooks`           | One citation per line. `*asterisks*` for italic titles.            |
 
 If you ever need to add a new program, edit two places:
@@ -146,14 +158,23 @@ If you ever need to add a new program, edit two places:
 
 ## Troubleshooting
 
-**"Could not reach the live catalogue" banner**
-The Apps Script web-app URL is missing or the deployment is private.
-Check that **Who has access** is set to **Anyone** in the deployment
-settings.
-
 **Changes don't appear on the page**
-The cache hasn't expired yet. Use **ICS Catalogue → Republish (clear
-cache)** in the sheet.
+The hourly bake hasn't run yet. Check the repo's **Actions** tab: the
+latest **Bake catalogue** run shows whether the data was refreshed. Use
+**Run workflow** there to force an immediate update.
+
+**A bake run shows red (failed) in the Actions tab**
+The page is *stale, not broken* — it keeps serving the last successfully
+baked data. Open the failed run's log: `bake.py` refuses to touch
+`index.html` if the download fails or the payload looks wrong (empty, or
+zero published courses), and the log says which. Usually this means the
+Apps Script deployment was archived or made private — check **Deploy →
+Manage deployments** (access must be "Anyone").
+
+**"Catalogue data unavailable" banner on the page**
+The `BAKED-DATA` block is missing from `index.html` (the page is showing
+bundled sample data). Run `python3 bake.py` locally or trigger the
+**Bake catalogue** Action, then commit/push the refreshed `index.html`.
 
 **Editor menu doesn't show up**
 You need to reload the sheet tab once after pasting in the script.

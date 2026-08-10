@@ -1,0 +1,39 @@
+name: Bake catalogue
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # hourly (off the top of the hour to dodge the GitHub cron rush)
+  workflow_dispatch:        # "Run workflow" button for urgent updates
+  push:
+    branches: [main]
+    paths: ["bake.py"]      # re-bake when the bake script itself changes;
+                            # the Action's own commits touch only index.html,
+                            # so they can never re-trigger this workflow
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bake-catalogue
+  cancel-in-progress: false
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bake course data into index.html
+        run: python3 bake.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet index.html; then
+            echo "No data changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Bake catalogue data"
+          git push
