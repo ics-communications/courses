@@ -427,6 +427,9 @@ mark.catl-hit {
   color: var(--text-body);
   margin: 0.85rem 0 1.1rem;
 }
+.catl-desc__full { display: none; }
+.catl-card.is-open .catl-desc__teaser { display: none; }
+.catl-card.is-open .catl-desc__full { display: inline; }
 .catl-card__meta {
   display: flex;
   flex-wrap: wrap;
@@ -692,6 +695,8 @@ mark.catl-hit {
 @media print {
   .catl-filters, .catl-card__toggle { display: none; }
   .catl-card__details { display: block !important; }
+  .catl-desc__teaser { display: none; }
+  .catl-desc__full { display: inline !important; }
   body { background: white; }
 }
 </style>
@@ -705,10 +710,6 @@ mark.catl-hit {
     <p class="catl-hero__subtitle" id="hero-subtitle">
       Graduate courses across the MA, MA-EL, MWS-E, and PhD programs. Foundational seminars, immersive electives, partnership concentrations, and capstone pathways — all in one place.
     </p>
-    <div class="catl-hero__meta" id="hero-meta">
-      <span class="dot"></span>
-      <span id="hero-meta-text">Loading catalogue…</span>
-    </div>
   </div>
 </header>
 
@@ -1003,6 +1004,7 @@ const state = {
   courses: [],
   activeTerm: "all",
   activeProgram: "all",
+  termPinned: false,   // true when ?term= came from the URL, so we skip the upcoming-term default
   searchQuery: "",
   updated: null
 };
@@ -1035,6 +1037,19 @@ function richify(text) {
   return escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>");
+}
+
+// Split a description at its first sentence boundary. Returns null when
+// there is no clean break — a single-sentence description, or a break that
+// would land inside a *markdown* pair (odd asterisk count in the lead).
+function splitFirstSentence(text) {
+  const s = String(text);
+  const m = s.match(/[.!?](?=\s)/);
+  if (!m) return null;
+  const lead = s.slice(0, m.index + 1);
+  if (!s.slice(m.index + 1).trim()) return null;
+  if ((lead.match(/\*/g) || []).length % 2 !== 0) return null;
+  return lead;
 }
 
 function paragraphs(text) {
@@ -1152,14 +1167,43 @@ function uniqueTokens(courses, key) {
   return [...set];
 }
 
+/* Deep links: ?program=mael (or ma-el), ?term=fall26 / ?term=all, ?q=ethics.
+ * Unknown values are validated in renderFilters() and fall back to defaults. */
+function applyUrlParams() {
+  const params = new URLSearchParams(location.search);
+  const program = (params.get("program") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (program) state.activeProgram = program;
+  const term = (params.get("term") || "").trim().toLowerCase();
+  if (term) {
+    state.activeTerm = term;
+    state.termPinned = true;
+  }
+  const q = (params.get("q") || "").trim();
+  if (q) {
+    state.searchQuery = q;
+    const input = $("#search-input");
+    if (input) {
+      input.value = q;
+      $("#search-wrap").classList.add("has-value");
+    }
+  }
+}
+
 function renderFilters() {
   const termIds = [...new Set(state.courses.map(c => String(c.term || "").trim()).filter(Boolean))]
     .sort((a, b) => sortTerms(a, b));
   const programTokens = uniqueTokens(state.courses, "programs");
 
+  // Ignore an unknown ?term= value rather than filtering everything out.
+  if (state.activeTerm !== "all" && !termIds.includes(state.activeTerm)) {
+    state.activeTerm = "all";
+    state.termPinned = false;
+  }
+
   // Default the term filter to the upcoming term (only if the visitor hasn't
-  // already chosen one — i.e. on first render, when activeTerm is still "all").
-  if (state.activeTerm === "all") {
+  // already chosen one — i.e. on first render, when activeTerm is still "all"
+  // — and the URL didn't explicitly ask for ?term=all).
+  if (state.activeTerm === "all" && !state.termPinned) {
     state.activeTerm = upcomingTermId(termIds) || "all";
   }
 
@@ -1174,9 +1218,13 @@ function renderFilters() {
   const sortedPrograms = programOrder
     .filter(p => programTokens.includes(p))
     .concat(programTokens.filter(p => !programOrder.includes(p)));
-  const programHtml = ['<button class="catl-pill is-active" data-program="all">All Programs</button>']
-    .concat(sortedPrograms.map(p =>
-      `<button class="catl-pill" data-program="${escapeHtml(p)}">${escapeHtml(PROGRAM_LABELS[p] || p.toUpperCase())}</button>`))
+  if (state.activeProgram !== "all" && !programTokens.includes(state.activeProgram)) {
+    state.activeProgram = "all";
+  }
+  const programPill = (p, label) =>
+    `<button class="catl-pill${state.activeProgram === p ? " is-active" : ""}" data-program="${escapeHtml(p)}">${escapeHtml(label)}</button>`;
+  const programHtml = [programPill("all", "All Programs")]
+    .concat(sortedPrograms.map(p => programPill(p, PROGRAM_LABELS[p] || p.toUpperCase())))
     .join("");
   $("#program-filters").innerHTML = programHtml;
 
@@ -1217,7 +1265,8 @@ function cardHtml(c) {
   ].filter(Boolean).join(" ").toLowerCase().replace(/\*/g, "");
 
   const tags = [];
-  if (c.credits) tags.push(`<span class="catl-tag catl-tag--credits">${escapeHtml(c.credits)}</span>`);
+  // Credits intentionally not displayed for now — c.credits stays in the data
+  // and can be re-enabled here once the credit values are finalized.
   programLabels.forEach(p =>
     tags.push(`<span class="catl-tag catl-tag--program">${escapeHtml(p)}</span>`));
   if (c.certificateTags) {
@@ -1248,6 +1297,19 @@ function cardHtml(c) {
   const win = termWindow(c.term);
   const isCompleted = !!(win && win[1].getTime() < Date.now());
 
+  // Description: collapsed cards show only the first sentence with an
+  // ellipsis; "Show more" reveals the full text (see .catl-desc__* rules).
+  let descHtml = "";
+  if (c.descriptionShort) {
+    const lead = splitFirstSentence(c.descriptionShort);
+    if (lead) {
+      const teaser = lead.replace(/\.$/, "") + "…";
+      descHtml = `<p class="catl-card__desc"><span class="catl-desc__teaser">${richify(teaser)}</span><span class="catl-desc__full">${richify(c.descriptionShort)}</span></p>`;
+    } else {
+      descHtml = `<p class="catl-card__desc">${richify(c.descriptionShort)}</p>`;
+    }
+  }
+
   return `
   <article class="catl-card"
            data-programs="${escapeHtml(c.programs || "")}"
@@ -1257,15 +1319,15 @@ function cardHtml(c) {
            id="course-${escapeHtml(c.id || "")}">
     <div class="catl-card__topline">
       <span class="catl-card__code">${escapeHtml(c.code || "")}</span>
-      <span class="catl-card__termcode">${escapeHtml(termCode)}</span>
+      <span class="catl-card__termcode">${escapeHtml(termYearLabelOf(c.term))}</span>
     </div>
     <h3 class="catl-card__title">${richify(c.title || "")}</h3>
     ${c.instructorName ? `<div class="catl-card__instructor">${instructorMarkup}</div>` : ""}
     ${c.subtitle ? `<div class="catl-card__subtitle">${escapeHtml(c.subtitle)}</div>` : ""}
-    ${c.descriptionShort ? `<p class="catl-card__desc">${richify(c.descriptionShort)}</p>` : ""}
+    ${descHtml}
     ${tags.length ? `<div class="catl-card__meta">${tags.join("")}</div>` : ""}
     <button class="catl-card__toggle" type="button" aria-expanded="false">
-      Course details
+      Show more
     </button>
     <div class="catl-card__details">
       ${c.descriptionMore ? paragraphs(c.descriptionMore) : ""}
@@ -1299,7 +1361,7 @@ function renderSections() {
     const card = btn.closest(".catl-card");
     const open = card.classList.toggle("is-open");
     btn.setAttribute("aria-expanded", open ? "true" : "false");
-    btn.firstChild.textContent = open ? "Hide details" : "Course details";
+    btn.firstChild.textContent = open ? "Show less" : "Show more";
   }));
 
   observeReveals();
@@ -1419,13 +1481,6 @@ function observeReveals() {
   $$(".reveal:not(.is-visible)").forEach(el => io.observe(el));
 }
 
-function setHeroMeta(updated, courseCount) {
-  const text = updated
-    ? `${courseCount} courses · Updated ${updated}`
-    : `${courseCount} courses listed`;
-  $("#hero-meta-text").textContent = text;
-}
-
 function initSearch() {
   const input = $("#search-input");
   const wrap  = $("#search-wrap");
@@ -1484,7 +1539,7 @@ async function load() {
   state.courses = sortCoursesByTerm(state.courses);
   state.updated = data.updated || null;
 
-  setHeroMeta(state.updated, state.courses.length);
+  applyUrlParams();
   renderFilters();
   renderSections();
   applyFilters();
