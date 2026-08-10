@@ -553,30 +553,17 @@ mark.catl-hit {
 }
 
 /* ---------- REGISTRATION OPTIONS + INQUIRY POPOUT ---------- */
-.catl-register { display: grid; gap: 0.55rem; }
-.catl-register__opt { display: flex; align-items: baseline; gap: 0.65rem; }
-.catl-register__num {
-  flex: none;
-  width: 20px; height: 20px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--font-sans);
-  font-size: 0.62rem; font-weight: 700;
-  color: var(--accent-muted);
-  border: 1px solid var(--border-mid);
-  transform: translateY(0.2em);
-}
-.catl-register__btn {
-  font-family: var(--font-sans);
-  font-size: 0.68rem; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--cream); background: var(--wine);
-  border: 1px solid var(--wine); border-radius: 0;
-  padding: 0.55rem 1.05rem;
+/* A button that reads as an inline text link, styled to match the page's <a>. */
+.catl-register__link {
+  font: inherit;
+  background: none;
+  border: none;
+  padding: 0; margin: 0;
+  color: var(--wine);
   cursor: pointer;
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  transition: background 160ms ease, border-color 160ms ease;
+  transition: color 160ms ease;
 }
-.catl-register__btn:hover { background: var(--wine-deep); border-color: var(--wine-deep); }
+.catl-register__link:hover { color: var(--accent); }
 
 .catl-inq-overlay {
   display: none; position: fixed; inset: 0; z-index: 9999;
@@ -867,7 +854,7 @@ mark.catl-hit {
   .catl-card__details { display: block !important; }
   .catl-desc__teaser { display: none; }
   .catl-desc__full { display: block !important; }
-  .catl-register__num, .catl-register__opt--form { display: none; }
+  .catl-register__form-phrase { display: none; }
   .catl-inq-overlay { display: none !important; }
   body { background: white; }
 }
@@ -1535,22 +1522,21 @@ function cardHtml(c) {
   if (c.format)             detailRows.push(["Format", escapeHtml(c.format)]);
   if (syllabusHref)         detailRows.push(["Syllabus", `<a href="${escapeHtml(syllabusHref)}" target="_blank" rel="noopener">View syllabus →</a>`]);
   if (c.enrolmentNotes)     detailRows.push(["Enrolment", escapeHtml(c.enrolmentNotes)]);
-  // Register row: two options — 1. email the registrar, 2. open the inquiry
-  // popout (only once INQUIRY_FORM is configured; see the constant up top).
+  // Register row: linked text — the inquiry popout (once INQUIRY_FORM is
+  // configured; see the constant up top) and/or the registrar's email.
   const regEmail = String(c.registrationEmail || "").trim();
-  const emailOpt = regEmail
-    ? `Email <a href="mailto:${encodeURIComponent(regEmail)}">${escapeHtml(regEmail)}</a>`
+  const emailLink = regEmail
+    ? `<a href="mailto:${encodeURIComponent(regEmail)}">${escapeHtml(regEmail)}</a>`
     : "";
-  const formOpt = inquiryReady()
-    ? `<button type="button" class="catl-register__btn" data-course-id="${escapeHtml(c.id || "")}">Registration Inquiry Form<span aria-hidden="true"> →</span></button>`
+  const formLink = inquiryReady()
+    ? `<button type="button" class="catl-register__link" data-course-id="${escapeHtml(c.id || "")}">registration inquiry form</button>`
     : "";
-  if (emailOpt && formOpt) {
-    detailRows.push(["Register", `<div class="catl-register">
-      <div class="catl-register__opt"><span class="catl-register__num" aria-hidden="true">1</span><span>${emailOpt}</span></div>
-      <div class="catl-register__opt catl-register__opt--form"><span class="catl-register__num" aria-hidden="true">2</span>${formOpt}</div>
-    </div>`]);
-  } else if (emailOpt || formOpt) {
-    detailRows.push(["Register", emailOpt || `<div class="catl-register">${formOpt}</div>`]);
+  if (formLink && emailLink) {
+    detailRows.push(["Register", `<span class="catl-register__form-phrase">Fill out a ${formLink} or </span>email ${emailLink}`]);
+  } else if (formLink) {
+    detailRows.push(["Register", `Fill out a ${formLink}`]);
+  } else if (emailLink) {
+    detailRows.push(["Register", `Email ${emailLink}`]);
   }
   if (c.meetingDay || c.meetingTime) detailRows.push(["Schedule", escapeHtml([c.meetingDay, c.meetingTime].filter(Boolean).join(" · "))]);
   if (c.tstCode)            detailRows.push(["TST Code", escapeHtml(c.tstCode)]);
@@ -1634,8 +1620,8 @@ function renderSections() {
     btn.firstChild.textContent = open ? "Show less" : "Show more";
   }));
 
-  // Wire the inquiry-popout buttons in the Register rows
-  $$(".catl-register__btn").forEach(btn => btn.addEventListener("click", () => {
+  // Wire the inquiry-popout links in the Register rows
+  $$(".catl-register__link").forEach(btn => btn.addEventListener("click", () => {
     const course = state.courses.find(c => String(c.id) === btn.dataset.courseId);
     if (course) openInquiry(course, btn);
   }));
