@@ -373,6 +373,22 @@ mark.catl-hit {
   border-top-color: var(--accent);
 }
 .catl-card[hidden] { display: none; }
+.catl-card { scroll-margin-top: 1.5rem; }
+
+/* Deep-linked card (#course-<id>) — flagged briefly so the visitor can see
+   which card the link landed on. See focusAnchoredCourse(). */
+.catl-card.is-anchored {
+  border-color: var(--border-mid);
+  border-top-color: var(--wine);
+  animation: catl-anchor-flash 2.4s ease-out;
+}
+@keyframes catl-anchor-flash {
+  from { box-shadow: 0 0 0 3px rgba(168,90,50,0.5); }
+  to   { box-shadow: 0 0 0 3px rgba(168,90,50,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catl-card.is-anchored { animation: none; }
+}
 .catl-card__topline {
   display: flex;
   flex-wrap: wrap;
@@ -396,6 +412,32 @@ mark.catl-hit {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+.catl-card__toplineend {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+.catl-card__anchor {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--text-muted);
+  opacity: 0.45;
+  padding: 0.15rem 0.2rem;
+  transition: opacity 160ms ease, color 160ms ease;
+}
+.catl-card:hover .catl-card__anchor,
+.catl-card__anchor:hover,
+.catl-card__anchor:focus-visible { opacity: 1; }
+.catl-card__anchor:hover,
+.catl-card__anchor.is-copied { color: var(--accent); }
+.catl-card__anchor.is-copied {
+  opacity: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
 }
 .catl-card__title {
   font-family: var(--font-serif);
@@ -1230,8 +1272,12 @@ const state = {
   activeProgram: "all",
   termPinned: false,   // true when ?term= came from the URL, so we skip the upcoming-term default
   searchQuery: "",
-  updated: null
+  updated: null,
+  anchorId: null      // id of the card deep-linked via #course-<id>, pinned past the filters
 };
+
+// Prefix for per-course deep links: <article id="course-<id>"> + #course-<id>
+const ANCHOR_PREFIX = "course-";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -1567,16 +1613,24 @@ function cardHtml(c) {
     }
   }
 
+  // Every card is deep-linkable at #course-<id>; the id comes from the sheet
+  // (generateId_ in apps-script/Code.gs) and is stable across bakes.
+  const anchorId = ANCHOR_PREFIX + escapeHtml(c.id || "");
+
   return `
   <article class="catl-card"
            data-programs="${escapeHtml(c.programs || "")}"
            data-term="${escapeHtml(c.term || "")}"
            data-completed="${isCompleted}"
            data-search="${escapeHtml(searchBlob)}"
-           id="course-${escapeHtml(c.id || "")}">
+           id="${anchorId}">
     <div class="catl-card__topline">
       <span class="catl-card__code">${escapeHtml(c.code || "")}</span>
-      <span class="catl-card__termcode">${escapeHtml(termYearLabelOf(c.term))}</span>
+      <span class="catl-card__toplineend">
+        <span class="catl-card__termcode">${escapeHtml(termYearLabelOf(c.term))}</span>
+        <a class="catl-card__anchor" href="#${anchorId}"
+           aria-label="Copy a link to this course" title="Copy a link to this course">#</a>
+      </span>
     </div>
     <h3 class="catl-card__title">${richify(c.title || "")}</h3>
     ${c.instructorName ? `<div class="catl-card__instructor">${instructorMarkup}</div>` : ""}
@@ -1615,9 +1669,21 @@ function renderSections() {
   // Wire card toggles + reveal observer
   $$(".catl-card__toggle").forEach(btn => btn.addEventListener("click", () => {
     const card = btn.closest(".catl-card");
-    const open = card.classList.toggle("is-open");
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-    btn.firstChild.textContent = open ? "Show less" : "Show more";
+    setCardOpen(card, !card.classList.contains("is-open"));
+  }));
+
+  // Wire the per-card anchor links. Clicking copies the full URL rather than
+  // navigating — the visitor wants the link to share, not to jump to a card
+  // they are already looking at. Without clipboard access (http:, older
+  // browsers) the plain href takes over and deep-links as usual.
+  $$(".catl-card__anchor").forEach(link => link.addEventListener("click", e => {
+    if (!navigator.clipboard || !window.isSecureContext) return;
+    const hash = link.getAttribute("href");
+    const url = location.origin + location.pathname + location.search + hash;
+    e.preventDefault();
+    navigator.clipboard.writeText(url)
+      .then(() => flashCopied(link))
+      .catch(() => { location.hash = hash; });
   }));
 
   // Wire the inquiry-popout links in the Register rows
@@ -1627,6 +1693,58 @@ function renderSections() {
   }));
 
   observeReveals();
+}
+
+// Open/close a card and keep its toggle button in sync. Shared by the
+// toggle click handler and by deep links (focusAnchoredCourse).
+function setCardOpen(card, open) {
+  card.classList.toggle("is-open", open);
+  const btn = $(".catl-card__toggle", card);
+  if (btn) {
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    btn.firstChild.textContent = open ? "Show less" : "Show more";
+  }
+}
+
+function flashCopied(link) {
+  clearTimeout(link._copyTimer);
+  if (!link.dataset.label) link.dataset.label = link.textContent;
+  link.textContent = "Link copied";
+  link.classList.add("is-copied");
+  link._copyTimer = setTimeout(() => {
+    link.textContent = link.dataset.label;
+    link.classList.remove("is-copied");
+  }, 1600);
+}
+
+// #course-<id> in the URL, if it points at a card id shape.
+function anchorIdFromHash() {
+  const raw = location.hash.slice(1);
+  let hash = raw;
+  try { hash = decodeURIComponent(raw); } catch (err) { /* keep raw */ }
+  return hash.startsWith(ANCHOR_PREFIX) ? hash : "";
+}
+
+// Land a deep link on its course: pin the card past the active filters (a
+// shared link may point at a past course, or one outside the visitor's term
+// /program filters), open it, and flash it so the landing spot is obvious.
+function focusAnchoredCourse({ smooth = true } = {}) {
+  const id = anchorIdFromHash();
+  const card = id ? document.getElementById(id) : null;
+  if (!card || !card.classList.contains("catl-card")) {
+    if (state.anchorId) { state.anchorId = null; applyFilters(); }
+    $$(".catl-card.is-anchored").forEach(c => c.classList.remove("is-anchored"));
+    return;
+  }
+
+  state.anchorId = id;
+  applyFilters();
+
+  $$(".catl-card.is-anchored").forEach(c => c.classList.remove("is-anchored"));
+  void card.offsetWidth;                       // restart the flash on a repeat hit
+  card.classList.add("is-anchored");
+  setCardOpen(card, true);
+  card.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
 }
 
 function applyFilters() {
@@ -1647,7 +1765,9 @@ function applyFilters() {
     const programMatch = state.activeProgram === "all" || programs.includes(state.activeProgram);
     const searchMatch = !queryTokens.length || queryTokens.every(t => blob.includes(t));
     const completedHidden = isDefaultView && completed;
-    const show = termMatch && programMatch && searchMatch && !completedHidden;
+    // A deep-linked card always shows, whatever the filters say.
+    const pinned = !!state.anchorId && card.id === state.anchorId;
+    const show = pinned || (termMatch && programMatch && searchMatch && !completedHidden);
     card.hidden = !show;
     if (show) visibleCards++;
   });
@@ -1921,6 +2041,8 @@ function load() {
   renderFilters();
   renderSections();
   applyFilters();
+  focusAnchoredCourse({ smooth: false });
+  window.addEventListener("hashchange", () => focusAnchoredCourse());
 }
 
 document.addEventListener("DOMContentLoaded", load);
