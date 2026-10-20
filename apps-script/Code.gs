@@ -209,10 +209,25 @@ function getCourse(id) {
   const rows = sheet.getDataRange().getValues();
   for (let i = 1; i < rows.length; i++) {
     if (String(rows[i][idCol]) === String(id)) {
-      return rowToObject_(rows[i], headers);
+      return serializeForClient_(rowToObject_(rows[i], headers));
     }
   }
   return null;
+}
+
+// google.script.run silently delivers null in place of any return value that
+// contains a Date — and Sheets auto-converts date-like text (lastDateToRegister,
+// updatedAt) into Dates. Stringify them so the sidebar actually receives the row.
+function serializeForClient_(obj) {
+  const tz = Session.getScriptTimeZone();
+  Object.keys(obj).forEach(k => {
+    if (obj[k] instanceof Date) {
+      obj[k] = k === "updatedAt"
+        ? obj[k].toISOString()
+        : Utilities.formatDate(obj[k], tz, "yyyy-MM-dd");
+    }
+  });
+  return obj;
 }
 
 function saveCourse(form) {

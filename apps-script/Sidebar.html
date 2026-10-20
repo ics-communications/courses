@@ -199,6 +199,18 @@
   .toast.is-error { background: #B33C3C; }
   .toast.is-visible { transform: translateY(0); }
 
+  .teaser-preview {
+    background: var(--cream-warm);
+    border-left: 3px solid var(--accent);
+    padding: 8px 10px;
+    margin: -2px 0 10px;
+  }
+  .teaser-preview .label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+  .teaser-preview p { margin: 0; font-size: 12px; color: var(--text-dark); max-height: 9em; overflow-y: auto; }
+  .teaser-preview p.empty { color: var(--text-muted); font-style: italic; }
+  .teaser-preview .hint { display: block; font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+  .teaser-preview .hint.is-problem { color: #B33C3C; }
+
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .id-display {
     font-family: 'SF Mono', Menlo, monospace;
@@ -259,15 +271,15 @@
         <span class="hint">Optional, e.g. "MA-EL Capstone" or "CILC Required".</span>
       </label>
       <label class="field">
-        <span class="field-label">Short Description</span>
-        <textarea name="descriptionShort"></textarea>
-        <span class="hint">2–3 sentence editorial blurb — always visible on the card.</span>
+        <span class="field-label">Description</span>
+        <textarea name="descriptionShort" id="f-description" class="tall"></textarea>
+        <span class="hint">The full course description. A closed card shows only the first sentence (with "…"); "Show more" reveals the rest. Leave a blank line between paragraphs. *Asterisks* for italics.</span>
       </label>
-      <label class="field">
-        <span class="field-label">Extended Description</span>
-        <textarea name="descriptionMore" class="tall"></textarea>
-        <span class="hint">Shown inside "Course details". Separate paragraphs with a blank line.</span>
-      </label>
+      <div class="teaser-preview" id="teaser-preview">
+        <span class="label">Closed card shows</span>
+        <p id="teaser-text"></p>
+        <span class="hint" id="teaser-warn" style="display:none;"></span>
+      </div>
     </div>
   </details>
 
@@ -423,6 +435,64 @@
     toast._h = setTimeout(() => t.classList.remove("is-visible"), 3000);
   }
 
+  // ----- Closed-card preview -----
+  // Mirrors splitFirstSentence()/richify() in the public index.html: the page
+  // joins descriptionShort + descriptionMore into one description and, on a
+  // closed card, shows only the text up to the first . ! or ? followed by
+  // whitespace, plus "…". Keep these in step if the page's logic changes.
+  function splitFirstSentence(text) {
+    const s = String(text);
+    const m = s.match(/[.!?](?=\s)/);
+    if (!m) return null;
+    const lead = s.slice(0, m.index + 1);
+    if (!s.slice(m.index + 1).trim()) return null;
+    if ((lead.match(/\*/g) || []).length % 2 !== 0) return null;
+    return lead;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function richify(text) {
+    return escapeHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+
+  const ABBREVIATION_END = /(?:^|[\s(])(?:Dr|Mr|Mrs|Ms|Prof|Rev|St|Fr|Sr|Jr|vs|etc|e\.g|i\.e|cf|ca|[A-Z])\.$/;
+
+  function updateTeaser() {
+    const desc = $("#f-description").value.trim();
+    const out = $("#teaser-text");
+    const warn = $("#teaser-warn");
+    const note = (msg, isProblem) => {
+      warn.textContent = msg;
+      warn.classList.toggle("is-problem", !!isProblem);
+      warn.style.display = "block";
+    };
+    warn.style.display = "none";
+    out.classList.remove("empty");
+    if (!desc) {
+      out.textContent = "(no description)";
+      out.classList.add("empty");
+      return;
+    }
+    const lead = splitFirstSentence(desc);
+    out.innerHTML = lead
+      ? richify(lead.replace(/\.$/, "") + "…")
+      : richify(desc).replace(/\n/g, "<br>");
+    // An unmatched * shows up literally on the page (and, inside the first
+    // sentence, also stops the closed card from getting its short preview).
+    if ((desc.match(/\*/g) || []).length % 2 !== 0) {
+      note("There's an unmatched * in the description, and it will show on the page. Italics need one * before and one after, e.g. *Confessions*.", true);
+    } else if (!lead) {
+      note("No sentence break, so the closed card shows the whole description.");
+    } else if (ABBREVIATION_END.test(lead)) {
+      note("The preview stops at an abbreviation or initial. Reword the first sentence so it doesn't contain one (e.g. write the name without \"Dr.\").", true);
+    }
+  }
+
   function setBusy(busy) {
     $$("button").forEach(b => b.disabled = busy);
   }
@@ -484,6 +554,7 @@
       $("#f-published").checked = true;
       // Uncheck all programs
       $$('input[name="program"]').forEach(cb => cb.checked = false);
+      updateTeaser();
       return;
     }
 
@@ -498,6 +569,14 @@
       }
       el.value = v ?? "";
     });
+
+    // Description — the page renders descriptionShort + descriptionMore as one
+    // flowing text, so edit them as one. Rows from before the fields were
+    // merged still have text in descriptionMore; fold it in here (saving
+    // writes the whole thing back to descriptionShort and clears descriptionMore).
+    $("#f-description").value = [course.descriptionShort, course.descriptionMore]
+      .map(s => String(s ?? "").trim()).filter(Boolean).join("\n\n");
+    updateTeaser();
 
     // Published checkbox
     $("#f-published").checked = (course.published === true || /^(true|yes|1)$/i.test(String(course.published || "")));
@@ -536,6 +615,8 @@
       }
     });
     data.programs = $$('input[name="program"]:checked').map(cb => cb.value).join(" ");
+    // The single Description box holds the whole description (see fillForm).
+    data.descriptionMore = "";
     // Term — combine Season + Year into the single stored filter key (e.g. "fall26")
     const season = String(data.season || "").trim().toLowerCase();
     const yr = data.year;
@@ -555,6 +636,8 @@
       .withFailureHandler(err => { toast("Load failed: " + err.message, true); setBusy(false); })
       .getCourse(id);
   });
+
+  $("#f-description").addEventListener("input", updateTeaser);
 
   $("#new-btn").addEventListener("click", () => {
     $("#picker-select").value = "";

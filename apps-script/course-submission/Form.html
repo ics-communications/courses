@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wine: #9B0D24;
+    --wine-deep: #7A0A1C;
+    --accent: #A85A32;
+    --accent-pale: #EEDACA;
+    --cream: #FDFBF7;
+    --cream-warm: #F9F5ED;
+    --text-dark: #2E1318;
+    --text-body: #3A3330;
+    --text-muted: #857E78;
+    --error: #B33C3C;
+    --border: rgba(155,13,36,0.18);
+    --border-light: rgba(155,13,36,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-body);
+    background: var(--cream);
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  header { border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+  h1 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 30px; line-height: 1.2; color: var(--text-dark); margin: 6px 0 10px; }
+  h1 em { color: var(--accent); font-weight: 400; }
+  header p { margin: 0 0 6px; }
+  .signed-in { font-size: 13px; color: var(--text-muted); }
+
+  fieldset { border: 0; padding: 0; margin: 28px 0 0; }
+  legend {
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 19px;
+    color: var(--wine-deep);
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .card { background: white; border: 1px solid var(--border-light); border-top: 3px solid var(--accent); padding: 18px 18px 6px; }
+
+  .field { display: block; margin-bottom: 16px; }
+  .field-label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+  .req { color: var(--wine); }
+  .opt { font-weight: 400; letter-spacing: 0.04em; text-transform: none; color: var(--text-muted); font-style: italic; }
+  .hint { display: block; font-size: 13px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+
+  input[type="text"], input[type="url"], select, textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-body);
+    border-radius: 0;
+  }
+  textarea { min-height: 90px; resize: vertical; }
+  textarea.tall { min-height: 200px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-pale); }
+  .invalid input, .invalid select, .invalid textarea, .invalid .choices { border-color: var(--error) !important; }
+  .field-error { display: none; font-size: 13px; color: var(--error); margin-top: 4px; }
+  .invalid .field-error { display: block; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; border: 1px solid transparent; }
+  .choices label {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid var(--border);
+    background: white;
+    padding: 7px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .choices label:has(input:checked) { background: var(--accent-pale); border-color: var(--accent); color: var(--text-dark); }
+  .choices input { margin: 0; accent-color: var(--wine); }
+  .choices.stack { flex-direction: column; align-items: stretch; }
+
+  .sub { margin: 4px 0 16px; padding: 14px 14px 2px; background: var(--cream-warm); border-left: 3px solid var(--accent-pale); }
+  .matched { font-size: 13px; margin-top: 5px; color: var(--text-muted); }
+  .matched a { color: var(--wine); }
+  .matched.no { color: var(--accent); }
+  .link-btn { font: inherit; font-size: 14px; background: none; border: 0; color: var(--wine); cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+
+  .teaser-preview { background: var(--cream-warm); border-left: 3px solid var(--accent); padding: 10px 12px; margin: -6px 0 16px; }
+  .teaser-preview .label { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+  .teaser-preview p { margin: 0; font-size: 14px; color: var(--text-dark); max-height: 9em; overflow-y: auto; }
+  .teaser-preview p.empty { color: var(--text-muted); font-style: italic; }
+  .teaser-preview .note { display: block; font-size: 13px; color: var(--text-muted); margin-top: 5px; font-style: italic; }
+  .teaser-preview .note.is-problem { color: var(--error); }
+
+  .actions { margin-top: 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  button.primary {
+    font: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 14px 26px; border: 1px solid var(--wine); background: var(--wine); color: var(--cream); cursor: pointer; border-radius: 0;
+  }
+  button.primary:hover { background: var(--wine-deep); }
+  button.primary:disabled { opacity: 0.55; cursor: wait; }
+  .form-error { display: none; background: #FBEFF0; border-left: 3px solid var(--error); padding: 10px 14px; margin-top: 20px; white-space: pre-line; color: var(--text-dark); }
+
+  .loading, .done { text-align: center; padding: 60px 10px; }
+  .done h2 { font-family: 'Libre Baskerville', Georgia, serif; color: var(--text-dark); font-size: 24px; margin: 0 0 10px; }
+  .done p { max-width: 520px; margin: 0 auto 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Institute for Christian Studies</div>
+    <h1>Submit a <em>Course</em></h1>
+    <p>Tell us about a course you're teaching. Your submission goes to the Registrar, who will confirm the details and add the rest (deadlines, enrolment limits) before it appears in the public <a href="https://courses.icscanada.edu" style="color:var(--wine)">course catalogue</a>.</p>
+    <div class="signed-in" id="signed-in"></div>
+  </header>
+
+  <div class="loading" id="loading">Loading the form…</div>
+
+  <form id="course-form" novalidate hidden>
+
+    <!-- ============ Instructor ============ -->
+    <fieldset>
+      <legend>Instructor</legend>
+      <div class="card">
+        <div class="field" data-field="instructor">
+          <span class="field-label">Instructor <span class="req">*</span></span>
+          <select id="instructor-select"></select>
+          <div class="sub" id="instructor-custom-wrap" hidden>
+            <label class="field">
+              <span class="field-label">Instructor's name</span>
+              <input type="text" id="instructor-custom" maxlength="100" placeholder="e.g. Dr. Jane Smith">
+              <span class="hint">As it should appear on the course card.</span>
+            </label>
+          </div>
+          <div class="matched" id="instructor-matched"></div>
+          <div class="field-error">Choose an instructor, or pick "Someone not listed" and type their name.</div>
+        </div>
+
+        <div class="field" id="co-toggle-wrap">
+          <button type="button" class="link-btn" id="co-toggle">+ Add a co-instructor</button>
+        </div>
+        <div class="field" data-field="coInstructor" id="co-wrap" hidden>
+          <span class="field-label">Co-instructor <span class="opt">(optional)</span></span>
+          <select id="co-select"></select>
+          <div class="sub" id="co-custom-wrap" hidden>
+            <label class="field">
+              <span class="field-label">Co-instructor's name</span>
+              <input type="text" id="co-custom" maxlength="100" placeholder="e.g. Dr. Jane Smith">
+            </label>
+          </div>
+          <div class="matched" id="co-matched"></div>
+          <div class="field-error">Choose a co-instructor or remove this field.</div>
+          <button type="button" class="link-btn" id="co-remove" style="margin-top:6px;font-size:13px">Remove co-instructor</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ============ The course ============ -->
+    <fieldset>
+      <legend>The course</legend>
+      <div class="card">
+        <label class="field" data-field="title">
+          <span class="field-label">Course title <span class="req">*</span></span>
+          <input type="text" name="title" maxlength="200">
+          <span class="hint">Put *asterisks* around a book title to italicize it, e.g. Augustine's *Confessions*.</span>
+          <div class="field-error">Enter the course title.</div>
+        </label>
+        <label class="field">
+          <span class="field-label">Subtitle <span class="opt">(optional)</span></span>
+          <input type="text" name="subtitle" maxlength="120">
+          <span class="hint">A short line under your name, e.g. "Modern Aesthetics Seminar".</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Course code <span class="opt">(optional — leave blank if you don't know it)</span></span>
+          <input type="text" name="code" maxlength="40" placeholder="e.g. 120107 / 220107">
+        </label>
+
+        <div class="row">
+          <label class="field" data-field="season">
+            <span class="field-label">Term <span class="req">*</span></span>
+            <select name="season" id="season"></select>
+            <div class="field-error">Choose a term.</div>
+          </label>
+          <label class="field" data-field="year">
+            <span class="field-label">Year <span class="req">*</span></span>
+            <select name="year" id="year"></select>
+            <div class="field-error">Choose a year.</div>
+          </label>
+        </div>
+
+        <div class="field" data-field="programs">
+          <span class="field-label">Programs this course counts toward <span class="req">*</span></span>
+          <div class="choices" id="programs"></div>
+          <span class="hint">Tick all that apply. These decide which program filters the course appears under.</span>
+          <div class="field-error">Tick at least one program.</div>
+        </div>
+
+        <div class="field sub" id="cstc-wrap" hidden>
+          <span class="field-label">CSTC area(s) <span class="opt">(optional)</span></span>
+          <div class="choices" id="cstc-areas"></div>
+        </div>
+
+        <label class="field" data-field="description">
+          <span class="field-label">Course description <span class="req">*</span></span>
+          <textarea name="description" id="description" class="tall" maxlength="5000"></textarea>
+          <span class="hint">The full description. Leave a blank line between paragraphs. The catalogue shows only the <strong>first sentence</strong> until a visitor clicks "Show more," so make it count.</span>
+          <div class="field-error" id="description-error">Please write a course description.</div>
+        </label>
+        <div class="teaser-preview">
+          <span class="label">Visitors see first</span>
+          <p id="teaser-text" class="empty">(start typing your description)</p>
+          <span class="note" id="teaser-note" hidden></span>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ============ Schedule ============ -->
+    <fieldset>
+      <legend>Format &amp; schedule</legend>
+      <div class="card">
+        <label class="field" data-field="format">
+          <span class="field-label">Format <span class="req">*</span></span>
+          <select name="format" id="format"></select>
+          <div class="field-error">Choose a format.</div>
+        </label>
+
+        <div class="field" data-field="schedule">
+          <span class="field-label">How does the class meet? <span class="req">*</span></span>
+          <div class="choices stack">
+            <label><input type="radio" name="schedule" value="weekly"> The same day(s) and time each week</label>
+            <label><input type="radio" name="schedule" value="dates"> On specific dates (e.g. intensives or a residency)</label>
+            <label><input type="radio" name="schedule" value="none"> No scheduled meetings (fully asynchronous)</label>
+          </div>
+          <div class="field-error">Choose how the class meets.</div>
+        </div>
+
+        <div class="sub" id="weekly-wrap" hidden>
+          <div class="field" data-field="days">
+            <span class="field-label">Day(s)</span>
+            <div class="choices" id="days"></div>
+            <div class="field-error">Tick the day(s) the class meets.</div>
+          </div>
+          <div class="row" data-field="times">
+            <label class="field">
+              <span class="field-label">Starts (Eastern Time)</span>
+              <select name="startTime" id="start-time"></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Ends (Eastern Time)</span>
+              <select name="endTime" id="end-time"></select>
+            </label>
+            <div class="field-error" style="grid-column:1/-1;margin:-10px 0 12px">Choose a start and an end time, with the end after the start.</div>
+          </div>
+        </div>
+
+        <div class="sub" id="dates-wrap" hidden>
+          <label class="field" data-field="scheduleDates">
+            <span class="field-label">Class dates and times</span>
+            <textarea name="scheduleDates" maxlength="1500" placeholder="e.g. Thursday, April 23, 2026, 6:15 – 9:15pm ET; Tuesday, August 11, 2026, 1 – 4pm ET"></textarea>
+            <span class="hint">Include the time zone.</span>
+            <div class="field-error">List the class dates and times.</div>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ============ Details ============ -->
+    <fieldset>
+      <legend>Details <span class="opt" style="font-family:Outfit,sans-serif;font-size:14px">(all optional)</span></legend>
+      <div class="card">
+        <label class="field" data-field="syllabusUrl">
+          <span class="field-label">Syllabus link</span>
+          <input type="url" name="syllabusUrl" maxlength="500" placeholder="https://…">
+          <span class="hint">A link anyone can open, such as a published Google Doc.</span>
+          <div class="field-error">The link must start with https://</div>
+        </label>
+        <label class="field">
+          <span class="field-label">Required books</span>
+          <textarea name="requiredBooks" maxlength="4000" placeholder="One book per line"></textarea>
+          <span class="hint">One book per line. *Asterisks* around titles for italics.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Prerequisites</span>
+          <input type="text" name="prerequisites" maxlength="300">
+        </label>
+        <label class="field">
+          <span class="field-label">TST cross-list code</span>
+          <input type="text" name="tstCode" maxlength="60" placeholder="e.g. ICH3761H L6201">
+        </label>
+        <label class="field">
+          <span class="field-label">Notes for the Registrar</span>
+          <textarea name="notes" maxlength="2000"></textarea>
+          <span class="hint">Anything the Registrar should know. This is not published.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="form-error" id="form-error"></div>
+
+    <div class="actions">
+      <button type="submit" class="primary" id="submit-btn">Submit course</button>
+      <span class="hint" style="margin:0">The course stays hidden until the Registrar publishes it.</span>
+    </div>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <h2>Thank you</h2>
+    <p><strong id="done-title"></strong> (<span id="done-term"></span>) has been sent to the Registrar.</p>
+    <p>They'll confirm the details and add the enrolment information before it appears in the catalogue. If they have questions, they'll email you.</p>
+    <p><button type="button" class="link-btn" id="again-btn">Submit another course</button></p>
+  </div>
+
+</div>
+
+<script>
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const NOT_LISTED = "__custom__";
+  let DATA = null;
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // ---------- build controls ----------
+  function option(value, label) {
+    const o = document.createElement("option");
+    o.value = value; o.textContent = label;
+    return o;
+  }
+
+  function fillInstructorSelect(sel, placeholder) {
+    sel.appendChild(option("", placeholder));
+    const groups = {};
+    DATA.faculty.forEach(f => (groups[f.group] = groups[f.group] || []).push(f));
+    Object.keys(groups).forEach(g => {
+      const og = document.createElement("optgroup");
+      og.label = g;
+      groups[g].slice().sort((a, b) => surname(a.name).localeCompare(surname(b.name)))
+        .forEach(f => og.appendChild(option(f.key, f.name)));
+      sel.appendChild(og);
+    });
+    const other = document.createElement("optgroup");
+    other.label = "Other";
+    other.appendChild(option(NOT_LISTED, "Someone not listed…"));
+    sel.appendChild(other);
+  }
+
+  function surname(name) {
+    const parts = String(name).replace(/\([^)]*\)/g, "").trim().split(/\s+/);
+    return parts[parts.length - 1] || "";
+  }
+
+  function checkboxes(container, name, items, type) {
+    container.innerHTML = items.map(it =>
+      `<label><input type="${type || "checkbox"}" name="${name}" value="${escapeHtml(it.value)}"> ${escapeHtml(it.label)}</label>`).join("");
+  }
+
+  function build() {
+    $("#signed-in").textContent = "Signed in as " + DATA.user;
+    fillInstructorSelect($("#instructor-select"), "— choose an instructor —");
+    fillInstructorSelect($("#co-select"), "— choose a co-instructor —");
+
+    $("#season").appendChild(option("", "— choose —"));
+    DATA.seasons.forEach(s => $("#season").appendChild(option(s.id, s.label)));
+    $("#year").appendChild(option("", "— choose —"));
+    DATA.years.forEach(y => $("#year").appendChild(option(y, y)));
+
+    checkboxes($("#programs"), "programs", DATA.programs.map(p => ({ value: p.id, label: p.label })));
+    checkboxes($("#cstc-areas"), "cstcAreas", DATA.cstcAreas.map(a => ({ value: a, label: "Area " + a })));
+    checkboxes($("#days"), "days", DATA.weekdays.map(d => ({ value: d, label: d })));
+
+    $("#format").appendChild(option("", "— choose —"));
+    DATA.formats.forEach(f => $("#format").appendChild(option(f, f)));
+
+    [$("#start-time"), $("#end-time")].forEach(sel => {
+      sel.appendChild(option("", "— choose —"));
+      DATA.times.forEach(t => sel.appendChild(option(t.value, t.label)));
+    });
+
+    wire();
+    $("#loading").hidden = true;
+    $("#course-form").hidden = false;
+  }
+
+  // ---------- instructor matching (mirrors matchFaculty_ in Code.gs) ----------
+  function normName(s) {
+    return String(s).toLowerCase()
+      .replace(/\b(dr|prof|professor|rev|mr|mrs|ms)\b\.?/g, " ")
+      .replace(/\([^)]*\)/g, " ")
+      .replace(/[^a-zÀ-ɏ\s-]/g, " ")
+      .split(/\s+/).filter(Boolean);
+  }
+  function matchFaculty(typed) {
+    const t = normName(typed);
+    if (!t.length) return null;
+    const key = t.join(" ");
+    const exact = DATA.faculty.find(f => normName(f.siteName || f.name).join(" ") === key || normName(f.name).join(" ") === key);
+    if (exact) return exact;
+    const last = t[t.length - 1], initial = t[0][0];
+    const loose = DATA.faculty.filter(f => { const n = normName(f.siteName || f.name); return n[n.length - 1] === last && n[0][0] === initial; });
+    return loose.length === 1 ? loose[0] : null;
+  }
+
+  function showMatch(prefix) {
+    const sel = $(`#${prefix}-select`), out = $(`#${prefix}-matched`);
+    const customWrap = $(`#${prefix}-custom-wrap`);
+    customWrap.hidden = sel.value !== NOT_LISTED;
+    out.className = "matched";
+    out.innerHTML = "";
+    if (sel.value && sel.value !== NOT_LISTED) {
+      out.innerHTML = `Profile link added automatically: <a href="${escapeHtml(sel.value)}" target="_blank" rel="noopener">${escapeHtml(sel.value.replace(/^https?:\/\//, ""))}</a>`;
+    } else if (sel.value === NOT_LISTED) {
+      const typed = $(`#${prefix}-custom`).value.trim();
+      if (!typed) return;
+      const hit = matchFaculty(typed);
+      if (hit) {
+        out.innerHTML = `Matched to <strong>${escapeHtml(hit.name)}</strong> on the faculty site, so their profile link will be added.`;
+      } else {
+        out.className = "matched no";
+        out.textContent = "Not found on faculty.icscanada.edu. The name will appear without a profile link.";
+      }
+    }
+  }
+
+  function readInstructor(prefix) {
+    const v = $(`#${prefix}-select`).value;
+    if (v === NOT_LISTED) return { custom: $(`#${prefix}-custom`).value.trim() };
+    return v ? { key: v } : {};
+  }
+
+  // ---------- description preview (mirrors splitFirstSentence in index.html) ----------
+  function splitFirstSentence(text) {
+    const s = String(text);
+    const m = s.match(/[.!?](?=\s)/);
+    if (!m) return null;
+    const lead = s.slice(0, m.index + 1);
+    if (!s.slice(m.index + 1).trim()) return null;
+    if ((lead.match(/\*/g) || []).length % 2 !== 0) return null;
+    return lead;
+  }
+  function richify(text) {
+    return escapeHtml(text).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+  const ABBREVIATION_END = /(?:^|[\s(])(?:Dr|Mr|Mrs|Ms|Prof|Rev|St|Fr|Sr|Jr|vs|etc|e\.g|i\.e|cf|ca|[A-Z])\.$/;
+
+  function updateTeaser() {
+    const desc = $("#description").value.trim();
+    const out = $("#teaser-text"), note = $("#teaser-note");
+    const say = (msg, problem) => { note.textContent = msg; note.classList.toggle("is-problem", !!problem); note.hidden = false; };
+    note.hidden = true;
+    out.classList.toggle("empty", !desc);
+    if (!desc) { out.textContent = "(start typing your description)"; return; }
+    const lead = splitFirstSentence(desc);
+    out.innerHTML = lead ? richify(lead.replace(/\.$/, "") + "…") : richify(desc).replace(/\n/g, "<br>");
+    if ((desc.match(/\*/g) || []).length % 2 !== 0) {
+      say("There's an unmatched *. Italics need one * before and one after, e.g. *Confessions*.", true);
+    } else if (!lead) {
+      say("Only one sentence so far, so visitors will see all of it.");
+    } else if (ABBREVIATION_END.test(lead)) {
+      say("The first sentence is cut off at an abbreviation or initial. Try rewording it without one (e.g. without \"Dr.\").", true);
+    }
+  }
+
+  // ---------- read + validate (the server re-checks everything) ----------
+  function checked(name) { return $$(`input[name="${name}"]:checked`).map(i => i.value); }
+
+  function readForm() {
+    const f = $("#course-form").elements;
+    return {
+      instructor: readInstructor("instructor"),
+      coInstructor: $("#co-wrap").hidden ? {} : readInstructor("co"),
+      title: f.title.value,
+      subtitle: f.subtitle.value,
+      code: f.code.value,
+      season: f.season.value,
+      year: f.year.value,
+      programs: checked("programs"),
+      cstcAreas: checked("cstcAreas"),
+      description: f.description.value,
+      format: f.format.value,
+      schedule: (checked("schedule")[0] || ""),
+      days: checked("days"),
+      startTime: f.startTime.value,
+      endTime: f.endTime.value,
+      scheduleDates: f.scheduleDates.value,
+      syllabusUrl: f.syllabusUrl.value.trim(),
+      requiredBooks: f.requiredBooks.value,
+      prerequisites: f.prerequisites.value,
+      tstCode: f.tstCode.value,
+      notes: f.notes.value
+    };
+  }
+
+  function validate(d) {
+    const bad = [];
+    const inst = d.instructor;
+    if (!(inst.key || inst.custom)) bad.push("instructor");
+    if (!$("#co-wrap").hidden && !(d.coInstructor.key || d.coInstructor.custom)) bad.push("coInstructor");
+    if (d.title.trim().length < 3) bad.push("title");
+    if (!d.season) bad.push("season");
+    if (!d.year) bad.push("year");
+    if (!d.programs.length) bad.push("programs");
+    const desc = d.description.trim();
+    if (desc.length < 40 || (desc.match(/\*/g) || []).length % 2 !== 0) {
+      bad.push("description");
+      $("#description-error").textContent = desc.length < 40
+        ? "Please write a course description (at least a sentence or two)."
+        : "The description has an unmatched * (see the note below).";
+    }
+    if (!d.format) bad.push("format");
+    if (!d.schedule) bad.push("schedule");
+    if (d.schedule === "weekly") {
+      if (!d.days.length) bad.push("days");
+      const ts = DATA.times.map(t => t.value);
+      if (!d.startTime || !d.endTime || ts.indexOf(d.endTime) <= ts.indexOf(d.startTime)) bad.push("times");
+    }
+    if (d.schedule === "dates" && !d.scheduleDates.trim()) bad.push("scheduleDates");
+    if (d.syllabusUrl && !/^https:\/\/\S+$/.test(d.syllabusUrl)) bad.push("syllabusUrl");
+
+    $$("[data-field]").forEach(el => el.classList.toggle("invalid", bad.indexOf(el.dataset.field) >= 0));
+    return bad;
+  }
+
+  // ---------- events ----------
+  function wire() {
+    ["instructor", "co"].forEach(p => {
+      $(`#${p}-select`).addEventListener("change", () => {
+        showMatch(p);
+        if ($(`#${p}-select`).value === NOT_LISTED) $(`#${p}-custom`).focus();
+      });
+      $(`#${p}-custom`).addEventListener("input", () => showMatch(p));
+    });
+    $("#co-toggle").addEventListener("click", () => { $("#co-wrap").hidden = false; $("#co-toggle-wrap").hidden = true; });
+    $("#co-remove").addEventListener("click", () => {
+      $("#co-wrap").hidden = true; $("#co-toggle-wrap").hidden = false;
+      $("#co-select").value = ""; $("#co-custom").value = ""; showMatch("co");
+    });
+
+    $("#programs").addEventListener("change", () => { $("#cstc-wrap").hidden = checked("programs").indexOf("cstc") < 0; });
+    $$('input[name="schedule"]').forEach(r => r.addEventListener("change", () => {
+      const v = checked("schedule")[0];
+      $("#weekly-wrap").hidden = v !== "weekly";
+      $("#dates-wrap").hidden = v !== "dates";
+    }));
+    $("#description").addEventListener("input", updateTeaser);
+
+    // Re-check a field as soon as it's fixed, once a submit attempt has flagged it.
+    $("#course-form").addEventListener("input", () => { if ($(".invalid")) validate(readForm()); });
+    $("#course-form").addEventListener("change", () => { if ($(".invalid")) validate(readForm()); });
+
+    $("#course-form").addEventListener("submit", e => {
+      e.preventDefault();
+      $("#form-error").style.display = "none";
+      const data = readForm();
+      const bad = validate(data);
+      if (bad.length) {
+        const first = $(".invalid");
+        if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const btn = $("#submit-btn");
+      btn.disabled = true; btn.textContent = "Submitting…";
+      google.script.run
+        .withSuccessHandler(res => {
+          $("#done-title").textContent = res.title;
+          $("#done-term").textContent = res.term;
+          $("#course-form").hidden = true;
+          $("#done").hidden = false;
+          window.scrollTo(0, 0);
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false; btn.textContent = "Submit course";
+          const box = $("#form-error");
+          box.textContent = "Your course wasn't submitted:\n" + String(err.message || err).replace(/^Error:\s*/, "");
+          box.style.display = "block";
+        })
+        .submitCourse(data);
+    });
+
+    $("#again-btn").addEventListener("click", () => {
+      $("#course-form").reset();
+      ["instructor", "co"].forEach(showMatch);
+      $("#co-wrap").hidden = true; $("#co-toggle-wrap").hidden = false;
+      ["#cstc-wrap", "#weekly-wrap", "#dates-wrap"].forEach(s => $(s).hidden = true);
+      updateTeaser();
+      const btn = $("#submit-btn"); btn.disabled = false; btn.textContent = "Submit course";
+      $("#done").hidden = true; $("#course-form").hidden = false;
+      window.scrollTo(0, 0);
+    });
+  }
+
+  // ---------- boot ----------
+  google.script.run
+    .withSuccessHandler(d => { DATA = d; build(); })
+    .withFailureHandler(err => {
+      $("#loading").innerHTML = escapeHtml(String(err.message || err).replace(/^Error:\s*/, ""));
+    })
+    .getFormData();
+</script>
+</body>
+</html>

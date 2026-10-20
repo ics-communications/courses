@@ -13,6 +13,8 @@ apps-script/
   Sidebar.html          ← the editor form opened from the sheet menu
   InquiryForm.gs        ← one-time setup for the registration inquiry popout
                           (separate standalone Apps Script project — see §9)
+  course-submission/     ← instructor "Submit a Course" web app
+                          (separate standalone Apps Script project — see §11)
 ```
 
 The architecture: a Google Sheet holds the courses, and the course data is
@@ -175,15 +177,64 @@ Important fields:
 | `published`               | `TRUE` shows on the page, `FALSE` hides it (draft).                |
 | `programs`                | Space-separated lowercase tokens (`mael mwse cilc`). Drives the program filter **and** the program tags shown on the card. |
 | `term`                    | Entered once via the sidebar's Season + Year. Stored as a key like `fall26`. The card's term code (`F26`) and label (`Fall Term`) are derived from it automatically. |
-| `descriptionShort`        | Always-visible blurb. Use `*asterisks*` for italic.                |
-| `descriptionMore`         | Shown after `descriptionShort` when a card is expanded ("Show more") — separate paragraphs with a blank line. |
+| `descriptionShort`        | The whole course description (the editor's single **Description** box). A closed card shows its first sentence + "…"; "Show more" reveals the rest. Blank line = new paragraph; `*asterisks*` for italic. |
+| `descriptionMore`         | Legacy. The page appends it to `descriptionShort` as further paragraphs; the editor folds it into Description and clears it on save. |
 | `requiredBooks`           | One citation per line. `*asterisks*` for italic titles.            |
 
-If you ever need to add a new program, edit two places:
+If you ever need to add a new program, edit three places:
 
 1. In `index.html`, add to the `PROGRAM_LABELS` constant near the top of
    the `<script>` block.
 2. In `apps-script/Code.gs`, add to `PROGRAM_OPTIONS`.
+3. In `apps-script/course-submission/Code.gs`, add to `PROGRAM_OPTIONS`
+   and redeploy a new version (§11).
+
+## 11. Instructor course submission form
+
+A web app where instructors enter their own courses. Each submission is
+added to the `Courses` sheet as an **unpublished** row and emailed to
+`academic-registrar@icscanada.edu` (Reply-To: the instructor). The email
+lists what the Registrar still has to fill in: course code if blank,
+enrolment notes, last date to register, max enrolment, credits, and
+Published. Access is restricted to `@icscanada.edu` Google accounts.
+
+Instructors pick from dropdowns and checkboxes wherever the catalogue has a
+fixed vocabulary: instructor, term, year, programs, CSTC areas, format,
+weekly days and times. The server re-checks every value, so edited
+requests can't write anything else. The instructor dropdown is read from
+faculty.icscanada.edu (current, cross-appointed, adjunct, sessional and
+living emeriti) and cached for 6 hours. Choosing someone adds their profile
+link to `instructorUrl`. "Someone not listed…" takes a typed name, which is
+still matched against the directory, e.g. "Ronald Kuipers" → Dr. Ron
+Kuipers. Display names reuse whatever the sheet already calls that person,
+otherwise "Dr. " + the site name for doctorates. There is an optional
+co-instructor, saved as "A and B" with the first person's link.
+
+It's a **separate standalone project**, like §9, because it needs
+permissions the catalogue sheet's project deliberately doesn't have:
+opening the sheet by id, sending mail, and fetching the faculty site.
+
+To set it up (once), signed in as an ICS Workspace account with edit
+access to the sheet:
+
+1. Go to [script.new](https://script.new) and name the project
+   **ICS Course Submission**.
+2. Replace `Code.gs` with `apps-script/course-submission/Code.gs`.
+3. **+ → HTML**, name it `Form`, and paste `apps-script/course-submission/Form.html`.
+4. Project Settings (gear) → tick **Show "appsscript.json"**, then replace
+   it with `apps-script/course-submission/appsscript.json`.
+5. **Deploy → New deployment → Web app**. Execute as: **Me**. Who has
+   access: **Anyone within Institute for Christian Studies**. Deploy and
+   approve the permission prompts.
+6. Copy the web app URL (it ends in `/exec`). In the private Google Site,
+   choose **Insert → Embed → By URL**, paste it, and make the embed tall
+   (the form is about 2,500px).
+
+After you edit the code, choose **Deploy → Manage deployments → ✏️ →
+Version: New version** so the embedded URL picks up the change. Config
+constants (sheet id, notification address, allowed domain) are at the top
+of `Code.gs`. If a new program is added, also add it to `PROGRAM_OPTIONS`
+there (see §10).
 
 ## Troubleshooting
 
